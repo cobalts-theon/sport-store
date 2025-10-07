@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+.loader-overlay {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: #070709;
+    z-index: 9999;
+    transition: opacity 500ms ease, visibility 500ms;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.loader-overlay.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader {
+    display: block;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-logo {
+    width: 140px;
+    height: auto;
+    transform-origin: center;
+    filter: drop-shadow(0 0 2em #faededaa);
+    animation: loader-pop 1100ms cubic-bezier(.2,.9,.3,1) forwards;
+}
+
+@keyframes loader-pop {
+    0% { transform: translateY(0) scale(0.9) rotate(-180deg); opacity: 0; }
+    40% { transform: translateY(0) scale(1.08) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-6px) scale(1) rotate(0deg); opacity: 1; }
+}
+
+.loader .loader-title {
+    font-family: 'Bebas Neue', sans-serif;
+    margin-top: 12px;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    font-size: 1.1rem;
+    display: block;
+    align-items: center;
+    white-space: nowrap;
+}
+
+/* blinking caret */
+.loader .loader-title .caret {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: #fff;
+    margin-left: -12px;
+    opacity: 1;
+    animation: blink 900ms steps(2, start) infinite;
+}
+
+/* hide caret when done optionally */
+.loader .loader-title.done .caret {
+    opacity: 0;
+    animation: none;
+}
+
+/* simple fade/slide in for title while typing */
+.loader .loader-title.typing {
+    transform: translateY(0);
+    transition: transform 1000ms ease, opacity 1500ms ease;
+    opacity: 1;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
