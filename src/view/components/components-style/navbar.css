@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-/* @import url('https://fonts.googleapis.com/css2?family=Anton&family=BBH+Sans+Bartle&display=swap'); */
+/* import font từ Google Fonts (Bebas Neue) */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=BBH+Sans+Bartle&display=swap');
 .nav {
     font-family: 'Bebas Neue', sans-serif;
     position: fixed;
@@ -37,6 +38,7 @@
     margin: -16px 0 -10px -15px;
 }
 
+/* nền phía trước (trước ::after) */
 .nav-logo::before {
     content: "";
     position: absolute;
@@ -52,6 +54,7 @@
     pointer-events: none;
 }
 
+/* nền chính (phía sau ::before) */
 .nav-logo::after {
     content: "";
     position: absolute;
@@ -66,6 +69,7 @@
     z-index: 0;
 }
 
+/* khi hover mở rộng cả hai nền */
 .nav-logo:hover::before {
     width: 135%;
     transition-delay: 0s;
@@ -76,10 +80,12 @@
     transition-delay: 0s;
 }
 
+/* delay mặc định cho ::before */
 .nav-logo::before {
     transition-delay: 0.3s; 
 }
 
+/* delay mặc định cho ::after */
 .nav-logo::after {
     transition-delay: 0s; 
 }
@@ -104,10 +110,12 @@
     font-size: 25px;
 }
 
+/* khi hover đổi màu chữ */
 .nav-logo:hover h1 {
     color: black;
 }
 
+/* khi hover đổi filter ảnh */
 .nav-logo:hover img {
     transition: filter 500ms ease-in-out;
     filter: invert(1);
@@ -132,10 +140,11 @@
     color: white;
     text-decoration: none;
     padding: 0.4rem 1rem; 
-    margin: -12px 0 0 0;
+    margin: -10px 0 0 0;
 }
 
 
+/* underline màu xanh khi hover (sử dụng ::after skew để hiệu ứng) */
 .nav-links a::after {
     content: "";
     position: absolute;
@@ -149,23 +158,77 @@
     transform: skewX(-45deg);
 }
 
+/* khi hover mở nền link */
 .nav-links a:hover::after {
-    height: 100%; 
+    height: 112%; 
 }
 
+/* khi hover đổi màu chữ link */
 .nav-links a:hover {
     color: black; 
 }
 
-/* Responsive: tablet (<=1024px) */
+/* Responsive: máy tính bảng (<=1024px) */
 @media (max-width: 1024px) {
     .nav-content {
         padding: 0.75rem 1rem;
     }
 
     .nav-logo {
-        padding: 8px 36px 0 12px;
-        margin: -12px 0 0 -8px;
+        padding: 10px 45px 5px 15px;
+        margin: -12px 0 0 -20px;
+    }
+
+    /* nền phía trước (trước ::after) */
+    .nav-logo::before {
+        content: "";
+        position: absolute;
+        left: -50%;
+        top: 0;
+        width: 0;
+        height: 100%;
+        background: rgba(255, 255, 255, 1); 
+        transform: skewX(-45deg);
+        transform-origin: center right;
+        transition: width 0.3s cubic-bezier(.2,.9,.2,1);
+        z-index: -1; 
+        pointer-events: none;
+    }
+
+    /* nền chính (phía sau ::before) */
+    .nav-logo::after {
+        content: "";
+        position: absolute;
+        left: -50%;
+        top: 0;
+        width: 0;
+        height: 100%;
+        background: #D0FE1D;
+        transition: width 0.4s ease-in-out;
+        transform: skewX(-45deg);
+        transform-origin: center right;
+        z-index: 0;
+    }
+
+    /* khi hover mở rộng cả hai nền */
+    .nav-logo:hover::before {
+        width: 135%;
+        transition-delay: 0s;
+    }
+
+    .nav-logo:hover::after {
+        width: 135%;
+        transition-delay: 0s;
+    }
+
+    /* delay mặc định cho ::before */
+    .nav-logo::before {
+        transition-delay: 0.3s; 
+    }
+
+    /* delay mặc định cho ::after */
+    .nav-logo::after {
+        transition-delay: 0s; 
     }
 
     .nav-logo img {
@@ -180,7 +243,7 @@
     .nav-links {
         gap: 0.5rem;
         font-size: 18px;
-        margin-right: -40px;
+        margin-right: -60px;
     }
 
     .nav-links a {
@@ -188,18 +251,18 @@
     }
 }
 
-/* Responsive: mobile (<=480px) */
+/* Responsive: điện thoại (<=480px) */
 @media (max-width: 480px) {
     .nav-content {
         padding: 0.6rem;
     }
 
     .nav-logo:hover::before {
-        display: none; /* disable hover effect on small screens */
+        display: none; /* tắt hiệu ứng hover trên màn nhỏ */
     }
 
     .nav-logo:hover::after {
-       display: none; /* disable hover effect on small screens */
+       display: none; /* tắt hiệu ứng hover trên màn nhỏ */
     }
 
     .nav-logo:hover img {
@@ -209,25 +272,26 @@
     .nav-logo img {
         width: 1.8rem;
         height: 2.2rem;
+        padding: 0 0 0 20px;
     }
 
     .nav-logo h1 {
-        display: none; /* hide title to save space */
+        display: none; /* ẩn tiêu đề để tiết kiệm không gian */
     }
 
-  /* keep links on single line and allow horizontal scroll */
+  /* ẩn nav-links trên điện thoại (sử dụng menu mobile thay thế) */
     .nav-links {
         display: none;
     }
 
-  /* tighten spacing for the user icon link */
+  /* thu gọn khoảng cách cho icon user */
     .nav-links a .nav-user-icon {
         margin: 0 8px 0 0;
         padding: 0;
     }
 }
 
-/* small fix: ensure transforms/stacking don't shift content when backgrounds expand */
+/* sửa nhỏ: đảm bảo transform/stacking không làm dịch nội dung khi nền mở rộng */
 .nav-logo,
 .nav-links a {
   -webkit-tap-highlight-color: transparent;
@@ -235,12 +299,12 @@
   will-change: transform;
 }    
 
-/* Mobile menu - hidden by default */
+/* Menu mobile - mặc định ẩn */
 .nav-mobile-menu {
     display: none;
 }
 
-/* Mobile menu */
+/* Menu mobile */
 @media (max-width: 480px) {
     .nav-mobile-menu {
         display: block;
@@ -263,19 +327,19 @@
 }
 
 
-/* ensure mobile menu only shown on small screens (you already hide .nav-links) */
+/* đảm bảo menu mobile chỉ hiển thị trên màn nhỏ */
 @media (max-width: 480px) {
     .nav-mobile-menu { display: block; }
 }
 
-/* keep the default state hidden on larger screens */
+/* giữ trạng thái mặc định ẩn trên màn lớn */
 @media (min-width: 481px) {
     .nav-mobile-menu { display: none; }
 }
 
-/* Mobile panel - full width, slide from top */
+/* Panel mobile - phủ ngang, trượt từ trên xuống */
 @media (max-width: 480px) {
-    /* Mobile hamburger bars */
+    /* thanh hamburger mobile */
     .nav-mobile-button {
         display: block;
         flex-direction: column;
@@ -286,6 +350,7 @@
         z-index: 60;
     }
 
+    /* pseudo-element nền nút (phía sau) */
     .nav-mobile-button ::after {
         content: "";
         position: absolute;
@@ -294,7 +359,7 @@
         width: 0;
         height: 100%;
         background: #D0FE1D;
-        transform: skewX(135deg); /* collapsed */
+        transform: skewX(135deg); /* trạng thái thu gọn */
         transition: width 0.1s ease-in-out;
         z-index: -2;
     }
@@ -327,18 +392,18 @@
         z-index: -1;           /* nằm trên content khác */
         transform-origin: top center;
 
-        /* hidden state */
+        /* trạng thái ẩn */
         pointer-events: none;
         transform: translateY(-100%); /* nằm ngoài màn hình phía trên */
         max-height: 0;
         overflow: hidden;
         opacity: 0;
         transition: transform 280ms cubic-bezier(.2,.9,.2,1), opacity 200ms ease, max-height 320ms ease;
-        border-radius: 0;       /* no rounded corners so it feels full-width */
+        border-radius: 0;       /* không bo góc để cảm giác full-width */
         box-shadow: none;
     }
 
-    /* opened state - slide down */
+    /* trạng thái mở - trượt xuống */
     .nav-mobile-panel.open {
         pointer-events: auto;
         transform: translateY(0);
@@ -347,7 +412,7 @@
         overflow: auto;
     }
     
-    /* panel links */
+    /* các liên kết trong panel */
     .nav-mobile-panel a {
         color: white;
         padding: 0.1rem 0.5rem;

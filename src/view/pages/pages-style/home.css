@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-
 html, body {
     justify-content: center;
     height: 100%;
@@ -41,13 +40,13 @@ html, body {
 
 /* keep image circular, remove previous border */
 .home-image img {
-  width: 100%;
+  width: 80%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
   display: block;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.45);
   border: none; /* removed border */
+  margin: 0 auto; /* center horizontally */
 }
 
 /* SVG ring text */
@@ -61,6 +60,14 @@ html, body {
   pointer-events: none;
   transform-origin: 50% 50%;
   animation: ring-rotate 12s linear infinite;
+}
+
+.home-image:hover .ring-text {
+  width: 130%;
+  height: 130%;
+  left: -15%;
+  top: -15%;
+  transition: all 0.2s ease-in-out;
 }
 
 /* style the text along path */
@@ -87,12 +94,21 @@ html, body {
   to   { transform: rotate(360deg); }
 }
 
-.home-solgan p, h2{
-    color: #D0FE1D;
+.home-solgan p {
+  color: #D0FE1D;
+  font-size: min(5vw, 24px);
+  margin: 0;
+  padding: 0;
 }
 
+/* Slogan của trang chủ Sử dụng rolling text animation từ dưới lên trên và tạo sóng từ trái qua phải */
 .home-solgan p {
-    font-size: min(5vw, 24px);
-    margin: 0;
-    padding: 0;
+  display: inline-block;
+  position: relative;
+  animation: rollUp 2s linear infinite, wave 2s ease-in-out infinite;
 }
+
+
+
+
+
