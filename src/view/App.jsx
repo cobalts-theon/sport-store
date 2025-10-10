@@ -1,20 +1,28 @@
 import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Link } from 'react-router-dom'
-import reactLogo from '/src/assets/icon/react.svg'
-import pslogo from '/src/assets/image/white-logo.png'
-import StartupLoader from './components/StartupLoader'
+import {Router, Routes, Route, Link} from "react-router-dom"
+// import reactLogo from '/src/assets/icon/react.svg'
+// import pslogo from '/src/assets/image/white-logo.png'
+import StartupLoader from './pages/start-intro'
 import Header from './components/navbar'
 
-//CSS
-import './App.css'
+//Pages
+import Home from './pages/home'
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0) //State count cho nút đếm
 
   return (
-    <Router>
-      <StartupLoader duration={2000}/>
+    <>
+      <StartupLoader duration={2000}/> {/* Thời gian hiển thị logo khởi động */}
       <Header/>
-      <div className="pt-20">
+      <Routes> {/* Dùng Routes để định nghĩa các tuyến đường trong ứng dụng mà không cần load lại trang */} 
+        <Route path="/" element={<Home/>}/>
+        {/* <Route path="/about" element={<About/>}/>
+        <Route path="/contact" element={<Contact/>}/>
+        <Route path="/profile" element={<Profile/>}/>
+        <Route path="/services" element={<Services/>}/> */}
+      </Routes>
+      {/* <div className="pt-20">
         <div>
           <a href="https://vite.dev" target="_blank">
             <img src={pslogo} className="logo" alt="Vite logo" />
@@ -35,8 +43,8 @@ function App() {
         <p className="read-the-docs">
           Click on the Vite and React logos to learn more
         </p>
-      </div>
-    </Router>
+      </div> */}
+    </>
   )
 }
 

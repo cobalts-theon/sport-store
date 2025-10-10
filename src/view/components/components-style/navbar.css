@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Anton&family=BBH+Sans+Bartle&display=swap'); */
+.nav {
+    font-family: 'Bebas Neue', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    transition: all 0.3s;
+    background: transparent;
+}
+
+.nav.scrolled {
+    background: rgba(30, 30, 30, 0.9);
+    backdrop-filter: blur(3px);
+}
+
+.nav-content {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1rem 2rem 0.2rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.nav-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 10px 50px 10px 20px;
+    margin: -16px 0 -10px -15px;
+}
+
+.nav-logo::before {
+    content: "";
+    position: absolute;
+    left: -50%;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 1); 
+    transform: skewX(-45deg);
+    transform-origin: center right;
+    transition: width 0.3s cubic-bezier(.2,.9,.2,1);
+    z-index: -1; 
+    pointer-events: none;
+}
+
+.nav-logo::after {
+    content: "";
+    position: absolute;
+    left: -50%;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: #D0FE1D;
+    transition: width 0.4s ease-in-out;
+    transform: skewX(-45deg);
+    transform-origin: center right;
+    z-index: 0;
+}
+
+.nav-logo:hover::before {
+    width: 135%;
+    transition-delay: 0s;
+}
+
+.nav-logo:hover::after {
+    width: 135%;
+    transition-delay: 0s;
+}
+
+.nav-logo::before {
+    transition-delay: 0.3s; 
+}
+
+.nav-logo::after {
+    transition-delay: 0s; 
+}
+
+.nav-logo h1,
+.nav-logo img {
+    position: relative;
+    z-index: 1;
+    transition: 600ms ease;
+    color: white;
+}
+
+.nav-logo img {
+    width: 2rem;
+    height: 2.5rem;
+    filter: invert(70%) sepia(60%) saturate(420%) hue-rotate(29deg) brightness(200%) contrast(200%);
+}
+
+.nav-logo h1 {
+    color: #D0FE1D;
+    margin: 0;
+    font-size: 25px;
+}
+
+.nav-logo:hover h1 {
+    color: black;
+}
+
+.nav-logo:hover img {
+    transition: filter 500ms ease-in-out;
+    filter: invert(1);
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.1rem;
+    font-size: 20px;
+    padding: 0 -20px 0 0; 
+    margin: 0 -70px 0 0;
+}
+
+.nav-links a .nav-user-icon {
+    margin: 0 50px 0 0 ;
+    padding: 0 -50px 0 0;
+}
+
+
+.nav-links a {
+    position: relative;
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 1rem; 
+    margin: -12px 0 0 0;
+}
+
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    background: #D0FE1D;
+    transition: height 0.1s ease-in-out;
+    z-index: -1; 
+    transform: skewX(-45deg);
+}
+
+.nav-links a:hover::after {
+    height: 100%; 
+}
+
+.nav-links a:hover {
+    color: black; 
+}
+
+/* Responsive: tablet (<=1024px) */
+@media (max-width: 1024px) {
+    .nav-content {
+        padding: 0.75rem 1rem;
+    }
+
+    .nav-logo {
+        padding: 8px 36px 0 12px;
+        margin: -12px 0 0 -8px;
+    }
+
+    .nav-logo img {
+        width: 1.8rem;
+        height: 2.2rem;
+    }
+
+    .nav-logo h1 {
+        font-size: 20px;
+    }
+
+    .nav-links {
+        gap: 0.5rem;
+        font-size: 18px;
+        margin-right: -40px;
+    }
+
+    .nav-links a {
+        padding: 0.45rem 0.8rem;
+    }
+}
+
+/* Responsive: mobile (<=480px) */
+@media (max-width: 480px) {
+    .nav-content {
+        padding: 0.6rem;
+    }
+
+    .nav-logo:hover::before {
+        display: none; /* disable hover effect on small screens */
+    }
+
+    .nav-logo:hover::after {
+       display: none; /* disable hover effect on small screens */
+    }
+
+    .nav-logo:hover img {
+       filter: invert(70%) sepia(60%) saturate(420%) hue-rotate(29deg) brightness(200%) contrast(200%);
+    }
+    
+    .nav-logo img {
+        width: 1.8rem;
+        height: 2.2rem;
+    }
+
+    .nav-logo h1 {
+        display: none; /* hide title to save space */
+    }
+
+  /* keep links on single line and allow horizontal scroll */
+    .nav-links {
+        display: none;
+    }
+
+  /* tighten spacing for the user icon link */
+    .nav-links a .nav-user-icon {
+        margin: 0 8px 0 0;
+        padding: 0;
+    }
+}
+
+/* small fix: ensure transforms/stacking don't shift content when backgrounds expand */
+.nav-logo,
+.nav-links a {
+  -webkit-tap-highlight-color: transparent;
+  backface-visibility: hidden;
+  will-change: transform;
+}    
+
+/* Mobile menu - hidden by default */
+.nav-mobile-menu {
+    display: none;
+}
+
+/* Mobile menu */
+@media (max-width: 480px) {
+    .nav-mobile-menu {
+        display: block;
+    }
+
+    .nav-mobile-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        margin-right: -10px;
+    }
+
+    .nav-mobile-bar {
+        display: block;
+        width: 25px;
+        height: 3px;
+        margin: 5px 0;
+    }
+}
+
+
+/* ensure mobile menu only shown on small screens (you already hide .nav-links) */
+@media (max-width: 480px) {
+    .nav-mobile-menu { display: block; }
+}
+
+/* keep the default state hidden on larger screens */
+@media (min-width: 481px) {
+    .nav-mobile-menu { display: none; }
+}
+
+/* Mobile panel - full width, slide from top */
+@media (max-width: 480px) {
+    /* Mobile hamburger bars */
+    .nav-mobile-button {
+        display: block;
+        flex-direction: column;
+        justify-content: left;
+        align-items: left;
+        cursor: pointer;
+        position: relative;
+        z-index: 60;
+    }
+
+    .nav-mobile-button ::after {
+        content: "";
+        position: absolute;
+        right: -50%;
+        top: 0;
+        width: 0;
+        height: 100%;
+        background: #D0FE1D;
+        transform: skewX(135deg); /* collapsed */
+        transition: width 0.1s ease-in-out;
+        z-index: -2;
+    }
+
+    .nav-mobile-button.open ::after {
+        width: 140%;
+    }
+
+    .nav-mobile-button h2 {
+        color: white;
+        margin: 0 -5px 0 0;
+        padding: 0 10px 0 30px;
+        transition: 0.1s ease-in-out;
+    }
+
+    .nav-mobile-button.open h2 {
+        color: black;
+    }
+
+    .nav-mobile-panel {
+        display: flex;
+        position: fixed;        /* cố định trên viewport */
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;           /* phủ toàn chiều ngang điện thoại */
+        background: rgba(18,18,18,0.98);
+        padding: 4rem 0.6rem 1rem;
+        flex-direction: column;
+        z-index: -1;           /* nằm trên content khác */
+        transform-origin: top center;
+
+        /* hidden state */
+        pointer-events: none;
+        transform: translateY(-100%); /* nằm ngoài màn hình phía trên */
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: transform 280ms cubic-bezier(.2,.9,.2,1), opacity 200ms ease, max-height 320ms ease;
+        border-radius: 0;       /* no rounded corners so it feels full-width */
+        box-shadow: none;
+    }
+
+    /* opened state - slide down */
+    .nav-mobile-panel.open {
+        pointer-events: auto;
+        transform: translateY(0);
+        opacity: 1;
+        max-height: 90vh;    
+        overflow: auto;
+    }
+    
+    /* panel links */
+    .nav-mobile-panel a {
+        color: white;
+        padding: 0.1rem 0.5rem;
+        border-radius: 8px;
+        display: flex;
+        padding: 0 0 0 1rem;
+        overflow: hidden;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 40px;
+    }
+}

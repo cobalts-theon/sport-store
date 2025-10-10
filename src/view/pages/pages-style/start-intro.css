@@ -40,6 +40,8 @@
 
 .loader .loader-title {
     font-family: 'Bebas Neue', sans-serif;
+    align-items: center;
+    text-align: center;
     margin-top: 12px;
     color: #fff;
     font-weight: 700;

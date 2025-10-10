@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+
+html, body {
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    background-color: #0f0f10; /* dark base */
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;   /* grid size */
+    background-repeat: repeat;
+    background-attachment: fixed;  /* đảm bảo background luôn giữ cố định khi scrolled */
+    -webkit-font-smoothing: antialiased;    /* Cho chữ đẹp hơn */
+    -moz-osx-font-smoothing: grayscale;  /* Cho chữ đẹp hơn */
+}
+
+.home-container {
+    font-family: 'Bebas Neue', sans-serif;
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.home-image,
+.home-container > * {
+    position: relative;
+    z-index: 2;
+}
+
+.home-image {
+  position: relative;
+  width: min(14vw, 150px);
+  height: min(14vw, 150px);
+  margin: 0 auto 2rem;
+}
+
+/* keep image circular, remove previous border */
+.home-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+  border: none; /* removed border */
+}
+
+/* SVG ring text */
+.ring-text {
+  position: absolute;
+  inset: 0;
+  width: 120%;
+  height: 120%;
+  left: -10%;               /* đẩy ra để giữ tâm ở giữa */
+  top: -10%;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: ring-rotate 12s linear infinite;
+}
+
+/* style the text along path */
+.ring-text text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 10px; /* adjust to taste */
+  fill: #D0FE1D;
+  letter-spacing: 2px;
+}
+.ring-text textPath {
+  /* keep text baseline centered on the path */
+  startOffset: 0;
+}
+
+/* speed/size adjustments for small screens */
+@media (max-width: 480px) {
+  .home-image { width: 150px; height: 150px; }
+  .ring-text text { font-size: 9px; }
+}
+
+/* rotate animation */
+@keyframes ring-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.home-solgan p, h2{
+    color: #D0FE1D;
+}
+
+.home-solgan p {
+    font-size: min(5vw, 24px);
+    margin: 0;
+    padding: 0;
+}

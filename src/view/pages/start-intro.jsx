@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import pslogo from "/src/assets/image/3d-logo.png";
-import "/src/view/components/css/StartupLoader.css";
+import "/src/view/pages/pages-style/start-intro.css";
 
 export default function StartupLoader({ duration = 1100 }) {
   //Make logo visible and not hidding at start 
