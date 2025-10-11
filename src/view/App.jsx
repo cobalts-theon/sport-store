@@ -5,12 +5,13 @@ import {Router, Routes, Route, Link} from "react-router-dom"
 import StartupLoader from './pages/start-intro'
 import Header from './components/navbar'
 
+//Components
+import Infbar from './components/infbar'
+
 //Pages
 import Home from './pages/home'
 
 function App() {
-  const [count, setCount] = useState(0) //State count cho nút đếm
-
   return (
     <>
       <StartupLoader duration={2000}/> {/* Thời gian hiển thị logo khởi động */}
@@ -22,6 +23,7 @@ function App() {
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/services" element={<Services/>}/> */}
       </Routes>
+      <Infbar/>
       {/* <div className="pt-20">
         <div>
           <a href="https://vite.dev" target="_blank">
