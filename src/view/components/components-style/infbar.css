@@ -1,0 +1,39 @@
+.infbar-container {
+  position: fixed;
+  bottom: 0%;
+  left: 0;
+  width: 100%;
+  background-color: #D0FE1D;
+  padding: 0.75rem 0;
+  overflow: hidden;
+  z-index: 50;
+  display: flex;
+}
+
+.infbar-track {
+  display: flex;
+  /* Thêm khoảng cách giữa các logo */
+  gap: 3rem; 
+  /* Ngăn các logo bị co lại */
+  flex-shrink: 0; 
+  /* Áp dụng hoạt ảnh cuộn */
+  animation: infinite-scroll-logo 30s linear infinite;
+}
+
+.infbar-logo {
+  /* Đặt chiều cao cho logo */
+  height: 40px; 
+  width: auto;
+}
+
+/* Định nghĩa keyframes cho hoạt ảnh cuộn logo */
+@keyframes infinite-scroll-logo {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* Di chuyển sang trái bằng một nửa chiều rộng của track */
+    /* Điều này tạo ra một vòng lặp hoàn hảo vì chúng ta đã nhân đôi nội dung */
+    transform: translateX(-50%);
+  }
+}

@@ -17,13 +17,19 @@ function App() {
       <StartupLoader duration={2000}/> {/* Thời gian hiển thị logo khởi động */}
       <Header/>
       <Routes> {/* Dùng Routes để định nghĩa các tuyến đường trong ứng dụng mà không cần load lại trang */} 
-        <Route path="/" element={<Home/>}/>
+        <Route
+         path="/" 
+         element={ 
+          <>
+            <Home/>
+            <Infbar/>
+          </>
+          }/>
         {/* <Route path="/about" element={<About/>}/>
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/services" element={<Services/>}/> */}
       </Routes>
-      <Infbar/>
       {/* <div className="pt-20">
         <div>
           <a href="https://vite.dev" target="_blank">
