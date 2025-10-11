@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 html, body {
+  display: flex;
+    flex-direction: column;
     justify-content: center;
     height: 100%;
     margin: 0;
@@ -13,6 +15,7 @@ html, body {
     background-attachment: fixed;  /* đảm bảo background luôn giữ cố định khi scrolled */
     -webkit-font-smoothing: antialiased;    /* Cho chữ đẹp hơn */
     -moz-osx-font-smoothing: grayscale;  /* Cho chữ đẹp hơn */
+    overflow-x: hidden; /* ngăn cuộn ngang */
 }
 
 .home-container {
@@ -41,7 +44,7 @@ html, body {
 /* keep image circular, remove previous border */
 .home-image img {
   width: 80%;
-  height: 100%;
+  height: 150%;
   object-fit: cover;
   border-radius: 50%;
   display: block;
@@ -53,20 +56,20 @@ html, body {
 .ring-text {
   position: absolute;
   inset: 0;
-  width: 120%;
-  height: 120%;
-  left: -10%;               /* đẩy ra để giữ tâm ở giữa */
-  top: -10%;
+  width: 150%;
+  height: 150%;
+  left: -25%;               /* đẩy ra để giữ tâm ở giữa */
+  top: 0%;
   pointer-events: none;
   transform-origin: 50% 50%;
   animation: ring-rotate 12s linear infinite;
 }
 
-.home-image:hover .ring-text {
-  width: 130%;
-  height: 130%;
-  left: -15%;
-  top: -15%;
+.home-image:hover .ring-text{
+  width: 170%;
+  height: 170%;
+  left: -35%;
+  top: -10%;
   transition: all 0.2s ease-in-out;
 }
 
@@ -77,15 +80,203 @@ html, body {
   fill: #D0FE1D;
   letter-spacing: 2px;
 }
+
 .ring-text textPath {
   /* keep text baseline centered on the path */
   startOffset: 0;
 }
 
+/* Slogan của trang chủ Sử dụng rolling text animation từ dưới lên trên và tạo sóng từ trái qua phải */
+.home-solgan p {
+  color: transparent;
+  font-size: min(5vw, 24px);
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  position: relative;
+  animation: rollUp 2s linear infinite, wave 2s ease-in-out infinite;
+}
+
+
+.home-shape {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000%;
+  height: 200%;
+  z-index: 1;
+}
+
+.home-shape .shape-shape1 {
+  background: white;
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  transform: translate(-50%, -50%) skewX(-25deg);
+  overflow: visible;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  animation: slideInFromLeft 3000ms cubic-bezier(.2,.9,.2,1) 120ms both;
+}
+
+.home-shape .shape-shape2 {
+  background: #D0FE1D;
+  position: absolute;
+  top: 50%;
+  right: -34.9%;
+  transform: translate(-50%, -50%) skewX(-25deg);
+  overflow: visible;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  animation: slideInFromRight 3000ms cubic-bezier(.2,.9,.2,1) 120ms both;
+}
+
+.shape-title1{
+  display:flex;
+  flex-direction:column;       /* xếp thẳng cột */
+  align-items:center;
+  gap: .08em; 
+  padding-top: 1rem;
+  padding-left: 30rem;
+}
+
+/* từng từ/khối để animate riêng */
+.shape-title1 .shape-word{
+  display:block;
+  font-family: 'BBH Sans Bartle', 'Bebas Neue', sans-serif;
+  font-weight: 700;
+  color:  #000000ff;
+  line-height:0.9;
+  transform-origin:center;
+  /* animation pulse (to -> trở về) */
+  font-size: clamp(28px, 8vw, 96px); /* responsive */
+  transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
+  animation: slideInFrombottomWord 3500ms cubic-bezier(.2,.9,.2,1) 120ms both;
+}
+
+.shape-title2 {
+  display:flex;
+  flex-direction:column;       /* xếp thẳng cột */
+  align-items:center;
+  gap: .08em; 
+  padding-top: 1rem;
+  padding-right: 30rem;
+}
+
+.shape-title2 .shape-word{
+  display:block;
+  font-family: 'BBH Sans Bartle', 'Bebas Neue', sans-serif;
+  font-weight: 700;
+  color: #000000ff;
+  line-height:0.9;
+  transform-origin:center;
+  /* animation pulse (to -> trở về) */
+  font-size: clamp(28px, 8vw, 96px); /* responsive */
+  transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
+}
+
+/* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
+.shape-title1 .shape-word:nth-child(1){ padding-left: 5rem; transform: scaleY(1.4); padding-bottom: 2rem; padding-top: 1rem;}
+.shape-title1 .shape-word:nth-child(2){ padding-left: 7rem; transform: scaleX(0.86); padding-bottom: 1rem; }
+.shape-title1 .shape-word:nth-child(3){ padding-left: 16rem; transform: scaleY(1.2); transform: scaleX(0.65); }
+
+/* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
+.shape-title2 .shape-word:nth-child(1){ padding-right: 15rem; transform: scaleX(0.8); padding-bottom: 1rem; padding-top: 1rem;}
+.shape-title2 .shape-word:nth-child(2){ padding-right: 9rem; transform: scaleX(1.5);}
+.shape-title2 .shape-word:nth-child(3){ padding-left: 2rem; transform: scaleY(2); transform: scaleX(0.8); padding-top: 1rem; transform-origin: left;}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translate(-150%, -50%) skewX(-25deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-130%, -50%) skewX(-25deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) skewX(-25deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translate(50%, -50%) skewX(-25deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(20%, -50%) skewX(-25deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) skewX(-25deg);
+    opacity: 1;
+  }
+}
+
+/* respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .home-shape .shape-shape1,
+  .home-shape .shape-shape2 {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, -50%) skewX(-25deg);
+  }
+}
+
+
+@media (max-width: 1048px) {
+  .home-image { width: 120px; height: 120px; }
+  .ring-text text { font-size: 8px; }
+  .shape-title1 {display: none;}
+  .shape-title2 {display: none;}
+  .shape-shape1 { left: 18%;}
+  .shape-shape2 { right: -36%;}
+  .home-solgan p { 
+    color: #D0FE1D;               /* make text visible on small screens */
+    font-size: clamp(14px, 6vw, 20px);
+    line-height: 1;
+    display: inline-block;
+    margin: 0;
+    padding: 40px 0 0 0;
+    transform-origin: center bottom; 
+    transition: all 0.2s ease-in-out;
+  }
+}
+
 /* speed/size adjustments for small screens */
 @media (max-width: 480px) {
+  html, body { overflow-x: hidden; /* ngăn cuộn ngang */}
   .home-image { width: 150px; height: 150px; }
-  .ring-text text { font-size: 9px; }
+  .home-image img { width: 70%; height: 100%;}
+  .ring-text {height: 6px; font-size: 6px; width: 120%; height: 120%; left: -10%; top: -10%;}
+  .home-image:hover .ring-text { width: 140%; height: 140%; left: -20%; top: -20%;}
+  .shape-shape1 {padding: 25rem 0 0 3rem; left: 20%;}
+  .shape-shape2 {padding: 0 0.9rem 30rem 0;}
+  .home-solgan p { 
+    color: #D0FE1D;               /* make text visible on small screens */
+    font-size: clamp(14px, 6vw, 20px);
+    line-height: 1;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    transform-origin: center bottom; 
+  }
+  .home-shape {display: none;}
+}
+
+@media (max-width: 1048px) {
+  .home-image { width: 120px; height: 120px; }
+  .ring-text text { font-size: 8px; }
+  .shape-title1 {display: none;}
+  .shape-shape1 { left: 18%;}
+  .shape-shape2 { right: -36%;}
 }
 
 /* rotate animation */
@@ -93,22 +284,3 @@ html, body {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
-
-.home-solgan p {
-  color: #D0FE1D;
-  font-size: min(5vw, 24px);
-  margin: 0;
-  padding: 0;
-}
-
-/* Slogan của trang chủ Sử dụng rolling text animation từ dưới lên trên và tạo sóng từ trái qua phải */
-.home-solgan p {
-  display: inline-block;
-  position: relative;
-  animation: rollUp 2s linear infinite, wave 2s ease-in-out infinite;
-}
-
-
-
-
-

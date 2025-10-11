@@ -265,8 +265,8 @@
        display: none; /* tắt hiệu ứng hover trên màn nhỏ */
     }
 
-    .nav-logo:hover img {
-       filter: invert(70%) sepia(60%) saturate(420%) hue-rotate(29deg) brightness(200%) contrast(200%);
+    .nav-logo img {
+       filter: invert(0);
     }
     
     .nav-logo img {
@@ -311,11 +311,36 @@
     }
 
     .nav-mobile-button {
+        /* ensure button layout stable */
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
         background: none;
         border: none;
         cursor: pointer;
         padding: 10px;
-        margin-right: -10px;
+        margin-right: -13px;
+        z-index: 60;
+        left: 0%;
+    }
+
+    /* giữ h2 chiếm chỗ cố định để text "Menu"/"Close" không đẩy vị trí */
+    .nav-mobile-button h2 {
+        color: white;
+        margin: 0;
+        padding: 0 10px;
+        display: inline-block;
+        min-width: 64px;            /* giữ chiều ngang cố định — chỉnh nếu cần */
+        text-align: center;
+        line-height: 1;
+        transition: color 120ms ease;
+        pointer-events: none;       /* tránh ảnh hưởng click trên text */
+    }
+
+    /* chỉ đổi màu khi mở, không thay đổi kích thước/position */
+    .nav-mobile-button.open h2 {
+        color: black;
     }
 
     .nav-mobile-bar {
@@ -350,7 +375,13 @@
         z-index: 60;
     }
 
-    /* pseudo-element nền nút (phía sau) */
+
+    .nav.mobile-open .nav-logo img {
+        transition: filter 100ms ease-in-out;
+        filter: invert(70%) sepia(60%) saturate(420%) hue-rotate(29deg) brightness(200%) contrast(200%);
+    }
+    
+    /* pseudo-elemen     nền nút (phía sau) */
     .nav-mobile-button ::after {
         content: "";
         position: absolute;

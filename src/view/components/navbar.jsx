@@ -18,7 +18,7 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className={scrolled ? 'nav scrolled' : 'nav'}>
+    <nav className={`nav ${scrolled ? 'scrolled' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
       <div className="nav-content">
         <div className="nav-logo" onClick={() => window.location.reload()}>
           <img src={pswhitelogo} alt="logo"/>

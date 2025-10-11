@@ -27,14 +27,23 @@ function Home() {
         <div className="home-solgan">
           <p>Move with Soul. Live in Prime.</p>
         </div>
-        <div className="infinite-scroll-image">
-          {/* <div className="scrolling-images">
-            <img src={limelogo} alt="Scrolling Logo" />
-            <img src={limelogo} alt="Scrolling Logo" />
-            <img src={limelogo} alt="Scrolling Logo" />
-            <img src={limelogo} alt="Scrolling Logo" />
-          </div> */}
+        <div className="home-shape">
+          <div className="shape-shape1">
+            <h1 className="shape-title1">
+              <span className="shape-word">MOVE</span>
+              <span className="shape-word">WITH</span>
+              <span className="shape-word">SOULS</span>
+            </h1>
+          </div>
+          <div className="shape-shape2">
+            <h1 className="shape-title2">
+              <span className="shape-word">LIVE</span>
+              <span className="shape-word">IN</span>
+              <span className="shape-word">PRIME</span>
+            </h1>
+          </div>
         </div>
+        
       </div>
     </>
   );
