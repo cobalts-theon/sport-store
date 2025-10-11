@@ -21,7 +21,9 @@ function App() {
          path="/" 
          element={ 
           <>
-            <Home/>
+            <div className="main-page-container">
+                <Home />
+            </div>
             <Infbar/>
           </>
           }/>

@@ -5,6 +5,7 @@ html, body {
     flex-direction: column;
     justify-content: center;
     height: 100%;
+
     margin: 0;
     background-color: #0f0f10; /* dark base */
     background-image:
@@ -16,6 +17,8 @@ html, body {
     -webkit-font-smoothing: antialiased;    /* Cho chữ đẹp hơn */
     -moz-osx-font-smoothing: grayscale;  /* Cho chữ đẹp hơn */
     overflow-x: hidden; /* ngăn cuộn ngang */
+
+    scroll-behavior: smooth;
 }
 
 .home-container {
@@ -281,6 +284,21 @@ html, body {
 
 /* rotate animation */
 @keyframes ring-rotate {
-  from { transform: rotate(0deg); }
+  from { transform: rotate(0deg);}
   to   { transform: rotate(360deg); }
+}
+/* Thêm vào cuối file home.css */
+
+.main-page-container {
+  min-height: 100vh; /* Chiếm ít nhất toàn bộ chiều cao màn hình */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-top: 8rem;
+  box-sizing: border-box;
+
+  /* Thêm dòng này để tạo khoảng cách */
+  margin-bottom: 4rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */
 }

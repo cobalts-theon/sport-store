@@ -3,25 +3,25 @@ import "./components-style/infbar.css";
 import blacklogo from "/src/assets/image/black-logo.png";
 
 function Infbar() {
-  // Tạo một mảng để lặp và hiển thị logo
-  const logos = Array(20).fill(null); 
+  // Tăng số lượng logo để đảm bảo không bao giờ bị thiếu
+  const logos = Array(30).fill(null); 
 
   return (
     <div className="infbar-container">
       <div className="infbar-track">
-        {/* Hiển thị bộ logo đầu tiên */}
+        {/* Dãy logo 1 */}
         {logos.map((_, index) => (
           <img 
-            key={index} 
+            key={`logo-a-${index}`} /* Key duy nhất */
             src={blacklogo} 
             alt="Scrolling Logo" 
             className="infbar-logo" 
           />
         ))}
-        {/* Hiển thị bộ logo thứ hai để tạo vòng lặp liền mạch */}
+        {/* Dãy logo 2 (bản sao để lặp lại) */}
         {logos.map((_, index) => (
           <img 
-            key={index + logos.length} 
+            key={`logo-b-${index}`} /* Key duy nhất */
             src={blacklogo} 
             alt="Scrolling Logo" 
             className="infbar-logo" 

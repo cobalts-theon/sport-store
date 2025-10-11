@@ -1,39 +1,32 @@
-.infbar-container {
-  position: fixed;
-  bottom: 0%;
-  left: 0;
+.infbar-container { 
   width: 100%;
   background-color: #D0FE1D;
-  padding: 0.75rem 0;
+  padding: 0rem 0;
   overflow: hidden;
-  z-index: 50;
   display: flex;
 }
 
 .infbar-track {
   display: flex;
-  /* Thêm khoảng cách giữa các logo */
-  gap: 3rem; 
-  /* Ngăn các logo bị co lại */
-  flex-shrink: 0; 
-  /* Áp dụng hoạt ảnh cuộn */
-  animation: infinite-scroll-logo 30s linear infinite;
+  flex-shrink: 0; /* Ngăn track bị co lại */
+  /* Áp dụng animation */
+  animation: infinite-scroll-logo 8s linear infinite; /* Tăng thời gian để chạy mượt hơn */
 }
 
 .infbar-logo {
-  /* Đặt chiều cao cho logo */
   height: 40px; 
   width: auto;
+  /* THAY THẾ 'gap' BẰNG 'padding' */
+  /* Thêm khoảng cách trái/phải cho mỗi logo */
+  padding: 0.75rem 1.5rem; 
 }
 
-/* Định nghĩa keyframes cho hoạt ảnh cuộn logo */
 @keyframes infinite-scroll-logo {
   from {
     transform: translateX(0);
   }
   to {
-    /* Di chuyển sang trái bằng một nửa chiều rộng của track */
-    /* Điều này tạo ra một vòng lặp hoàn hảo vì chúng ta đã nhân đôi nội dung */
-    transform: translateX(-50%);
+    /* Giá trị này vẫn đúng, nó sẽ di chuyển track đi 1 nửa chiều dài của chính nó */
+    transform: translateX(-10%);
   }
 }
