@@ -138,6 +138,32 @@
   /* animation pulse (to -> trở về) */
   font-size: clamp(28px, 8vw, 96px); /* responsive */
   transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
+  animation: WordslideInFromLeft 3s ease-out both;
+  --sx: 1;
+  --sy: 1.12;
+}
+
+/* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
+.shape-title1 .shape-word:nth-child(1){
+  padding-left: 1rem;
+  --sx: 0.8;
+  --sy: 1.12;
+  padding-bottom: 1rem;
+  animation-delay: 0s;
+}
+.shape-title1 .shape-word:nth-child(2){
+  padding-left: 4rem;
+  --sx: 0.7;
+  --sy: 1.12;
+  padding-bottom: 1rem;
+  animation-delay: 0.15s;
+}
+.shape-title1 .shape-word:nth-child(3){
+  padding-left: 7rem;
+  --sx: 0.6;
+  --sy: 1.2;
+  padding-bottom: 0.5rem;
+  animation-delay: 0.3s;
 }
 
 .shape-title2 {
@@ -149,6 +175,7 @@
   padding-right: 30rem;
 }
 
+/* column 2 - giữ nguyên thuộc tính nhưng animation ngược chiều */
 .shape-title2 .shape-word{
   display:block;
   font-family: 'BBH Sans Bartle', 'Bebas Neue', sans-serif;
@@ -159,19 +186,65 @@
   /* animation pulse (to -> trở về) */
   font-size: clamp(28px, 8vw, 96px); /* responsive */
   transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
+  animation: WordslideInFromRight 3s ease-out both;
+  --sx: 1;
+  --sy: 1.12;
+}
+.shape-title2 .shape-word:nth-child(1){
+  padding-left: 0rem;
+  --sx: 0.8;
+  --sy: 1.12;
+  padding-bottom: 1.5rem;
+  padding-top: 1rem;
+  animation-delay: 0s;
+}
+.shape-title2 .shape-word:nth-child(2){
+  padding-left: 8rem;
+  --sx: 1.6;
+  --sy: 1.2;
+  animation-delay: 0.2s;
+}
+.shape-title2 .shape-word:nth-child(3){
+  padding-left: 45rem;
+  --sx: 0.7;
+  --sy: 1.2;
+  padding-top: 1rem;
+  transform-origin: left;
+  animation-delay: 0.15s;
 }
 
-/* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
-.shape-title1 .shape-word:nth-child(1){ padding-left: 1rem; transform: scaleX(0.8); padding-bottom: 1rem; }
-.shape-title1 .shape-word:nth-child(2){ padding-left: 4rem; transform: scaleX(0.7); padding-bottom: 1rem; }
-.shape-title1 .shape-word:nth-child(3){ padding-left: 7rem; transform: scaleY(1.4); transform: scaleX(0.6); }
+/* keyframes sử dụng biến scale để không bị ghi đè thuộc tính scale của .shape-word */
+@keyframes WordslideInFromLeft {
+  0% {
+    transform: translateX(-100%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-50%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 1;
+  }
+}
 
-/* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
-.shape-title2 .shape-word:nth-child(1){ padding-right: 8rem; transform: scaleX(0.7); padding-bottom: 1.5rem; padding-top: 1rem;}
-.shape-title2 .shape-word:nth-child(2){ padding-left: 0rem; transform: scaleX(1.2);}
-.shape-title2 .shape-word:nth-child(3){ padding-left: 45rem; transform: scaleY(2); transform: scaleX(0.7); padding-top: 1rem; transform-origin: left;}
+@keyframes WordslideInFromRight {
+  0% {
+    transform: translateX(100%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(50%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 1;
+  }
+}
 
-/* word slide from left animation */
+/* shape */
 @keyframes slideInFromLeft {
   0% {
     transform: translate(-150%, -50%) skewX(-25deg);
@@ -202,6 +275,12 @@
   }
 }
 
+/* rotate animation */
+@keyframes ring-rotate {
+  from { transform: rotate(0deg);}
+  to   { transform: rotate(360deg); }
+}
+
 /* respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .home-shape .shape-shape1,
@@ -209,6 +288,13 @@
     animation: none;
     opacity: 1;
     transform: translate(-50%, -50%) skewX(-25deg);
+  }
+
+  .shape-title1 .shape-word,
+  .shape-title2 .shape-word {
+    animation: none !important;
+    opacity: 1;
+    transform: translateX(0) scaleX(var(--sx)) scaleY(var(--sy));
   }
 }
 
@@ -261,11 +347,6 @@
   .shape-shape2 { right: -36%;}
 }
 
-/* rotate animation */
-@keyframes ring-rotate {
-  from { transform: rotate(0deg);}
-  to   { transform: rotate(360deg); }
-}
 /* Thêm vào cuối file home.css */
 
 .main-page-container {

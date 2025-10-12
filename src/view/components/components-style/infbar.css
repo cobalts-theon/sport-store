@@ -11,13 +11,12 @@
   display: flex;
   flex-shrink: 0; /* Ngăn track bị co lại */
   /* Áp dụng animation */
-  animation: infinite-scroll-logo 8s linear infinite; /* Tăng thời gian để chạy mượt hơn */
+  animation: infinite-scroll-logo 20s linear infinite; /* Tăng thời gian để chạy mượt hơn */
 }
 
 .infbar-logo {
   height: 40px; 
   width: auto;
-  /* THAY THẾ 'gap' BẰNG 'padding' */
   /* Thêm khoảng cách trái/phải cho mỗi logo */
   padding: 0.75rem 1.5rem; 
 }
@@ -28,6 +27,6 @@
   }
   to {
     /* Giá trị này vẫn đúng, nó sẽ di chuyển track đi 1 nửa chiều dài của chính nó */
-    transform: translateX(-10%);
+    transform: translateX(-50%);
   }
 }

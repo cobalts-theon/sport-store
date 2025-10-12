@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 /* import font từ Google Fonts (Bebas Neue) */
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=BBH+Sans+Bartle&display=swap');
+
 .nav {
     font-family: 'Bebas Neue', sans-serif;
     position: fixed;
