@@ -12,7 +12,7 @@ function Navbar() {
   // Thêm sự kiện lắng nghe cuộn trang để thay đổi trạng thái scrolled
   // Navbar sẽ đổi màu khi người dùng cuộn trang xuống > 10px
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);  // Nếu cuộn > 10px thì scrolled = true
+    const handleScroll = () => setScrolled(window.scrollY > 1);  // Nếu cuộn > 10px thì scrolled = true
     window.addEventListener('scroll', handleScroll);  // Lắng nghe sự kiện cuộn trang
     return () => window.removeEventListener('scroll', handleScroll);  // Cleanup khi component unmount
   }, []);

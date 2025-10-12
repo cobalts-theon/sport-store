@@ -445,6 +445,7 @@
     
     /* các liên kết trong panel */
     .nav-mobile-panel a {
+        text-decoration: none;
         color: white;
         padding: 0.1rem 0.5rem;
         border-radius: 8px;

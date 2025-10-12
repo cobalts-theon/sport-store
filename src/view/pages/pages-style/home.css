@@ -1,26 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-html, body {
-  display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-
-    margin: 0;
-    background-color: #0f0f10; /* dark base */
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-    background-size: 48px 48px;   /* grid size */
-    background-repeat: repeat;
-    background-attachment: fixed;  /* đảm bảo background luôn giữ cố định khi scrolled */
-    -webkit-font-smoothing: antialiased;    /* Cho chữ đẹp hơn */
-    -moz-osx-font-smoothing: grayscale;  /* Cho chữ đẹp hơn */
-    overflow-x: hidden; /* ngăn cuộn ngang */
-
-    scroll-behavior: smooth;
-}
-
 .home-container {
     font-family: 'Bebas Neue', sans-serif;
     margin: 0 auto;
@@ -144,7 +123,7 @@ html, body {
   flex-direction:column;       /* xếp thẳng cột */
   align-items:center;
   gap: .08em; 
-  padding-top: 1rem;
+  padding-top: 2.5rem;
   padding-left: 30rem;
 }
 
@@ -159,7 +138,6 @@ html, body {
   /* animation pulse (to -> trở về) */
   font-size: clamp(28px, 8vw, 96px); /* responsive */
   transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
-  animation: slideInFrombottomWord 3500ms cubic-bezier(.2,.9,.2,1) 120ms both;
 }
 
 .shape-title2 {
@@ -184,15 +162,16 @@ html, body {
 }
 
 /* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
-.shape-title1 .shape-word:nth-child(1){ padding-left: 5rem; transform: scaleY(1.4); padding-bottom: 2rem; padding-top: 1rem;}
-.shape-title1 .shape-word:nth-child(2){ padding-left: 7rem; transform: scaleX(0.86); padding-bottom: 1rem; }
-.shape-title1 .shape-word:nth-child(3){ padding-left: 16rem; transform: scaleY(1.2); transform: scaleX(0.65); }
+.shape-title1 .shape-word:nth-child(1){ padding-left: 1rem; transform: scaleX(0.8); padding-bottom: 1rem; }
+.shape-title1 .shape-word:nth-child(2){ padding-left: 4rem; transform: scaleX(0.7); padding-bottom: 1rem; }
+.shape-title1 .shape-word:nth-child(3){ padding-left: 7rem; transform: scaleY(1.4); transform: scaleX(0.6); }
 
 /* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
-.shape-title2 .shape-word:nth-child(1){ padding-right: 15rem; transform: scaleX(0.8); padding-bottom: 1rem; padding-top: 1rem;}
-.shape-title2 .shape-word:nth-child(2){ padding-right: 9rem; transform: scaleX(1.5);}
-.shape-title2 .shape-word:nth-child(3){ padding-left: 2rem; transform: scaleY(2); transform: scaleX(0.8); padding-top: 1rem; transform-origin: left;}
+.shape-title2 .shape-word:nth-child(1){ padding-right: 8rem; transform: scaleX(0.7); padding-bottom: 1.5rem; padding-top: 1rem;}
+.shape-title2 .shape-word:nth-child(2){ padding-left: 0rem; transform: scaleX(1.2);}
+.shape-title2 .shape-word:nth-child(3){ padding-left: 45rem; transform: scaleY(2); transform: scaleX(0.7); padding-top: 1rem; transform-origin: left;}
 
+/* word slide from left animation */
 @keyframes slideInFromLeft {
   0% {
     transform: translate(-150%, -50%) skewX(-25deg);
@@ -296,9 +275,9 @@ html, body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding-top: 8rem;
+  padding-top: 2rem;
   box-sizing: border-box;
 
   /* Thêm dòng này để tạo khoảng cách */
-  margin-bottom: 4rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */
+  margin-bottom: 3rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */
 }
