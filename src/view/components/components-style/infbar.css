@@ -1,6 +1,6 @@
 .infbar-container { 
   width: 100%;
-  background-color: #D0FE1D;
+  background-color: transparent;
   overflow: hidden; 
   display: flex;
   overflow-x: hidden; /* Ngăn cuộn ngang */
@@ -11,6 +11,16 @@
   flex-shrink: 0; /* Ngăn track bị co lại */
   /* Áp dụng animation */
   animation: infinite-scroll-logo 20s linear infinite; /* Tăng thời gian để chạy mượt hơn */
+  transition: all 0.3s ease-in-out;
+}
+
+.infbar-track:hover {
+  transition: all 0.3s ease-in-out;
+  animation-play-state: paused; /* Tạm dừng animation khi hover */
+}
+
+.infbar-logo {
+  filter: invert(1);
 }
 
 .infbar-logo {
@@ -18,6 +28,7 @@
   width: auto;
   /* Thêm khoảng cách trái/phải cho mỗi logo */
   padding: 0.75rem 1.5rem; 
+  filter: invert(60%) sepia(65%) saturate(400%) hue-rotate(30deg) brightness(100%) contrast(200%);
 }
 
 @keyframes infinite-scroll-logo {

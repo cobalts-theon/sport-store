@@ -204,8 +204,8 @@
   animation-delay: 0s;
 }
 .shape-title2 .shape-word:nth-child(2){
-  padding-right: 2.24rem;
-  --sx: 5;
+  padding-right: 4.4rem;
+  --sx: 4;
   --sy: 1.5;
   animation-delay: 0.25s;
 }
@@ -214,10 +214,10 @@
 .shape-title2 .shape-word:nth-child(2)::after {
   content: '||||||||';
   position: absolute;
-  left: 37.2px;
-  right: -3.97rem;
+  left: 37.4px;
+  right: -3.09rem;
   top: 50%;
-  transform: translateY(-50%) scaleX(0.54) scaleY(1.2);
+  transform: translateY(-50%) scaleX(0.68) scaleY(1.2);
   font-family: 'Merinos Regular';
   font-weight: 700;
   font-size: 60px; /* responsive */
@@ -226,7 +226,7 @@
 }
 
 .shape-title2 .shape-word:nth-child(3){
-  padding-left: 6.74rem;
+  padding-left: 6.83rem;
   --sx: 1.7;
   --sy: 1.5;
   padding-top: 1rem;
