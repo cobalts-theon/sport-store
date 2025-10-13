@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
+@font-face {
+  font-family: 'Merinos Regular';
+  src: url('src/assets/fonts/Merinos.otf') format('opentype');
+}
+
 .home-container {
     font-family: 'Bebas Neue', sans-serif;
     margin: 0 auto;
@@ -130,7 +135,7 @@
 /* từng từ/khối để animate riêng */
 .shape-title1 .shape-word{
   display:block;
-  font-family: 'BBH Sans Bartle', 'Bebas Neue', sans-serif;
+  font-family: 'Merinos Regular';
   font-weight: 700;
   color:  #000000ff;
   line-height:0.9;
@@ -145,24 +150,25 @@
 
 /* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
 .shape-title1 .shape-word:nth-child(1){
-  padding-left: 1rem;
-  --sx: 0.8;
-  --sy: 1.12;
-  padding-bottom: 1rem;
+  padding-right: 5.95rem;
+  --sx: 1.7;
+  --sy: 1.5;
+  padding-bottom: 1.5rem;
+  transform: skewX(25deg);
   animation-delay: 0s;
 }
 .shape-title1 .shape-word:nth-child(2){
-  padding-left: 4rem;
-  --sx: 0.7;
-  --sy: 1.12;
+  padding-right: 3.95rem;
+  --sx: 1.7;
+  --sy: 1.5;
   padding-bottom: 1rem;
   animation-delay: 0.15s;
 }
 .shape-title1 .shape-word:nth-child(3){
-  padding-left: 7rem;
-  --sx: 0.6;
-  --sy: 1.2;
-  padding-bottom: 0.5rem;
+  padding-right: 0.58em;
+  --sx: 1.7;
+  --sy: 1.5;
+  padding-bottom: 1rem;
   animation-delay: 0.3s;
 }
 
@@ -171,14 +177,13 @@
   flex-direction:column;       /* xếp thẳng cột */
   align-items:center;
   gap: .08em; 
-  padding-top: 1rem;
   padding-right: 30rem;
 }
 
 /* column 2 - giữ nguyên thuộc tính nhưng animation ngược chiều */
 .shape-title2 .shape-word{
   display:block;
-  font-family: 'BBH Sans Bartle', 'Bebas Neue', sans-serif;
+  font-family: 'Merinos Regular';
   font-weight: 700;
   color: #000000ff;
   line-height:0.9;
@@ -188,30 +193,46 @@
   transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
   animation: WordslideInFromRight 3s ease-out both;
   --sx: 1;
-  --sy: 1.12;
+  --sy: 1.2;
 }
 .shape-title2 .shape-word:nth-child(1){
-  padding-left: 0rem;
-  --sx: 0.8;
-  --sy: 1.12;
+  padding-left: 2.19rem;
+  --sx: 1.7;
+  --sy: 1.5;
   padding-bottom: 1.5rem;
-  padding-top: 1rem;
+  padding-top: 2rem;
   animation-delay: 0s;
 }
 .shape-title2 .shape-word:nth-child(2){
-  padding-left: 8rem;
-  --sx: 1.6;
-  --sy: 1.2;
-  animation-delay: 0.2s;
+  padding-right: 2.24rem;
+  --sx: 5;
+  --sy: 1.5;
+  animation-delay: 0.25s;
 }
+
+/* Thêm đường gạch bên phải */
+.shape-title2 .shape-word:nth-child(2)::after {
+  content: '||||||||';
+  position: absolute;
+  left: 37.2px;
+  right: -3.97rem;
+  top: 50%;
+  transform: translateY(-50%) scaleX(0.54) scaleY(1.2);
+  font-family: 'Merinos Regular';
+  font-weight: 700;
+  font-size: 60px; /* responsive */
+  color: #000000ff;
+  line-height: 0.9;
+}
+
 .shape-title2 .shape-word:nth-child(3){
-  padding-left: 45rem;
-  --sx: 0.7;
-  --sy: 1.2;
+  padding-left: 6.74rem;
+  --sx: 1.7;
+  --sy: 1.5;
   padding-top: 1rem;
-  transform-origin: left;
-  animation-delay: 0.15s;
+  animation-delay: 0.3s;
 }
+
 
 /* keyframes sử dụng biến scale để không bị ghi đè thuộc tính scale của .shape-word */
 @keyframes WordslideInFromLeft {
@@ -321,7 +342,8 @@
 /* speed/size adjustments for small screens */
 @media (max-width: 480px) {
   html, body { overflow-x: hidden; /* ngăn cuộn ngang */}
-  .home-image { width: 150px; height: 150px; }
+  .home-image { margin-top: -80px;}
+  .home-image { width: 150px; height: 150px;}
   .home-image img { width: 70%; height: 100%;}
   .ring-text {height: 6px; font-size: 6px; width: 120%; height: 120%; left: -10%; top: -10%;}
   .home-image:hover .ring-text { width: 140%; height: 140%; left: -20%; top: -20%;}
@@ -337,6 +359,10 @@
     transform-origin: center bottom; 
   }
   .home-shape {display: none;}
+  .main-page-container {
+    /* Thêm dòng này để tạo khoảng cách */
+    margin-bottom: 0rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */
+  }
 }
 
 @media (max-width: 1048px) {
@@ -356,9 +382,20 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding-top: 2rem;
   box-sizing: border-box;
 
   /* Thêm dòng này để tạo khoảng cách */
-  margin-bottom: 3rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */
+  margin-bottom: 0rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */
+}
+
+@media (max-width: 480px) {
+  .main-page-container {
+    padding-bottom: 0;
+    margin-bottom: -2rem; /* Đẩy infbar lên trên trong mobile */
+    min-height: 85vh; 
+  }
+
+  .home-container {
+    margin-bottom: -3rem;
+  }
 }

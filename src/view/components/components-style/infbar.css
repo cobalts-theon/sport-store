@@ -1,8 +1,7 @@
 .infbar-container { 
   width: 100%;
   background-color: #D0FE1D;
-  padding: 0rem 0;
-  overflow: hidden;
+  overflow: hidden; 
   display: flex;
   overflow-x: hidden; /* Ngăn cuộn ngang */
 }

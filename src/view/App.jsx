@@ -7,6 +7,7 @@ import Header from './components/navbar'
 
 //Components
 import Infbar from './components/infbar'
+import Commercre from './components/commercre'
 
 //Pages
 import Home from './pages/home'
@@ -15,6 +16,7 @@ function App() {
   return (
     <>
       <StartupLoader duration={2000}/> {/* Thời gian hiển thị logo khởi động */}
+      <Commercre/>
       <Header/>
       <Routes> {/* Dùng Routes để định nghĩa các tuyến đường trong ứng dụng mà không cần load lại trang */} 
         <Route

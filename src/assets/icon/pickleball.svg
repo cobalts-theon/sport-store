@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Paddle -->
+  <g id="paddle">
+    <!-- Handle -->
+    <rect x="85" y="120" width="30" height="60" rx="15" fill="#333" stroke="#000" stroke-width="2"/>
+    <rect x="90" y="125" width="20" height="50" rx="10" fill="#555"/>
+    
+    <!-- Paddle face -->
+    <ellipse cx="100" cy="70" rx="45" ry="55" fill="#D0FE1D" stroke="#000" stroke-width="3"/>
+    
+    <!-- Paddle texture/holes -->
+    <circle cx="100" cy="50" r="3" fill="#000" opacity="0.3"/>
+    <circle cx="85" cy="60" r="3" fill="#000" opacity="0.3"/>
+    <circle cx="115" cy="60" r="3" fill="#000" opacity="0.3"/>
+    <circle cx="90" cy="75" r="3" fill="#000" opacity="0.3"/>
+    <circle cx="110" cy="75" r="3" fill="#000" opacity="0.3"/>
+    <circle cx="100" cy="85" r="3" fill="#000" opacity="0.3"/>
+    
+    <!-- Edge guard -->
+    <ellipse cx="100" cy="70" rx="45" ry="55" fill="none" stroke="#000" stroke-width="4"/>
+  </g>
+  
+  <!-- Pickleball -->
+  <g id="ball">
+    <!-- Ball background -->
+    <circle cx="150" cy="50" r="25" fill="#FFF" stroke="#000" stroke-width="2"/>
+    
+    <!-- Ball holes -->
+    <circle cx="150" cy="50" r="2.5" fill="#000"/>
+    <circle cx="150" cy="38" r="2" fill="#000"/>
+    <circle cx="158" cy="44" r="2" fill="#000"/>
+    <circle cx="158" cy="56" r="2" fill="#000"/>
+    <circle cx="150" cy="62" r="2" fill="#000"/>
+    <circle cx="142" cy="56" r="2" fill="#000"/>
+    <circle cx="142" cy="44" r="2" fill="#000"/>
+  </g>
+</svg>

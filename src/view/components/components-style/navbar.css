@@ -5,7 +5,7 @@
 .nav {
     font-family: 'Bebas Neue', sans-serif;
     position: fixed;
-    top: 0;
+    top: 40px;
     left: 0;
     right: 0;
     z-index: 50;
@@ -16,6 +16,9 @@
 .nav.scrolled {
     background: rgba(30, 30, 30, 0.9);
     backdrop-filter: blur(3px);
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 .nav-content {
@@ -376,7 +379,6 @@
         z-index: 60;
     }
 
-
     .nav.mobile-open .nav-logo img {
         transition: filter 100ms ease-in-out;
         filter: invert(70%) sepia(60%) saturate(420%) hue-rotate(29deg) brightness(200%) contrast(200%);
@@ -438,11 +440,16 @@
     /* trạng thái mở - trượt xuống */
     .nav-mobile-panel.open {
         pointer-events: auto;
-        transform: translateY(0);
+        transform: translateY(40px);
         opacity: 1;
-        max-height: 90vh;    
+        max-height: 90vh; 
         overflow: auto;
     }
+
+    .nav.mobile-open.scrolled .nav-mobile-panel.open {
+        transform: translateY(0px); 
+    }
+
     
     /* các liên kết trong panel */
     .nav-mobile-panel a {

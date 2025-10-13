@@ -1,0 +1,51 @@
+.commercre-container { 
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #D0FE1D;
+  padding: 0;
+  overflow: hidden; 
+  display: flex;
+  overflow-x: hidden;
+  z-index: 100; /* Cao hơn navbar */
+}
+
+.commercre-track {
+  display: flex;
+  flex-shrink: 0;
+  /* Áp dụng animation */
+  animation: infinite-scroll-word 50s linear infinite; /* Tăng thời gian để chạy mượt hơn */
+}
+
+.infbar-word {
+  height: 40px; 
+  width: auto;
+  /* Thêm khoảng cách trái/phải cho mỗi word */
+  padding: 0rem 1rem; 
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.infbar-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+  margin-bottom: 2px;
+  filter: brightness(0);
+}
+
+@keyframes infinite-scroll-word {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    /* Giá trị này vẫn đúng, nó sẽ di chuyển track đi 1 nửa chiều dài của chính nó */
+    transform: translateX(0);
+  }
+}

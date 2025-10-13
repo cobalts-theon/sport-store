@@ -32,13 +32,13 @@ function Home() {
             <h1 className="shape-title1">
               <span className="shape-word">||||||||MOVE</span>
               <span className="shape-word">||||||||WITH</span>
-              <span className="shape-word">||||||||SOULS</span>
+              <span className="shape-word">||||||||SOUL</span>
             </h1>
           </div>
           <div className="shape-shape2">
             <h1 className="shape-title2">
               <span className="shape-word">LIVE||||||||</span>
-              <span className="shape-word">IN||||||||</span>
+              <span className="shape-word">IN</span>
               <span className="shape-word">PRIME||||||||</span>
             </h1>
           </div>
