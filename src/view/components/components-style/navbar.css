@@ -259,54 +259,141 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    overflow: hidden;
     transform-origin: left center;
     transition: all 0.1s ease-in-out;
-    transform: skewX(-25deg);
     border: #D0FE1D 2px solid;
+    border-radius: 50px;
     background: transparent;
+    
 }
 
 .nav-music-icon {
-    position: relative; /* Quan trọng: Thiết lập bối cảnh cho pseudo-element */
-    display: inline-block; /* Quan trọng: Để relative hoạt động tốt */
-    width: 24px;
-    height: 24px;
-    margin-right: -40px;
-    margin-left: 15px; /* nhích icon sang phải một chút */
+    position: relative; /* Đã thêm */
+    display: inline-block; /* Đã thêm */
+    width: 20px;
+    height: 20px;
+    margin-right: -45px;
+    margin-left: 21px; /* nhích icon sang phải một chút */
     color: #D0FE1D;          /* color dùng làm currentColor cho SVG */
     z-index: 1;
-    transition: all 120ms ease-in-out;
     vertical-align: middle;
-    overflow: hidden;
-
 }
 
-.nav-music-icon:hover {
+.music-button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 0;
+    border-radius: 50px;
+    background: #D0FE1D;
+    z-index: -2;
+}
+
+.music-button:hover::before {
+    height: 100%;
+}
+
+/* Loại bỏ padding và background cũ, chỉ đổi màu icon */
+.music-button:hover{
+    background: #D0FE1D;
+}
+
+.music-button:hover .nav-music-icon {
+    color: black; /* đổi màu icon khi hover */
+}
+
+.music-button.playing .music-visualizer .bar1,
+.music-button.playing .music-visualizer .bar2,
+.music-button.playing .music-visualizer .bar3,
+.music-button.playing .music-visualizer .bar4,
+.music-button.playing .music-visualizer .bar5 {
+    animation-play-state: running; /* chạy animation khi music đang play */
+    background: black; /* đổi màu thanh khi đang play */
+}
+
+.music-button:not(.playing) .music-visualizer .bar1,
+.music-button:not(.playing) .music-visualizer .bar2,
+.music-button:not(.playing) .music-visualizer .bar3,
+.music-button:not(.playing) .music-visualizer .bar4,
+.music-button:not(.playing) .music-visualizer .bar5 {
+    animation-play-state: paused;            /* dừng animation */
+    transform: scaleY(1) !important;        /* trả về tỉ lệ chiều cao gốc */
+    height: 18px;                            /* chiều cao mặc định */
+    background: #D0FE1D;                    /* màu mặc định */
+    transition: transform 180ms ease, height 160ms ease, background 120ms ease-in-out;
+}
+
+.music-button:hover .music-visualizer .bar1,
+.music-button:hover .music-visualizer .bar2,
+.music-button:hover .music-visualizer .bar3,
+.music-button:hover .music-visualizer .bar4,
+.music-button:hover .music-visualizer .bar5 {
+    transition: background 120ms ease-in-out;
+    background: black; /* đổi màu thanh khi hover */
+}
+
+.music-button.playing  {
+    color: black;
+    background: #D0FE1D;
+}
+
+.music-button.playing .nav-music-icon {
     color: black;
 }
 
-.nav-music-icon::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #D0FE1D;
-    z-index: -1; /* Đặt phía sau icon */
-    transform-origin: center;
-    transition: transform 0.1s ease-in-out, border-radius 0.1s ease-in-out;
-    /* Dùng scale để mở rộng hiệu ứng tràn */
-    transform: scale(0); 
-    border-radius: 50%; /* Bắt đầu là hình tròn */
+.music-visualizer {
+    display: flex;
+    gap: 5px;                /* khoảng cách giữa các thanh */
+    align-items: flex-end;   /* căn đáy để các thanh "vươn" lên từ dưới */
+    margin-left: -30px;
+    vertical-align: middle;
+    height: 20px;
+    position: relative;
+    z-index: 1;
 }
 
-/* Hiệu ứng khi hover */
-.nav-music-icon:hover::before {
-    /* Scale ra để background tràn, ví dụ 2.5 lần sẽ tràn ra ngoài */
-    transform: scale(2.5); 
-    border-radius: 0; /* Có thể chuyển thành hình chữ nhật khi tràn */
+.music-visualizer .bar1,
+.music-visualizer .bar2,
+.music-visualizer .bar3,
+.music-visualizer .bar4,
+.music-visualizer .bar5 {
+    display: inline-block;
+    width: 4px;
+    height: 18px;                 /* chiều cao mặc định (sẽ scaleY khi animate) */
+    transform-origin: center;
+    animation-name: visualizer-bounce;
+    animation-duration: 700ms;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-play-state: paused; /* chỉ chạy khi music-button.playing */
+}
+
+.music-visualizer .bar1 {
+    animation-delay: 200ms;
+}
+.music-visualizer .bar2 {
+    animation-delay: 100ms;
+}
+.music-visualizer .bar3 {
+    animation-delay: 0ms;
+}
+.music-visualizer .bar4 {
+    animation-delay: 100ms;
+}
+.music-visualizer .bar5 {
+    animation-delay: 200ms;
+}
+
+
+@keyframes visualizer-bounce {
+    0%, 100% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(0.4); /* thu nhỏ chiều cao thanh */
+    }
 }
 
 /* Responsive: máy tính bảng (<=1024px) */

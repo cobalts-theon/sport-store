@@ -4,17 +4,28 @@ import { Link } from "react-router-dom";
 import pswhitelogo from "/src/assets/image/white-logo.png";
 import "./components-style/navbar.css";
 
+// FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSearch, faTimes, faMusic } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSearch, faTimes, faPlay, faPause} from '@fortawesome/free-solid-svg-icons';
 
+//Audio
+import backgroundMusic from '/src/assets/audio/Memory-Reboot-Hatsune-Miku&Shrek.mp3';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);  
   const [searchQuery, setSearchQuery] = useState('');
+  const [musicPlaying, setMusicPlaying] = useState(false);
   const searchRef = useRef(null); // Dùng để phát hiện click ngoài search box
+  const audioRef = useRef(new Audio(backgroundMusic));
 
+  //giảm âm lượng
+  useEffect(() => {
+    const audio = audioRef.current;
+    audio.volume = 0.1; // Giảm âm lượng xuống 20%
+  }, []);
+  
   // Theo dõi cuộn trang
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -84,12 +95,20 @@ function Navbar() {
         {/* music play */}
 
         <button
-          className="music-button"
-          onClick={(e) => { e.stopPropagation(); toggleMusic?.(); }}
+          className={`music-button ${musicPlaying ? 'playing' : 'paused'}`}
+          onClick={() => {
+            if (musicPlaying) {
+              audioRef.current.pause();
+            } else {
+              audioRef.current.volume = 0.2; 
+              audioRef.current.play();
+            }
+            setMusicPlaying(v => !v);
+          }}
           type="button"
         >
-          <FontAwesomeIcon icon={faMusic} className="nav-music-icon" />
-          <span className="music visualizer">
+          <FontAwesomeIcon icon={musicPlaying ? faPause : faPlay} className="nav-music-icon" />
+          <span className="music-visualizer">
             <span className="bar1"></span>  
             <span className="bar2"></span>
             <span className="bar3"></span>
