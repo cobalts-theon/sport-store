@@ -5,7 +5,7 @@ import pswhitelogo from "/src/assets/image/white-logo.png";
 import "./components-style/navbar.css";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSearch, faTimes, faMusic } from '@fortawesome/free-solid-svg-icons';
 
 
 function Navbar() {
@@ -79,6 +79,23 @@ function Navbar() {
               }}
               autoComplete="off"
             />
+        </button>
+
+        {/* music play */}
+
+        <button
+          className="music-button"
+          onClick={(e) => { e.stopPropagation(); toggleMusic?.(); }}
+          type="button"
+        >
+          <FontAwesomeIcon icon={faMusic} className="nav-music-icon" />
+          <span className="music visualizer">
+            <span className="bar1"></span>  
+            <span className="bar2"></span>
+            <span className="bar3"></span>
+            <span className="bar4"></span>
+            <span className="bar5"></span>
+          </span>
         </button>
 
         {/* --- USER ICON --- */}

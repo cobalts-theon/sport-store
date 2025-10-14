@@ -28,6 +28,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 
@@ -230,10 +231,14 @@
 }
 
 .nav-links#main {
-    left: 60%;
-    transform: translate(-220%, 6%);
+    position: absolute;
+    left: 27%;
+    /* move from center by fixed pixels to keep stable when zooming/resizing */
+    transform: translate(-225px, 6%);
     display: flex;
     z-index: 10;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 /* khi hover mở nền link */
@@ -246,6 +251,63 @@
     color: black; 
 }
 
+.music-button {
+    left: 88%;
+    padding: 5px 50px;
+    margin: 0 15px 15px 0;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    transform-origin: left center;
+    transition: all 0.1s ease-in-out;
+    transform: skewX(-25deg);
+    border: #D0FE1D 2px solid;
+    background: transparent;
+}
+
+.nav-music-icon {
+    position: relative; /* Quan trọng: Thiết lập bối cảnh cho pseudo-element */
+    display: inline-block; /* Quan trọng: Để relative hoạt động tốt */
+    width: 24px;
+    height: 24px;
+    margin-right: -40px;
+    margin-left: 15px; /* nhích icon sang phải một chút */
+    color: #D0FE1D;          /* color dùng làm currentColor cho SVG */
+    z-index: 1;
+    transition: all 120ms ease-in-out;
+    vertical-align: middle;
+    overflow: hidden;
+
+}
+
+.nav-music-icon:hover {
+    color: black;
+}
+
+.nav-music-icon::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #D0FE1D;
+    z-index: -1; /* Đặt phía sau icon */
+    transform-origin: center;
+    transition: transform 0.1s ease-in-out, border-radius 0.1s ease-in-out;
+    /* Dùng scale để mở rộng hiệu ứng tràn */
+    transform: scale(0); 
+    border-radius: 50%; /* Bắt đầu là hình tròn */
+}
+
+/* Hiệu ứng khi hover */
+.nav-music-icon:hover::before {
+    /* Scale ra để background tràn, ví dụ 2.5 lần sẽ tràn ra ngoài */
+    transform: scale(2.5); 
+    border-radius: 0; /* Có thể chuyển thành hình chữ nhật khi tràn */
+}
 
 /* Responsive: máy tính bảng (<=1024px) */
 @media (max-width: 1024px) {
