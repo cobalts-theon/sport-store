@@ -6,7 +6,7 @@ import "./components-style/navbar.css";
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping, faVenus, faMars} from '@fortawesome/free-solid-svg-icons';
 
 //Audio
 import backgroundMusic from '/src/assets/audio/Memory-Reboot-Hatsune-Miku&Shrek.mp3';
@@ -53,9 +53,37 @@ function Navbar() {
         </Link>
 
         <div className="nav-links" id="main">
-          <Link to="/"><span class="nav-link-label">Home</span></Link>
-          <Link to="/products" id="products"><span class="nav-link-label">Products</span></Link>
-          <Link to="/services"><span class="nav-link-label">Help</span></Link>
+          <Link to="/"><span className="nav-link-label">Home</span></Link>
+
+          {/* Products with full-width hover panel */}
+          <div className="has-dropdown">
+            <Link to="/products" id="products"><span className="nav-link-label">Products</span></Link>
+            {/* empty panel, stays visible when mouse is over it because it's a child of .has-dropdown */}
+            <div className="product-panel" onMouseDown={(e) => e.stopPropagation()}>
+              <div className="product-panel-grid">
+                <div className="product-category">
+                  <h3>Categories</h3>
+                  <Link to="/products?category=shoes" className="product-link" onClick={() => setMobileOpen(false)}>Shoes</Link>
+                  <Link to="/products?category=clothes" className="product-link" onClick={() => setMobileOpen(false)}>Clothes</Link>
+                  <Link to="/products?category=accessories" className="product-link" onClick={() => setMobileOpen(false)}>Accessories</Link>
+                </div>
+                <div className="product-category">
+                  <h3>By Sport</h3>
+                  <Link to="/products?sport=running" className="product-link" onClick={() => setMobileOpen(false)}>Running</Link>
+                  <Link to="/products?sport=training" className="product-link" onClick={() => setMobileOpen(false)}>Training</Link>
+                  <Link to="/products?sport=basketball" className="product-link" onClick={() => setMobileOpen(false)}>Basketball</Link>
+                  <Link to="/products?sport=soccer" className="product-link" onClick={() => setMobileOpen(false)}>Soccer</Link>
+                  <Link to="/products?sport=skateboarding" className="product-link" onClick={() => setMobileOpen(false)}>Skateboarding</Link>
+                </div>
+                <div className="product-category">
+                  <h3>Target</h3>
+                  <Link to="/products?target=men" className="product-link" onClick={() => setMobileOpen(false)}>Men <FontAwesomeIcon icon={faMars}/></Link>
+                  <Link to="/products?target=women" className="product-link" onClick={() => setMobileOpen(false)}>Women <FontAwesomeIcon icon={faVenus}/></Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Link to="/services"><span className="nav-link-label">Help</span></Link>
         </div>
 
         {/* --- SEARCH BUTTON --- */}

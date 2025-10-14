@@ -26,12 +26,60 @@
   width: min(14vw, 150px);
   height: min(14vw, 150px);
   margin: 0 auto 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* slideshow wrapper: anchor inside .home-image (which is position:relative) */
+.slideshow {
+  position: absolute;   /* fix typo (was "postion") */
+  inset: 0;             /* top:0; right:0; bottom:0; left:0; */
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+/* stacked slides - ensure selector matches class used in JSX: .slide */
+.slideshow .slide {
+  position: absolute;
+  inset: 0;
+  width: 130%;
+  height: 130%;
+  left: -15%;         
+  top: 10%;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(1);
+  will-change: opacity, transform;
+  animation-name: slideFade;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  pointer-events: none;
+}
+
+/* Animate của slide  */
+@keyframes slideFade {
+  0%   { opacity: 0; transform: scale(1); }
+  4%   { opacity: 1; transform: scale(1.02); }
+  20%  { opacity: 1; transform: scale(1.03); }
+  24%  { opacity: 0; transform: scale(1.04); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+.home-image:hover .ring-text {
+  transform: scale(1.06);
+  transition: transform 200ms ease;
 }
 
 /* keep image circular, remove previous border */
 .home-image img {
-  width: 80%;
-  height: 150%;
+  width: 130%;
+  height: 130%;
+  transform: translate(-12%, 8%); /* center the image within the container */
   object-fit: cover;
   border-radius: 50%;
   display: block;
@@ -50,13 +98,6 @@
   pointer-events: none;
   transform-origin: 50% 50%;
   animation: ring-rotate 12s linear infinite;
-}
-
-.home-image:hover .ring-text{
-  width: 170%;
-  height: 170%;
-  left: -35%;
-  top: -10%;
   transition: all 0.2s ease-in-out;
 }
 
@@ -69,10 +110,16 @@
 }
 
 .ring-text textPath {
-  /* keep text baseline centered on the path */
   startOffset: 0;
 }
 
+.home-image:hover .ring-text{
+  width: 170%;
+  height: 170%;
+  left: -35%;
+  top: -10%;
+  transition: all 0.1s ease-in-out;
+}
 /* Slogan của trang chủ Sử dụng rolling text animation từ dưới lên trên và tạo sóng từ trái qua phải */
 .home-solgan p {
   color: transparent;
@@ -327,7 +374,9 @@
 @media (max-width: 480px) {
   html, body { overflow-x: hidden; /* ngăn cuộn ngang */}
   .home-image { margin-top: -80px;}
-  .home-image { width: 150px; height: 150px;}
+  .home-image { width: 150px; height: 150px; }
+  .slideshow .slide { border-radius: 50%; }
+  .ring-text { left: -10%; top: -10%; }
   .home-image img { width: 70%; height: 100%;}
   .ring-text {height: 6px; font-size: 6px; width: 120%; height: 120%; left: -10%; top: -10%;}
   .home-image:hover .ring-text { width: 140%; height: 140%; left: -20%; top: -20%;}

@@ -1,0 +1,22 @@
+#AUTHENTICATION:
+    -login
+    -logout
+    -register (username, gmail, password, comfirm password) || (with google)
+    -forgot password (PIN email)
+
+#MAIN PAGES
+    -Home Page (NEWS): hiển thị tin tức, sản phẩm mới
+    -Product List Page: danh sách sản phẩm (filter, search, sort)
+    -Product Detail Page: xem chi tiết sản phẩm
+    -Cart Page: xem, thêm, xóa, cập nhật sản phẩm trong giỏ hàng
+    -Order Page: xem thông tin đơn hàng trong quá trình vận chuyển.
+    -Checkout Page: xác nhận đơn hàng và thanh toán (giả lập)
+    -Profile Page: xem và cập nhật thông tin cá nhân
+    -Help Page: Page giúp bạn tìm trợ giúp nếu có sự cố hay bug xảy ra
+#PRODCUT FEATURES
+    -Add to cart: Thêm sản phẩm vào giỏ
+    -Remove from cart: Xóa sản phẩn khỏi giỏ
+    -Thay đổi số lượng: Thay đổi số lượng sản phẩm trong giỏ
+    -Product Info: Xem chi tiết thông tin sản phẩm, giá, năm sx, tình trạng (Hết hay còn)
+    -Search product: Tìm tên sản phẩm
+    -Filter: Lọc theo địa chỉ, loại(Áo, quần, dụng cụ thể thao,...)

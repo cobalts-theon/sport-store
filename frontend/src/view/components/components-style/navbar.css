@@ -280,7 +280,7 @@
     cursor: pointer;
     transform-origin: left center;
     transition: all 0.1s ease-in-out;
-    border: #D0FE1D 2px solid;
+    border: #D0FE1D 1px solid;
     border-radius: 50px;
     background: transparent;
     
@@ -713,4 +713,130 @@
         gap: 0.6rem;
         font-size: 40px;
     }
+}
+
+/* wrapper for Products link + panel */
+.has-dropdown {
+  /* ensure panel is not clipped by parent overflow */
+  transform: skewX(-25deg);
+  padding-right: 4px;
+  z-index: 150;
+}
+
+/* empty full-width panel shown on hover; stays visible while pointer is over panel */
+.product-panel {
+  position: absolute;
+  left: -250%;
+  top: 100%;                      /* place directly under the nav row */
+  width: 100vw;                   /* full viewport width */
+  height: 0;                   /* requested height */
+  background: transparent;        /* CHANGED: make main panel transparent */
+  pointer-events: none;           /* default: ignore pointer until visible */
+  opacity: 1;
+  visibility: visible;
+  transition: height 160ms ease, opacity 200ms ease, visibility 200ms ease;
+  z-index: 140;
+}
+
+.product-panel::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 130%;
+  height: 100%;
+  transform: skewX(25deg); /* bù lại để nền thẳng */
+  background: rgba(18,18,18,0.98); /* set background here for animation */
+  z-index: -1;            /* behind any content inside panel */
+}
+
+/* show panel when hovering the link or the panel (focus-within covers keyboard) */
+.has-dropdown:hover .product-panel,
+.has-dropdown:focus-within .product-panel {
+    height: 70vh;
+    pointer-events: auto;
+}
+
+/* ensure panel sits above other nav items */
+.nav, .nav-content { /* keep stacking context predictable */
+  z-index: 100;
+}
+
+#products {
+    padding-top: 0.65rem;
+}
+
+.product-panel-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    right: 15%;
+    padding: 20px 40px;
+    max-width: 700px;
+    transform: skewX(25deg); /* bù lại để nội dung thẳng */
+    margin: 0 auto;
+    z-index: 1;
+    opacity: 0;
+    position: relative;
+}
+
+.has-dropdown:hover .product-panel-grid,
+.has-dropdown:focus-within .product-panel-grid {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 200ms ease, visibility 200ms ease;
+}
+
+
+/* Category section styling */
+.product-category {
+  gap: 12px;
+  padding: 16px;
+  transition: all 180ms ease;
+}
+
+.product-category:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(208, 254, 29, 0.3);
+  transform: translateY(-2px);
+}
+
+.product-category h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  color: #D0FE1D;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+}
+
+/* Product links styling */
+.product-category .product-link {
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 140ms ease;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-category .product-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #D0FE1D;
+  transition: width 180ms ease;
+}
+
+.product-category .product-link:hover {
+  color: #000000ff;
+  background: rgba(208, 254, 29, 0.08);
+  padding-left: 16px;
+}
+
+.product-category .product-link:hover::before {
+  width: 100%;
 }
