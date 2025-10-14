@@ -6,7 +6,7 @@ import "./components-style/navbar.css";
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSearch, faTimes, faPlay, faPause} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping} from '@fortawesome/free-solid-svg-icons';
 
 //Audio
 import backgroundMusic from '/src/assets/audio/Memory-Reboot-Hatsune-Miku&Shrek.mp3';
@@ -95,13 +95,15 @@ function Navbar() {
         {/* music play */}
 
         <button
-          className={`music-button ${musicPlaying ? 'playing' : 'paused'}`}
+          className={`music-button ${musicPlaying ? 'playing' : 'paused'}`} // Thêm class để thay đổi giao diện khi đang phát nhạc
           onClick={() => {
+            // Chuyển đổi trạng thái phát nhạc
             if (musicPlaying) {
-              audioRef.current.pause();
+              audioRef.current.pause(); // Tạm dừng nhạc
             } else {
-              audioRef.current.volume = 0.2; 
-              audioRef.current.play();
+              audioRef.current.volume = 0.1;  // Đảm bảo âm lượng thấp khi bắt đầu phát
+              audioRef.current.play();  // Phát nhạc
+              audioRef.current.loop = true; // Lặp lại nhạc
             }
             setMusicPlaying(v => !v);
           }}
@@ -119,6 +121,12 @@ function Navbar() {
 
         {/* --- USER ICON --- */}
         <div className="nav-links" id="alter">
+          <Link to="/order" className="order-icon">
+            <FontAwesomeIcon icon={faBox} className="nav-user-icon"/>
+          </Link>
+          <Link to="/cart" className="order-icon">
+            <FontAwesomeIcon icon={faCartShopping} className="nav-user-icon"/>
+          </Link>
           <Link to="/login"> 
             <FontAwesomeIcon icon={faUser} className="nav-user-icon"/> 
           </Link>

@@ -241,6 +241,19 @@
     backface-visibility: hidden;
 }
 
+.order-icon {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    transform: translateX(-120px);
+    transition: transform 120ms ease;
+}
+
+/* nếu muốn cho nền xuất hiện khi hover toàn bộ vùng nav-links#alter (nếu order-icon nằm trong đó) */
+.nav-links#alter:hover #order-icon::after {
+    height: 112%;
+}
+
 /* khi hover mở nền link */
 .nav-links a:hover::after {
     height: 112%; 
@@ -516,6 +529,10 @@
     .nav-links a .nav-user-icon {
         margin: 0 8px 0 0;
         padding: 0;
+    }
+
+    #order-icon {
+        transform: translateX(-4px);
     }
 }
 
