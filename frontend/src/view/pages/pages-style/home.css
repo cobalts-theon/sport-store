@@ -204,29 +204,13 @@
   animation-delay: 0s;
 }
 .shape-title2 .shape-word:nth-child(2){
-  padding-right: 4.4rem;
-  --sx: 4;
+  padding-left: 5.13rem;
+  --sx: 1.7;
   --sy: 1.5;
   animation-delay: 0.25s;
 }
-
-/* Thêm đường gạch bên phải */
-.shape-title2 .shape-word:nth-child(2)::after {
-  content: '||||||||';
-  position: absolute;
-  left: 37.4px;
-  right: -3.09rem;
-  top: 50%;
-  transform: translateY(-50%) scaleX(0.68) scaleY(1.2);
-  font-family: 'Merinos Regular';
-  font-weight: 700;
-  font-size: 60px; /* responsive */
-  color: #000000ff;
-  line-height: 0.9;
-}
-
 .shape-title2 .shape-word:nth-child(3){
-  padding-left: 6.83rem;
+  padding-left: 6.7rem;
   --sx: 1.7;
   --sy: 1.5;
   padding-top: 1rem;

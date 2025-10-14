@@ -53,9 +53,9 @@ function Navbar() {
         </Link>
 
         <div className="nav-links" id="main">
-          <Link to="/">Home</Link>
-          <Link to="/products" id="products">Products</Link>
-          <Link to="/services">Services</Link>
+          <Link to="/"><span class="nav-link-label">Home</span></Link>
+          <Link to="/products" id="products"><span class="nav-link-label">Products</span></Link>
+          <Link to="/services"><span class="nav-link-label">Help</span></Link>
         </div>
 
         {/* --- SEARCH BUTTON --- */}

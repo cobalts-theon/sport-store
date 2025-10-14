@@ -38,7 +38,7 @@ function Home() {
           <div className="shape-shape2">
             <h1 className="shape-title2">
               <span className="shape-word">LIVE||||||||</span>
-              <span className="shape-word">IN</span>
+              <span className="shape-word">WITH||||||||</span>
               <span className="shape-word">PRIME||||||||</span>
             </h1>
           </div>
