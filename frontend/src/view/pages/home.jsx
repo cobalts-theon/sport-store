@@ -26,7 +26,7 @@ function Home() {
 
   const ProductDescriptions = [
     '›››Elevate your game with the PS C12 Basic Basketball, designed for optimal performance and style on the court, whether you\'re a beginner or a pro.',
-    '›››Experience unmatched precision and control with the PS GlitchX Football, engineered for champions, perfect for every pass and goal, rain or shine, on any field.',
+    '›››Experience unmatched precision and control with the PS GlitchX Football, perfect for every pass and goal, rain or shine, on any field.',
     '›››Step into comfort and durability with the PS LXCX Trainer, your perfect companion for every workout, run, or casual outing, combining style and performance.',
     '›››Dominate the court with the PS V675 Volleyball, crafted for power and agility, ensuring every spike and serve is executed with excellence.',
     '›››Stay hydrated in style with the PS (O) Water Bottle, featuring a sleek design and superior functionality, perfect for athletes and everyday use.'

@@ -283,6 +283,7 @@
 
 /* product name + buy button inside .home-shape */
 .product-name .product-name-text {
+    border-bottom: 20px solid black;
     position: absolute;
     top: 12%;
     left: 73%;
@@ -299,6 +300,7 @@
 }
 
 .product-name .product-description-text {
+    border-bottom: 20px solid black;
     position: absolute;
     left: 73%;
     font-family: 'Bebas Neue', sans-serif;
