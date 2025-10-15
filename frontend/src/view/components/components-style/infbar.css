@@ -1,5 +1,9 @@
 .infbar-container { 
   width: 100%;
+  transform: translateY(-78%);
+  border: 1px solid rgba(255, 255, 255, 1); 
+  border: 1px 
+  height:60px;
   background-color: transparent;
   overflow: hidden; 
   display: flex;

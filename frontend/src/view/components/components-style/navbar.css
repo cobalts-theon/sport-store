@@ -5,6 +5,7 @@
 .nav {
     font-family: 'Bebas Neue', sans-serif;
     position: fixed;
+    border: 1px solid white;
     top: 40px;
     left: 0;
     right: 0;

@@ -1,0 +1,435 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+@font-face {
+  font-family: 'Merinos Regular';
+  src: url('src/assets/fonts/Merinos.otf') format('opentype');
+}
+
+.slogan-container {
+  font-family: 'Bebas Neue', sans-serif;
+  margin: 0 auto;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.slogan-image,
+.slogan-container > * {
+  position: relative;
+  z-index: 2;
+}
+
+.slogan-image {
+  position: relative;
+  width: min(14vw, 150px);
+  height: min(14vw, 150px);
+  margin: 0 auto 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* slideshow wrapper: anchor inside .slogan-image (which is position:relative) */
+.slideshow {
+  position: absolute;   /* fix typo (was "postion") */
+  inset: 0;             /* top:0; right:0; bottom:0; left:0; */
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+/* stacked slides - ensure selector matches class used in JSX: .slide */
+.slideshow .slide {
+  position: absolute;
+  inset: 0;
+  width: 130%;
+  height: 130%;
+  left: -15%;         
+  top: 10%;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(1);
+  will-change: opacity, transform;
+  animation-name: slideFade;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  pointer-events: none;
+}
+
+/* Animate của slide  */
+@keyframes slideFade {
+  0%   { opacity: 0; transform: scale(1); }
+  4%   { opacity: 1; transform: scale(1.02); }
+  20%  { opacity: 1; transform: scale(1.03); }
+  24%  { opacity: 0; transform: scale(1.04); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+.slogan-image:hover .ring-text {
+  transform: scale(1.06);
+  transition: transform 200ms ease;
+}
+
+/* keep image circular, remove previous border */
+.slogan-image img {
+  width: 130%;
+  height: 130%;
+  transform: translate(-12%, 8%); /* center the image within the container */
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  border: none; /* removed border */
+  margin: 0 auto; /* center horizontally */
+}
+
+/* SVG ring text */
+.ring-textt {
+  position: absolute;
+  inset: 0;
+  width: 150%;
+  height: 150%;
+  left: -25%;               /* đẩy ra để giữ tâm ở giữa */
+  top: 0%;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: ring-rotate 12s linear infinite;
+  transition: all 0.2s ease-in-out;
+}
+
+/* style the text along path */
+.ring-textt text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 10px; /* adjust to taste */
+  fill: #D0FE1D;
+  letter-spacing: 2px;
+}
+
+.ring-text textPath {
+  startOffset: 0;
+}
+
+.slogan-image:hover .ring-text{
+  width: 170%;
+  height: 170%;
+  left: -35%;
+  top: -10%;
+  transition: all 0.1s ease-in-out;
+}
+/* Slogan của trang chủ Sử dụng rolling text animation từ dưới lên trên và tạo sóng từ trái qua phải */
+.slogan-main p {
+  color: transparent;
+  font-size: min(5vw, 24px);
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  position: relative;
+  animation: rollUp 2s linear infinite, wave 2s ease-in-out infinite;
+}
+
+
+.slogan-shape {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000%;
+  height: 200%;
+  z-index: 1;
+}
+
+.slogan-shape .shape-shape1 {
+  background: white;
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  transform: translate(-50%, -50%) skewX(-25deg);
+  overflow: visible;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  animation: slideInFromLeft 3000ms cubic-bezier(.2,.9,.2,1) 120ms both;
+}
+
+.slogan-shape .shape-shape2 {
+  background: #D0FE1D;
+  position: absolute;
+  top: 50%;
+  right: -34.9%;
+  transform: translate(-50%, -50%) skewX(-25deg);
+  overflow: visible;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  animation: slideInFromRight 3000ms cubic-bezier(.2,.9,.2,1) 120ms both;
+}
+
+.shape-title1{
+  display:flex;
+  flex-direction:column;       /* xếp thẳng cột */
+  align-items:center;
+  gap: .08em; 
+  padding-top: 2.5rem;
+  padding-left: 30rem;
+}
+
+/* từng từ/khối để animate riêng */
+.shape-title1 .shape-word{
+  display:block;
+  font-family: 'Merinos Regular';
+  font-weight: 700;
+  color:  #000000ff;
+  line-height:0.9;
+  transform-origin:center;
+  /* animation pulse (to -> trở về) */
+  font-size: clamp(28px, 8vw, 96px); /* responsive */
+  transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
+  animation: WordslideInFromLeft 3s ease-out both;
+  --sx: 1;
+  --sy: 1.12;
+}
+
+/* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
+.shape-title1 .shape-word:nth-child(1){
+  padding-right: 5.95rem;
+  --sx: 1.7;
+  --sy: 1.5;
+  padding-bottom: 1.5rem;
+  transform: skewX(25deg);
+  animation-delay: 0s;
+}
+.shape-title1 .shape-word:nth-child(2){
+  padding-right: 3.95rem;
+  --sx: 1.7;
+  --sy: 1.5;
+  padding-bottom: 1rem;
+  animation-delay: 0.15s;
+}
+.shape-title1 .shape-word:nth-child(3){
+  padding-right: 0.58em;
+  --sx: 1.7;
+  --sy: 1.5;
+  padding-bottom: 1rem;
+  animation-delay: 0.3s;
+}
+
+.shape-title2 {
+  display:flex;
+  flex-direction:column;       /* xếp thẳng cột */
+  align-items:center;
+  gap: .08em; 
+  padding-right: 30rem;
+}
+
+/* column 2 - giữ nguyên thuộc tính nhưng animation ngược chiều */
+.shape-title2 .shape-word{
+  display:block;
+  font-family: 'Merinos Regular';
+  font-weight: 700;
+  color: #000000ff;
+  line-height:0.9;
+  transform-origin:center;
+  /* animation pulse (to -> trở về) */
+  font-size: clamp(28px, 8vw, 96px); /* responsive */
+  transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
+  animation: WordslideInFromRight 3s ease-out both;
+  --sx: 1;
+  --sy: 1.2;
+}
+.shape-title2 .shape-word:nth-child(1){
+  padding-left: 2.19rem;
+  --sx: 1.7;
+  --sy: 1.5;
+  padding-bottom: 1.5rem;
+  padding-top: 2rem;
+  animation-delay: 0s;
+}
+.shape-title2 .shape-word:nth-child(2){
+  padding-left: 5.13rem;
+  --sx: 1.7;
+  --sy: 1.5;
+  animation-delay: 0.25s;
+}
+.shape-title2 .shape-word:nth-child(3){
+  padding-left: 6.7rem;
+  --sx: 1.7;
+  --sy: 1.5;
+  padding-top: 1rem;
+  animation-delay: 0.3s;
+}
+
+
+/* keyframes sử dụng biến scale để không bị ghi đè thuộc tính scale của .shape-word */
+@keyframes WordslideInFromLeft {
+  0% {
+    transform: translateX(-100%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-50%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 1;
+  }
+}
+
+@keyframes WordslideInFromRight {
+  0% {
+    transform: translateX(100%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(50%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0%) scaleX(var(--sx)) scaleY(var(--sy));
+    opacity: 1;
+  }
+}
+
+/* shape */
+@keyframes slideInFromLeft {
+  0% {
+    transform: translate(-150%, -50%) skewX(-25deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-130%, -50%) skewX(-25deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) skewX(-25deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translate(50%, -50%) skewX(-25deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(20%, -50%) skewX(-25deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) skewX(-25deg);
+    opacity: 1;
+  }
+}
+
+/* rotate animation */
+@keyframes ring-rotate {
+  from { transform: rotate(0deg);}
+  to   { transform: rotate(360deg); }
+}
+
+/* respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .slogan-shape .shape-shape1,
+  .slogan-shape .shape-shape2 {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, -50%) skewX(-25deg);
+  }
+
+  .shape-title1 .shape-word,
+  .shape-title2 .shape-word {
+    animation: none !important;
+    opacity: 1;
+    transform: translateX(0) scaleX(var(--sx)) scaleY(var(--sy));
+  }
+}
+
+
+@media (max-width: 1048px) {
+  .slogan-image { width: 120px; height: 120px; }
+  .ring-text text { font-size: 8px; }
+  .shape-title1 {display: none;}
+  .shape-title2 {display: none;}
+  .shape-shape1 { left: 18%;}
+  .shape-shape2 { right: -36%;}
+  .slogan-main p { 
+    color: #D0FE1D;               /* make text visible on small screens */
+    font-size: clamp(14px, 6vw, 20px);
+    line-height: 1;
+    display: inline-block;
+    margin: 0;
+    padding: 40px 0 0 0;
+    transform-origin: center bottom; 
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+/* speed/size adjustments for small screens */
+@media (max-width: 480px) {
+  html, body { overflow-x: hidden; /* ngăn cuộn ngang */}
+  .slogan-image { margin-top: -80px;}
+  .slogan-image { width: 150px; height: 150px; }
+  .slideshow .slide { border-radius: 50%; }
+  .ring-text { left: -10%; top: -10%; }
+  .slogan-image img { width: 70%; height: 100%;}
+  .ring-text {height: 6px; font-size: 6px; width: 120%; height: 120%; left: -10%; top: -10%;}
+  .slogan-image:hover .ring-text { width: 140%; height: 140%; left: -20%; top: -20%;}
+  .shape-shape1 {padding: 25rem 0 0 3rem; left: 20%;}
+  .shape-shape2 {padding: 0 0.9rem 30rem 0;}
+  .slogan-main p { 
+    color: #D0FE1D;               /* make text visible on small screens */
+    font-size: clamp(14px, 6vw, 20px);
+    line-height: 1;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    transform-origin: center bottom; 
+  }
+  .slogan-shape {display: none;}
+  .main-page-container {
+    /* Thêm dòng này để tạo khoảng cách */
+    margin-bottom: 0rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */
+  }
+}
+
+@media (max-width: 1048px) {
+  .slogan-image { width: 120px; height: 120px; }
+  .ring-text text { font-size: 8px; }
+  .shape-title1 {display: none;}
+  .shape-shape1 { left: 18%;}
+  .shape-shape2 { right: -36%;}
+}
+
+/* Thêm vào cuối file home.css */
+
+.slogan-page-container {
+  min-height: 100vh; /* Chiếm ít nhất toàn bộ chiều cao màn hình */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  transform: translateY(-11%); /* Để tránh bị che khuất bởi navbar */
+
+  /* Thêm dòng này để tạo khoảng cách */
+  margin-bottom: 0rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */
+}
+
+@media (max-width: 480px) {
+  .main-page-container {
+    padding-bottom: 0;
+    margin-bottom: -2rem; /* Đẩy infbar lên trên trong mobile */
+    min-height: 85vh; 
+  }
+
+  .slogan-container {
+    margin-bottom: -3rem;
+  }
+}

@@ -2,14 +2,15 @@ import { useState } from 'react'
 import {Router, Routes, Route, Link} from "react-router-dom"
 // import reactLogo from '/src/assets/icon/react.svg'
 // import pslogo from '/src/assets/image/white-logo.png'
-import StartupLoader from './pages/start-intro'
-import Header from './components/navbar'
 
 //Components
+import Header from './components/navbar'
 import Infbar from './components/infbar'
 import Commercre from './components/commercre'
 
 //Pages
+import StartupLoader from './pages/start-intro'
+import Slogan from './pages/slogan'
 import Home from './pages/home'
 
 function App() {
@@ -23,10 +24,11 @@ function App() {
          path="/" 
          element={ 
           <>
-            <div className="main-page-container">
-                <Home />
-            </div>
+            <Home/>
             <Infbar/>
+            <div className="slogan-page-container">
+                <Slogan />
+            </div>
           </>
           }/>
         {/* <Route path="/about" element={<About/>}/>
