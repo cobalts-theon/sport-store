@@ -740,7 +740,7 @@
   position: absolute;
   left: -250%;
   top: 100%;                      /* place directly under the nav row */
-  width: 100vw;                   /* full viewport width */
+  width: 100vw;                  /* full viewport width */
   height: 0;                   /* requested height */
   background: transparent;        /* CHANGED: make main panel transparent */
   pointer-events: none;           /* default: ignore pointer until visible */
@@ -749,6 +749,7 @@
   transition: height 100ms ease, opacity 200ms ease, visibility 200ms ease;
   z-index: 140;
 }
+
 
 /* First rectangle - top right */
 .product-panel::after {
@@ -800,6 +801,7 @@
   height: 100%;
   transform: skewX(25deg); /* bù lại để nền thẳng */
   background: rgba(18,18,18,0.98); /* set background here for animation */
+  backdrop-filter: blur(3px);
   z-index: -2;            /* behind any content inside panel */
 }
 
@@ -828,8 +830,8 @@
     margin-top: 50%;
     color: #000;
     margin: 0;
-    margin-left: -70%;
-    transform: rotate(-90deg);
+    margin-left: -72%;
+    transform: rotate(90deg);
     white-space: nowrap;
     opacity: 1;
     transition: opacity 200ms ease-in-out;
@@ -840,6 +842,12 @@
 .has-dropdown:focus-within .product-panel {
     height: 70vh;
     pointer-events: auto;
+}
+
+/* Show blurred background on hover */
+.has-dropdown:hover .blurred-background,
+.has-dropdown:focus-within .blurred-background {
+    opacity: 1;
 }
 
 /* Expand both rectangles on hover */
@@ -904,12 +912,18 @@
   gap: 12px;
   padding: 16px;
   transition: all 180ms ease;
+  border: 1px solid white;
 }
 
 .product-category:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(208, 254, 29, 0.3);
+  border-color: #D0FE1D;
   transform: translateY(-2px);
+}
+
+.product-category:hover .product-link {
+  color: #D0FE1D;
+  border-color: #D0FE1D;
 }
 
 .product-category h3 {
