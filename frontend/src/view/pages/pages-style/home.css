@@ -7,7 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 11px; /* Để tránh bị che khuất bởi navbar */
+    padding-top: 12px; /* Để tránh bị che khuất bởi navbar */
     overflow: hidden;
     position: relative;
 }   
@@ -70,11 +70,17 @@
     100% { background-position: 0% 50%; }
 }
 
+/* rotate animation */
+@keyframes ring-rotate {
+  from { transform: rotate(0deg);}
+  to   { transform: rotate(360deg); }
+}
+
 .start-word .home-subtitle {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2.5rem;
     font-weight: normal;
-    padding-left: 50px;
+    padding-left: 55px;
     display: inline-block;
     max-width: 20ch;    /* giới hạn độ dài */
     white-space: wrap;      /* xuống dòng */
@@ -124,7 +130,7 @@
     height: 100%;
     pointer-events: none;
     transform-origin: 50% 50%;
-    animation: ring-rotate 12s linear infinite;
+    animation: ring-rotate 20s linear infinite;
     transition: all 0.2s ease-in-out;
     z-index: 2;
     mix-blend-mode: difference;
@@ -329,13 +335,14 @@
     clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
     transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1.2s;
     transition-delay: 2s; /* delay để chữ nhỏ hiện sau chữ lớn */
+    overflow: visible;
 }
 
 /* Khi animation bắt đầu - mở rộng từ giữa ra */
 .home-rectangle.expand .product-name .product-name-text,
 .home-rectangle.expand .product-name .product-description-text,
 .home-rectangle.expand .product-actions {
-    clip-path: inset(0% 0 0 0);
+    clip-path: inset(0% -100% 0 -100%);
 }
 
 /* Buy button */

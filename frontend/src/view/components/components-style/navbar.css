@@ -6,7 +6,7 @@
     font-family: 'Bebas Neue', sans-serif;
     position: fixed;
     border: 1px solid white;
-    top: 40px;
+    top: 42px;
     left: 0;
     right: 0;
     z-index: 50;
@@ -248,6 +248,17 @@
     backface-visibility: hidden;
 }
 
+.nav-links#alter {
+    position: absolute;
+    right: 10%;
+    /* move from center by fixed pixels to keep stable when zooming/resizing */
+    transform: translate(120px, 6%);
+    display: flex;
+    z-index: 10;
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
 .order-icon {
     position: relative;
     display: inline-block;
@@ -274,7 +285,7 @@
 .music-button {
     left: 78%;
     padding: 5px 50px;
-    margin: 0 15px 15px 0;
+    margin: 0 15px 10px 0;
     position: absolute;
     display: flex;
     align-items: center;
@@ -735,10 +746,51 @@
   pointer-events: none;           /* default: ignore pointer until visible */
   opacity: 1;
   visibility: visible;
-  transition: height 160ms ease, opacity 200ms ease, visibility 200ms ease;
+  transition: height 100ms ease, opacity 200ms ease, visibility 200ms ease;
   z-index: 140;
 }
 
+/* First rectangle - top right */
+.product-panel::after {
+    content: "";
+    position: absolute;
+    left: 70%;
+    top: 15%;
+    width: 0;
+    height: 70%;
+    background: rgb(209, 254, 29);
+    transform: skewX(25deg);
+    transition: width 300ms ease-in-out;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Image container inside first rectangle */
+.first-rectangle-image {
+    position: absolute;
+    left: 70%;
+    top: 15%;
+    width: 0;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: skewX(25deg);
+    transition: width 300ms ease-in-out;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Image styling */
+.rectangle-image {
+    width: 300px;
+    object-fit: contain;
+    opacity: 1;
+    transition: opacity 200ms ease-in-out;
+}
+
+/* Background panel */
 .product-panel::before {
   content: "";
   position: absolute;
@@ -748,7 +800,39 @@
   height: 100%;
   transform: skewX(25deg); /* bù lại để nền thẳng */
   background: rgba(18,18,18,0.98); /* set background here for animation */
-  z-index: -1;            /* behind any content inside panel */
+  z-index: -2;            /* behind any content inside panel */
+}
+
+/* Second rectangle - bottom left */
+.product-panel .second-rectangle {
+    content: "";
+    position: absolute;
+    left: 65%;
+    bottom: 15%;
+    width: 0;
+    height: 60%;
+    background: rgb(255, 255, 255);
+    transform: skewX(25deg);
+    transition: width 300ms ease-in-out;
+    z-index: -2;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Text styling for second rectangle */
+.second-rectangle-text {
+    font-family: 'Bebas Neue', sans-serif;
+    margin-top: 50%;
+    color: #000;
+    margin: 0;
+    margin-left: -70%;
+    transform: rotate(-90deg);
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 200ms ease-in-out;
 }
 
 /* show panel when hovering the link or the panel (focus-within covers keyboard) */
@@ -756,6 +840,33 @@
 .has-dropdown:focus-within .product-panel {
     height: 70vh;
     pointer-events: auto;
+}
+
+/* Expand both rectangles on hover */
+.has-dropdown:hover .product-panel::after,
+.has-dropdown:focus-within .product-panel::after {
+    width: 400px;
+}
+
+.has-dropdown:hover .first-rectangle-image,
+.has-dropdown:focus-within .first-rectangle-image {
+    width: 400px;
+}
+
+.has-dropdown:hover .rectangle-image,
+.has-dropdown:focus-within .rectangle-image {
+    opacity: 1;
+}
+
+.has-dropdown:hover .product-panel .second-rectangle,
+.has-dropdown:focus-within .product-panel .second-rectangle {
+    width: 300px;
+}
+
+/* Show text when rectangle expands */
+.has-dropdown:hover .second-rectangle-text,
+.has-dropdown:focus-within .second-rectangle-text {
+    opacity: 1;
 }
 
 /* ensure panel sits above other nav items */

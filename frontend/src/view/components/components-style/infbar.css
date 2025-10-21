@@ -1,6 +1,6 @@
 .infbar-container { 
   width: 100%;
-  transform: translateY(-78%);
+  transform: translateY(-80%);
   border: 1px solid rgba(255, 255, 255, 1); 
   border: 1px 
   height:60px;
@@ -14,13 +14,7 @@
   display: flex;
   flex-shrink: 0; /* Ngăn track bị co lại */
   /* Áp dụng animation */
-  animation: infinite-scroll-logo 20s linear infinite; /* Tăng thời gian để chạy mượt hơn */
-  transition: all 0.3s ease-in-out;
-}
-
-.infbar-track:hover {
-  transition: all 0.3s ease-in-out;
-  animation-play-state: paused; /* Tạm dừng animation khi hover */
+  animation: infinite-scroll-logo 30s linear infinite; /* Tăng thời gian để chạy mượt hơn */
 }
 
 .infbar-logo {

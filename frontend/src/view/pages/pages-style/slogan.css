@@ -6,6 +6,7 @@
 }
 
 .slogan-container {
+  width: 100%;
   font-family: 'Bebas Neue', sans-serif;
   margin: 0 auto;
   text-align: center;
@@ -15,7 +16,6 @@
   z-index: 2;
 }
 
-.slogan-image,
 .slogan-container > * {
   position: relative;
   z-index: 2;
@@ -29,15 +29,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: -2;
 }
 
 /* slideshow wrapper: anchor inside .slogan-image (which is position:relative) */
 .slideshow {
-  position: absolute;   /* fix typo (was "postion") */
-  inset: 0;             /* top:0; right:0; bottom:0; left:0; */
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
+  position: absolute;
+  top: -95%;
+  width: 400%;
+  height: 223%;
+  z-index: -2;
   display: block;
 }
 
@@ -50,7 +51,6 @@
   left: -15%;         
   top: 10%;
   object-fit: cover;
-  border-radius: 50%;
   opacity: 0;
   transform: scale(1);
   will-change: opacity, transform;
@@ -64,9 +64,9 @@
 /* Animate của slide  */
 @keyframes slideFade {
   0%   { opacity: 0; transform: scale(1); }
-  4%   { opacity: 1; transform: scale(1.02); }
-  20%  { opacity: 1; transform: scale(1.03); }
-  24%  { opacity: 0; transform: scale(1.04); }
+  4%   { opacity: 1; transform: scale(1); }
+  20%  { opacity: 1; transform: scale(1); }
+  24%  { opacity: 0; transform: scale(1); }
   100% { opacity: 0; transform: scale(1); }
 }
 
@@ -81,45 +81,11 @@
   height: 130%;
   transform: translate(-12%, 8%); /* center the image within the container */
   object-fit: cover;
-  border-radius: 50%;
   display: block;
   border: none; /* removed border */
   margin: 0 auto; /* center horizontally */
 }
 
-/* SVG ring text */
-.ring-textt {
-  position: absolute;
-  inset: 0;
-  width: 150%;
-  height: 150%;
-  left: -25%;               /* đẩy ra để giữ tâm ở giữa */
-  top: 0%;
-  pointer-events: none;
-  transform-origin: 50% 50%;
-  animation: ring-rotate 12s linear infinite;
-  transition: all 0.2s ease-in-out;
-}
-
-/* style the text along path */
-.ring-textt text {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 10px; /* adjust to taste */
-  fill: #D0FE1D;
-  letter-spacing: 2px;
-}
-
-.ring-text textPath {
-  startOffset: 0;
-}
-
-.slogan-image:hover .ring-text{
-  width: 170%;
-  height: 170%;
-  left: -35%;
-  top: -10%;
-  transition: all 0.1s ease-in-out;
-}
 /* Slogan của trang chủ Sử dụng rolling text animation từ dưới lên trên và tạo sóng từ trái qua phải */
 .slogan-main p {
   color: transparent;
@@ -137,7 +103,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1000%;
+  width: 155%;
   height: 200%;
   z-index: 1;
 }
@@ -147,7 +113,7 @@
   position: absolute;
   top: 50%;
   left: 15%;
-  transform: translate(-50%, -50%) skewX(-25deg);
+  transform: translate(-50%, -50%) skewX(-15deg);
   overflow: visible;
   width: 50%;
   height: 100%;
@@ -161,7 +127,7 @@
   position: absolute;
   top: 50%;
   right: -34.9%;
-  transform: translate(-50%, -50%) skewX(-25deg);
+  transform: translate(-50%, -50%) skewX(-15deg);
   overflow: visible;
   width: 50%;
   height: 100%;
@@ -299,38 +265,32 @@
 /* shape */
 @keyframes slideInFromLeft {
   0% {
-    transform: translate(-150%, -50%) skewX(-25deg);
+    transform: translate(-150%, -50%) skewX(-15deg);
     opacity: 0;
   }
   60% {
-    transform: translate(-130%, -50%) skewX(-25deg);
+    transform: translate(-130%, -50%) skewX(-15deg);
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, -50%) skewX(-25deg);
+    transform: translate(-50%, -50%) skewX(-15deg);
     opacity: 1;
   }
 }
 
 @keyframes slideInFromRight {
   0% {
-    transform: translate(50%, -50%) skewX(-25deg);
+    transform: translate(50%, -50%) skewX(-15deg);
     opacity: 0;
   }
   60% {
-    transform: translate(20%, -50%) skewX(-25deg);
+    transform: translate(20%, -50%) skewX(-15deg);
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, -50%) skewX(-25deg);
+    transform: translate(-50%, -50%) skewX(-15deg);
     opacity: 1;
   }
-}
-
-/* rotate animation */
-@keyframes ring-rotate {
-  from { transform: rotate(0deg);}
-  to   { transform: rotate(360deg); }
 }
 
 /* respect user motion preferences */
@@ -339,7 +299,7 @@
   .slogan-shape .shape-shape2 {
     animation: none;
     opacity: 1;
-    transform: translate(-50%, -50%) skewX(-25deg);
+    transform: translate(-50%, -50%) skewX(-15deg);
   }
 
   .shape-title1 .shape-word,
@@ -409,11 +369,12 @@
 /* Thêm vào cuối file home.css */
 
 .slogan-page-container {
-  min-height: 100vh; /* Chiếm ít nhất toàn bộ chiều cao màn hình */
+  min-height: 65vh; /* Chiếm ít nhất toàn bộ chiều cao màn hình */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border: 1px solid white;
   width: 100%;
   box-sizing: border-box;
   transform: translateY(-11%); /* Để tránh bị che khuất bởi navbar */

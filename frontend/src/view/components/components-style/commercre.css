@@ -15,7 +15,7 @@
   display: flex;
   flex-shrink: 0;
   /* Áp dụng animation */
-  animation: infinite-scroll-word 50s linear infinite; /* Tăng thời gian để chạy mượt hơn */
+  animation: infinite-scroll-word 80s linear infinite; /* Tăng thời gian để chạy mượt hơn */
 }
 
 .infbar-word {

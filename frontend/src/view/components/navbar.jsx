@@ -17,6 +17,8 @@ function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);  
   const [searchQuery, setSearchQuery] = useState('');
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const [hoveredText, setHoveredText] = useState('PRIMESOULS'); //Gọi tên hiện tại của link
+  const [hoveredImage, setHoveredImage] = useState('/src/assets/icon/sales.svg'); //Hình ảnh mặc định
   const searchRef = useRef(null); // Dùng để phát hiện click ngoài search box
   const audioRef = useRef(new Audio(backgroundMusic));
 
@@ -60,25 +62,140 @@ function Navbar() {
             <Link to="/products" id="products"><span className="nav-link-label">Products</span></Link>
             {/* empty panel, stays visible when mouse is over it because it's a child of .has-dropdown */}
             <div className="product-panel" onMouseDown={(e) => e.stopPropagation()}>
+              <div className="first-rectangle-image">
+                <img src={hoveredImage} alt={hoveredText} className="rectangle-image" />
+              </div>
+              <div className="second-rectangle">
+                <h1 className="second-rectangle-text">{hoveredText}</h1>
+              </div>
               <div className="product-panel-grid">
                 <div className="product-category">
                   <h3>Categories</h3>
-                  <Link to="/products?category=shoes" className="product-link" onClick={() => setMobileOpen(false)}>Shoes</Link>
-                  <Link to="/products?category=clothes" className="product-link" onClick={() => setMobileOpen(false)}>Clothes</Link>
-                  <Link to="/products?category=accessories" className="product-link" onClick={() => setMobileOpen(false)}>Accessories</Link>
+                  <Link 
+                    to="/products?category=shoes" 
+                    className="product-link" 
+                    onClick={() => setMobileOpen(false)}
+                    onMouseEnter={() => {
+                      setHoveredText('SHOES');
+                      setHoveredImage('/src/assets/image/shoess.jpg');
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredText('PRIMESOULS');
+                      setHoveredImage('/src/assets/icon/sales.svg');
+                    }}
+                  >
+                    Shoes
+                  </Link>
+                  <Link 
+                    to="/products?category=clothes" 
+                    className="product-link" 
+                    onClick={() => setMobileOpen(false)}
+                    onMouseEnter={() => {
+                      setHoveredText('CLOTHES');
+                      setHoveredImage('/src/assets/image/unnamed.jpg');
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredText('PRIMESOULS');
+                      setHoveredImage('/src/assets/icon/sales.svg');
+                    }}
+                  >
+                    Clothes
+                  </Link>
                 </div>
                 <div className="product-category">
                   <h3>By Sport</h3>
-                  <Link to="/products?sport=running" className="product-link" onClick={() => setMobileOpen(false)}>Running</Link>
-                  <Link to="/products?sport=training" className="product-link" onClick={() => setMobileOpen(false)}>Training</Link>
-                  <Link to="/products?sport=basketball" className="product-link" onClick={() => setMobileOpen(false)}>Basketball</Link>
-                  <Link to="/products?sport=soccer" className="product-link" onClick={() => setMobileOpen(false)}>Soccer</Link>
-                  <Link to="/products?sport=skateboarding" className="product-link" onClick={() => setMobileOpen(false)}>Skateboarding</Link>
+                  <Link 
+                    to="/products?sport=running" 
+                    className="product-link" 
+                    onClick={() => setMobileOpen(false)}
+                    onMouseEnter={() => {
+                      setHoveredText('RUNNING')
+                      setHoveredImage('/src/assets/image/running.jpg');
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredText('PRIMESOULS')
+                      setHoveredImage('/src/assets/icon/sales.svg');}}
+                  >
+                    Running
+                  </Link>
+                  <Link 
+                    to="/products?sport=basketball" 
+                    className="product-link" 
+                    onClick={() => setMobileOpen(false)}
+                    onMouseEnter={() => {
+                      setHoveredText('BASKETBALL')
+                      setHoveredImage('/src/assets/image/5.jpg');
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredText('PRIMESOULS')
+                      setHoveredImage('/src/assets/icon/sales.svg');
+                    }}
+                  >
+                    Basketball
+                  </Link>
+                  <Link 
+                    to="/products?sport=soccer" 
+                    className="product-link" 
+                    onClick={() => setMobileOpen(false)}
+                    onMouseEnter={() => {
+                      setHoveredText('SOCCER')
+                      setHoveredImage('/src/assets/image/Soccer.jpg');
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredText('PRIMESOULS')
+                      setHoveredImage('/src/assets/icon/sales.svg');
+                    }}
+                  >
+                    Soccer
+                  </Link>
+                  <Link 
+                    to="/products?sport=skateboarding" 
+                    className="product-link" 
+                    onClick={() => setMobileOpen(false)}
+                    onMouseEnter={() => {
+                      setHoveredText('PICKLEBALL')
+                      setHoveredImage('/src/assets/image/pickle.jpg');
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredText('PRIMESOULS')
+                      setHoveredImage('/src/assets/icon/sales.svg');
+                    }}
+                  >
+                    Pickleball
+                  </Link>
                 </div>
                 <div className="product-category">
                   <h3>Target</h3>
-                  <Link to="/products?target=men" className="product-link" onClick={() => setMobileOpen(false)}>Men <FontAwesomeIcon icon={faMars}/></Link>
-                  <Link to="/products?target=women" className="product-link" onClick={() => setMobileOpen(false)}>Women <FontAwesomeIcon icon={faVenus}/></Link>
+                  <Link 
+                    to="/products?target=men" 
+                    className="product-link" 
+                    onClick={() => setMobileOpen(false)}
+                    onMouseEnter={() => {
+                      setHoveredText('MEN')
+                      setHoveredImage('/src/assets/image/Male.png');
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredText('PRIMESOULS')
+                      setHoveredImage('/src/assets/icon/sales.svg');
+                    }}
+                  >
+                    Men <FontAwesomeIcon icon={faMars}/>
+                  </Link>
+                  <Link 
+                    to="/products?target=women" 
+                    className="product-link" 
+                    onClick={() => setMobileOpen(false)}
+                    onMouseEnter={() => {
+                      setHoveredText('WOMEN')
+                      setHoveredImage('/src/assets/image/Female.png');
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredText('PRIMESOULS')
+                      setHoveredImage('/src/assets/icon/sales.svg');
+                    }}
+                  >
+                    Women <FontAwesomeIcon icon={faVenus}/>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -9,7 +9,6 @@ import seven from "/src/assets/image/7.jpg";
 import eight from "/src/assets/image/8.jpg";
 
 function Slogan() {
-  const ringText = " PRIME SOULS • PRIME SOULS • PRIME SOULS • ";
   const images = [one, two, three, four, five, six, seven, eight];
 
   // thời gian hiển thị mỗi ảnh và tổng thời gian của toàn bộ chu trình ảnh
@@ -34,16 +33,6 @@ function Slogan() {
               />
             ))}
           </div>
-          <svg className="ring-textt" viewBox="0 0 200 200" aria-hidden="true"> {/* Vòng tròn văn bản trang trí */}
-            <defs>
-              <path id="text-circle" d="M100,10 a90,90 0 1,1 -0.01,0" />
-            </defs>
-            <text>
-              <textPath xlinkHref="#text-circle" startOffset="0%">  
-                {ringText.repeat(3)}  {/* repeat(3) Lặp lại chuỗi văn bản 3 để tạo hiệu ứng vòng tròn */}
-              </textPath>
-            </text>
-          </svg>
         </div>
 
         <div className="slogan-main">
