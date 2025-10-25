@@ -111,15 +111,12 @@
     opacity: 0.98;
     will-change: width, right;
     overflow: visible;
-
     background-split: text;
 }
 
 .home-rectangle.expand .home-shape{
     /* responsive expanded width: min 40vw, ideal 60vw, max 1400px */
     width: clamp(40vw, 60vw, 1400px);
-
-    /* DO NOT override transition here so animation stays smooth */
 }
 
 /* SVG ring text */

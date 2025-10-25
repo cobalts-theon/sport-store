@@ -503,11 +503,23 @@
     .nav-links {
         gap: 0.5rem;
         font-size: 18px;
-        margin-right: -60px;
+        margin-right: 0px;
     }
 
     .nav-links a {
-        padding: 0.45rem 0.8rem;
+        padding: 0.45rem 0.9rem;
+    }
+
+    #main {
+        margin-left: 120px;
+    }
+
+    .search-button {
+        left: 40%;
+    }
+
+    .music-button {
+        left: 65%;
     }
 }
 
@@ -552,6 +564,14 @@
 
     #order-icon {
         transform: translateX(-4px);
+    }
+
+    .nav-links#main {
+        display: none;
+    }
+
+    .nav-links#alter {
+        display: none;
     }
 }
 
@@ -760,6 +780,7 @@
     width: 0;
     height: 70%;
     background: rgb(209, 254, 29);
+    border: 1px solid rgba(0, 0, 0, 1);
     transform: skewX(25deg);
     transition: width 300ms ease-in-out;
     z-index: -1;
@@ -821,7 +842,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
+
+    clip-path: polygon(
+        10% 0,      /* start from 15% on top edge (cuts top-left) */
+        100% 0,     /* top-right */
+        100% 100%,  /* bottom-right */
+        0 100%,     /* bottom-left */
+        0 10%       /* left edge up to 15% (creates diagonal cut) */
+    );
+}
+
+.product-panel .second-rectangle::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(255,255,255,0.05));
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    transform: translate(-14px, -10px) rotate(180deg) skewX(-25deg);
+    z-index: -1;
 }
 
 /* Text styling for second rectangle */
@@ -918,7 +960,6 @@
 .product-category:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: #D0FE1D;
-  transform: translateY(-2px);
 }
 
 .product-category:hover .product-link {
@@ -965,4 +1006,155 @@
 
 .product-category .product-link:hover::before {
   width: 100%;
+}
+/* Hide desktop search and music buttons on mobile */
+@media (max-width: 480px) {
+  .search-button,
+  .music-button {
+    display: none;
+  }
+}
+
+/* Mobile search container styling */
+@media (max-width: 480px) {
+  .mobile-search-container {
+    position: relative;
+    width: calc(90% - 1rem);
+    margin: 0 1rem 1.5rem 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .mobile-search-input {
+    font-family: 'Bebas Neue', sans-serif;
+    width: 83%;
+    padding: 12px 40px 12px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(208,254,29,0.3);
+    color: white;
+    font-size: 18px;
+    outline: none;
+    transition: all 180ms ease;
+  }
+
+  .mobile-search-input:focus {
+    background: rgba(255,255,255,0.08);
+    border-color: #D0FE1D;
+  }
+
+  .mobile-search-input::placeholder {
+    color: rgba(255,255,255,0.5);
+  }
+
+  .mobile-search-icon {
+    position: absolute;
+    left: 90%;
+    top: 40%;
+    transform: translateY(-50%);
+    color: #D0FE1D;
+    font-size: 18px;
+    pointer-events: none;
+  }
+}
+
+/* Mobile music button at bottom of panel */
+@media (max-width: 480px) {
+  .mobile-music-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: calc(95% - 2rem);
+    margin: auto 1rem 1rem 1rem;
+    padding: 14px 20px;
+    background: transparent;
+    border: 1px solid #D0FE1D;
+    border-radius: 12px;
+    color: #D0FE1D;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 180ms ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: auto; /* push to bottom */
+  }
+
+  .mobile-music-button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: #D0FE1D;
+    transition: width 200ms ease;
+    z-index: -1;
+  }
+
+  .mobile-music-button:active::before,
+  .mobile-music-button.playing::before {
+    width: 100%;
+  }
+
+  .mobile-music-button.playing {
+    color: black;
+    border-color: #D0FE1D;
+  }
+
+  .mobile-music-icon {
+    font-size: 20px;
+    transition: color 180ms ease;
+  }
+
+  .mobile-music-button.playing .mobile-music-icon {
+    color: black;
+  }
+
+  .mobile-music-text {
+    flex: 1;
+    text-align: left;
+    transition: color 180ms ease;
+  }
+
+  .mobile-music-button.playing .mobile-music-text {
+    color: black;
+  }
+
+  .mobile-music-visualizer {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    height: 20px;
+  }
+
+  .mobile-music-visualizer .bar1,
+  .mobile-music-visualizer .bar2,
+  .mobile-music-visualizer .bar3,
+  .mobile-music-visualizer .bar4,
+  .mobile-music-visualizer .bar5 {
+    display: inline-block;
+    width: 3px;
+    height: 16px;
+    background: #D0FE1D;
+    transform-origin: bottom;
+    animation: visualizer-bounce 700ms ease-in-out infinite;
+    animation-play-state: paused;
+    transition: background 180ms ease;
+  }
+
+  .mobile-music-button.playing .mobile-music-visualizer .bar1,
+  .mobile-music-button.playing .mobile-music-visualizer .bar2,
+  .mobile-music-button.playing .mobile-music-visualizer .bar3,
+  .mobile-music-button.playing .mobile-music-visualizer .bar4,
+  .mobile-music-button.playing .mobile-music-visualizer .bar5 {
+    animation-play-state: running;
+    background: black;
+  }
+
+  .mobile-music-visualizer .bar1 { animation-delay: 0ms; }
+  .mobile-music-visualizer .bar2 { animation-delay: 100ms; }
+  .mobile-music-visualizer .bar3 { animation-delay: 200ms; }
+  .mobile-music-visualizer .bar4 { animation-delay: 100ms; }
+  .mobile-music-visualizer .bar5 { animation-delay: 0ms; }
 }

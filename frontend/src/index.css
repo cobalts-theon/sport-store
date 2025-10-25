@@ -28,8 +28,34 @@ body {
   scroll-behavior: smooth;
 
   /* Quy tắc quan trọng để chặn cuộn ngang */
-  overflow-x: hidden;
+  overflow-x: clip;
 }
+
+/* WebKit scrollbar styles (Chrome, Safari, Edge) */
+/* MUST target ::-webkit-scrollbar on html or body, not :root */
+html::-webkit-scrollbar {
+  width: 8px; /* increased from 8px for better visibility */
+  background: transparent;
+}
+
+html::-webkit-scrollbar-track {
+  background: #100f0f; /* dark track to match body background */
+  border: 1px solid #ffffffff; /* adds padding around track */
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #5c5c5cff; /* teal thumb color */
+  border: 1px solid #ffffffff; /* adds padding around thumb */
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: #7a7a7aff; /* lighter teal on hover */
+}
+
+html::-webkit-scrollbar-button {
+  display: none; /* hide arrow buttons */
+}
+
 
 h1 {
   font-size: 3.2em;
