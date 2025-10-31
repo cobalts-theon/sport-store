@@ -7,6 +7,7 @@ import {Router, Routes, Route, Link} from "react-router-dom"
 import Header from './components/navbar'
 import Infbar from './components/infbar'
 import Commercre from './components/commercre'
+import Footer from './components/footer'
 
 //Pages
 import StartupLoader from './pages/start-intro'
@@ -36,6 +37,7 @@ function App() {
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/services" element={<Services/>}/> */}
       </Routes>
+      <Footer/>
       {/* <div className="pt-20">
         <div>
           <a href="https://vite.dev" target="_blank">

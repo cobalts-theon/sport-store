@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.ps-footer {
+  background: rgba(26, 26, 46, 0.3);
+  color: #ffffff;
+  font-family: 'Bebas Neue', sans-serif;
+  padding: 60px 40px 40px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(208, 254, 29, 0.25);
+  max-height: 75vh;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.ps-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(208, 254, 29, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(208, 254, 29, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ps-footer__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.ps-footer__main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
+  gap: 60px;
+  margin-bottom: 50px;
+  padding-bottom: 40px;
+}
+
+/* Column Sections */
+.ps-footer__column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ps-footer__title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 8px 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.ps-footer__column a {
+  font-family: 'Bebas Neue', sans-serif;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 20px;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  position: relative;
+  width: fit-content;
+}
+
+.ps-footer__column a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #D0FE1D;
+  transition: width 0.3s ease;
+}
+
+.ps-footer__column a:hover {
+  color: #D0FE1D;
+  transform: translateX(5px);
+}
+
+.ps-footer__column a:hover::after {
+  width: 100%;
+}
+
+/* Footer Image */
+.ps-footer__image {
+  transform: translateY(-60px);  
+  width: 100%;
+  height: 110%;
+  overflow: hidden;
+  position: relative;
+}
+
+.ps-footer__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.ps-footer__image:hover img {
+  transform: scale(1.05);
+}
+
+
+/* Bottom Section */
+.ps-footer__bottom {
+  transform: translateY(-350px);
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* Social Media */
+.ps-footer__social {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  padding-right: 170px;
+}
+
+.ps-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.ps-social-icon:hover {
+  color: #D0FE1D;
+  background: rgba(208, 254, 29, 0.1);
+  transform: translateY(-3px);
+}
+
+/* Footer Links */
+.ps-footer__links {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ps-footer__links a {
+  font-family: 'Bebas Neue', sans-serif;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+}
+
+.ps-footer__links a:hover {
+  color: #D0FE1D;
+}
+
+.ps-footer__text {
+  transform: translateY(-350px);
+}
+
+/* Large Text Decoration */
+.ps-footer__decoration {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 15vw, 200px);
+  font-weight: 700;
+  color: #D0FE1D;
+  text-align: left;
+  line-height: 0.8;
+  letter-spacing: -5px;
+  margin-top: 20px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ps-footer__copyright {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .ps-footer {
+    padding: 50px 30px 30px;
+  }
+
+  .ps-footer__main {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .ps-footer__image {
+    grid-column: 1 / -1;
+    max-height: 250px;
+  }
+
+  .ps-footer__decoration {
+    font-size: clamp(60px, 12vw, 150px);
+  }
+}
+
+@media (max-width: 768px) {
+  .ps-footer {
+    padding: 40px 20px 25px;
+  }
+
+  .ps-footer__main {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .ps-footer__image {
+    max-height: 200px;
+  }
+
+  .ps-footer__bottom {
+    flex-direction: column;
+    gap: 25px;
+    padding: 25px 0;
+  }
+
+  .ps-footer__social {
+    order: 1;
+  }
+
+  .ps-footer__links {
+    order: 2;
+    justify-content: center;
+  }
+
+  .ps-footer__decoration {
+    font-size: clamp(50px, 10vw, 120px);
+  }
+}
+
+@media (max-width: 480px) {
+  .ps-footer {
+    padding: 35px 16px 20px;
+  }
+
+  .ps-footer__column a {
+    font-size: 18px;
+  }
+
+  .ps-footer__social {
+    gap: 12px;
+  }
+
+  .ps-social-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ps-footer__links {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .ps-footer__links a {
+    font-size: 12px;
+  }
+
+  .ps-footer__decoration {
+    font-size: clamp(40px, 8vw, 100px);
+    margin-top: 15px;
+  }
+}
