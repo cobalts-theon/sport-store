@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+.review-container-bento-grid {
+    font-family: 'Bebas Neue', sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
+    height: 100vh;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    margin-bottom: 100px;
+    gap: 0;
+    grid-template-areas: 
+    "title title title"
+    "box-1 box-2 box-3"
+    "box-1 box-4 box-4";
+}
+
+.review-container-bento-grid-title {
+    grid-area: title;
+    border: 1px solid rgba(255, 255, 255, 0);
+    padding-left: 20px;
+    margin-top: -20px;
+    margin-bottom: -20px;
+}
+
+
+.review-container-bento-grid-item {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+#box-1 {
+    grid-area: box-1;
+    position: relative;
+}
+
+#box-2 {
+    grid-area: box-2;
+    position: relative;
+    overflow: hidden;
+}
+
+#box-2 p.product-name2 {
+    font-size: 15px;
+    color: #ffffff;
+    position: absolute;
+    top: 2%;
+    left: 3%;
+    z-index: 1;
+}
+
+#box-2 img.shoe-img {
+    width: 80%;
+    height: 100%;
+    transform: translate(15%, -10%);
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+#box-2 img.calloutlineup-img {
+    width: 20%;
+    height: 10%;
+    transform: translate(250%, 250%);
+    object-fit: cover;
+    z-index: 1;
+}
+
+#box-2 img.calloutlinedown-img {
+    width: 20%;
+    height: 10%;
+    transform: translate(20%, 800%);
+    object-fit: cover;
+    z-index: 1;
+}
+
+#box-2 p.product-material {
+    font-size: 10px;
+    color: #ffffff;
+    position: absolute;
+    top: 23%;
+    left: 68%;
+    z-index: 1;
+}
+
+#box-2 p.product-material1-des {
+    font-family: 'Jetbrains Mono', monospace;
+    font-size: 8px;
+    color: #ffffff;
+    position: absolute;
+    width: 18ch;
+    top: 24%;
+    left: 80%;
+    z-index: 1;
+}
+
+#box-2 p.product-material2 {
+    font-size: 10px;
+    color: #ffffff;
+    position: absolute;
+    top: 81%;
+    left: 19%;
+    z-index: 1;
+}
+
+#box-2 p.product-material2-des {
+    font-family: 'Jetbrains Mono', monospace;
+    font-size: 8px;
+    color: #ffffff;
+    text-align: left;
+    position: absolute;
+    width: 14ch;
+    top: 50%;
+    left: 3%;
+    z-index: 1;
+}
+#box-3 {
+    grid-area: box-3;
+    overflow: hidden;
+    position: relative;
+}
+
+#box-4 {
+    grid-area: box-4;
+    padding-left: 20px;
+}
+
+#box-1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+#box-1 img.removebg-img1 {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    z-index: 3;
+}
+
+#box-1 img.removebg-img2 {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    z-index: 0;
+}
+#box-1 h2 {
+    color:#D0FE1D;
+    font-size: 150px;
+    line-height: 0.8;
+    position: absolute;
+    bottom: 10px;
+    left: 40px;
+    z-index: 1;
+}
+#box-1 h2 .fa-futbol {
+    font-size: 100px;
+    position: absolute;
+    z-index: 1;
+}
+/* rotate animation */
+@keyframes ring-rotate {
+    from { transform: rotate(0deg);}
+    to   { transform: rotate(360deg); }
+}
+
+.lime-ring-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    z-index: 5;
+}
+
+#box-1 img.lime-img {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+
+/* SVG ring text for lime */
+.lime-ring-text {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform-origin: 50% 50%;
+    animation: ring-rotate 20s linear infinite;
+    z-index: 2;
+}
+
+/* style the text along path */
+.lime-ring-text text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    fill: #D0FE1D;
+    letter-spacing: 2px;
+}
+
+.lime-ring-text textPath {
+    startOffset: 0;
+}
+
+#box-3 video {
+    width: 80%;
+    height: 80%;
+    transform: translate(10%, 20%);
+    object-fit: cover;
+}
+
+.coordinates {
+    font-size: 9px;
+    color: rgb(255, 255, 255);
+    position: absolute;
+    padding-left: 20px;
+    padding-top: 20px;
+    line-height: 1;
+}
+
+#box-3 img {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 10px;
+    left: 85%;
+}

@@ -306,7 +306,7 @@
     position: absolute;
     left: 73%;
     font-family: 'Bebas Neue', sans-serif;
-    white-space: wrap;      /* xuống dòng  */
+    white-space: wrap;      /* không xuống dòng  */
     max-width: 30ch;    /* giới hạn độ dài */
     line-height: 1.2;
     font-size: 1.2rem;

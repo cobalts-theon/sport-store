@@ -41,16 +41,16 @@ function Slogan() {
         <div className="slogan-shape">
           <div className="shape-shape1">
             <h1 className="shape-title1">
-              <span className="shape-word">||||||||MOVE</span>
-              <span className="shape-word">||||||||WITH</span>
-              <span className="shape-word">||||||||SOUL</span>
+              <span className="shape-word" data-text="||||||||MOVE">||||||||MOVE</span>
+              <span className="shape-word" data-text="||||||||WITH">||||||||WITH</span>
+              <span className="shape-word" data-text="||||||||SOUL">||||||||SOUL</span>
             </h1>
           </div>
           <div className="shape-shape2">
             <h1 className="shape-title2">
-              <span className="shape-word">LIVE||||||||</span>
-              <span className="shape-word">WITH||||||||</span>
-              <span className="shape-word">PRIME||||||||</span>
+              <span className="shape-word" data-text="LIVE||||||||">LIVE||||||||</span>
+              <span className="shape-word" data-text="WITH||||||||">WITH||||||||</span>
+              <span className="shape-word" data-text="PRIME||||||||">PRIME||||||||</span>
             </h1>
           </div>
         </div>

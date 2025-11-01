@@ -75,7 +75,7 @@ function Footer() {
                 {/* Large Text Decoration */}
                 <div className="ps-footer__text">
                     <div className="ps-footer__decoration">
-                        PRIME SOULS.
+                        PRIME <span style={{ color: 'white' }}>SOULS.</span>
                     </div>
                     <div className="ps-footer__copyright">
                         &copy; 2025 Prime Souls. All rights reserved.

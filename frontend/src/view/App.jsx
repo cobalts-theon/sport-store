@@ -13,6 +13,8 @@ import Footer from './components/footer'
 import StartupLoader from './pages/start-intro'
 import Slogan from './pages/slogan'
 import Home from './pages/home'
+import HomeProduct from './pages/home-product'
+import Review from './pages/review'
 
 function App() {
   return (
@@ -26,12 +28,15 @@ function App() {
          element={ 
           <>
             <Home/>
-            <Infbar/>
+            <Review/>
             <div className="slogan-page-container">
-                <Slogan />
+              <Slogan />
             </div>
+            <Infbar/>
+            <HomeProduct/>
           </>
           }/>
+        <Route path="/products" element={<HomeProduct/>}/>
         {/* <Route path="/about" element={<About/>}/>
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/profile" element={<Profile/>}/>

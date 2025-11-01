@@ -150,15 +150,29 @@
   display:block;
   font-family: 'Merinos Regular';
   font-weight: 700;
-  color:  #000000ff;
+  color: transparent;
+  -webkit-text-stroke: 2px black;
   line-height:0.9;
   transform-origin:center;
-  /* animation pulse (to -> trở về) */
   font-size: clamp(28px, 8vw, 96px); /* responsive */
-  transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
-  animation: WordslideInFromLeft 3s ease-out both;
+  transform: translateX(0%) scaleX(var(--sx)) scaleY(var(--sy)); /* vị trí cuối cùng */
+  opacity: 1;
   --sx: 1;
   --sy: 1.12;
+  position: relative;
+}
+
+/* Pseudo-element for filled text */
+.shape-title1 .shape-word::before{
+  line-height: 0.9;
+  content: attr(data-text);
+  position: absolute;
+  color: black;
+  clip-path: inset(0 0 0 100%);
+  
+  /* Scroll-driven animation */
+  animation: clipPathReveal both;
+  animation-timeline: view(0% -60%);
 }
 
 /* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
@@ -167,22 +181,27 @@
   --sx: 1.7;
   --sy: 1.5;
   padding-bottom: 1.5rem;
-  transform: skewX(25deg);
-  animation-delay: 0s;
+}
+.shape-title1 .shape-word:nth-child(1)::before{
+  animation-range: entry 0% cover 30%;
 }
 .shape-title1 .shape-word:nth-child(2){
   padding-right: 3.95rem;
   --sx: 1.7;
   --sy: 1.5;
   padding-bottom: 1rem;
-  animation-delay: 0.15s;
+}
+.shape-title1 .shape-word:nth-child(2)::before{
+  animation-range: entry 5% cover 35%;
 }
 .shape-title1 .shape-word:nth-child(3){
   padding-right: 0.58em;
   --sx: 1.7;
   --sy: 1.5;
   padding-bottom: 1rem;
-  animation-delay: 0.3s;
+}
+.shape-title1 .shape-word:nth-child(3)::before{
+  animation-range: entry 10% cover 40%;
 }
 
 .shape-title2 {
@@ -198,15 +217,31 @@
   display:block;
   font-family: 'Merinos Regular';
   font-weight: 700;
-  color: #000000ff;
+  
+  color: transparent;
+  -webkit-text-stroke: 2px black;
   line-height:0.9;
   transform-origin:center;
-  /* animation pulse (to -> trở về) */
   font-size: clamp(28px, 8vw, 96px); /* responsive */
-  transform: scaleY(1.12); /* mặc định tỉ lệ 1:1 */
-  animation: WordslideInFromRight 3s ease-out both;
+  transform: translateX(0%) scaleX(var(--sx)) scaleY(var(--sy)); /* vị trí cuối cùng */
+  opacity: 1;
   --sx: 1;
   --sy: 1.2;
+  position: relative;
+}
+
+/* Pseudo-element for filled text */
+.shape-title2 .shape-word::before{
+  content: attr(data-text);
+  position: absolute;
+  color: #000000ff;
+  line-height: 0.9;
+  -webkit-text-stroke: 2px black;
+  clip-path: inset(0 0 0 100%);
+  
+  /* Scroll-driven animation */
+  animation: clipPathReveal both;
+  animation-timeline: view(0% -60%);
 }
 .shape-title2 .shape-word:nth-child(1){
   padding-left: 2.19rem;
@@ -214,51 +249,43 @@
   --sy: 1.5;
   padding-bottom: 1.5rem;
   padding-top: 2rem;
-  animation-delay: 0s;
+}
+.shape-title2 .shape-word:nth-child(1)::before{
+  animation-range: entry 0% cover 30%;
 }
 .shape-title2 .shape-word:nth-child(2){
   padding-left: 5.13rem;
   --sx: 1.7;
   --sy: 1.5;
-  animation-delay: 0.25s;
+}
+.shape-title2 .shape-word:nth-child(2)::before{
+  animation-range: entry 5% cover 35%;
 }
 .shape-title2 .shape-word:nth-child(3){
   padding-left: 6.7rem;
   --sx: 1.7;
   --sy: 1.5;
   padding-top: 1rem;
-  animation-delay: 0.3s;
+}
+.shape-title2 .shape-word:nth-child(3)::before{
+  animation-range: entry 10% cover 40%;
 }
 
-
-/* keyframes sử dụng biến scale để không bị ghi đè thuộc tính scale của .shape-word */
-@keyframes WordslideInFromLeft {
+/* Scroll-driven text fill reveal animation using clip-path */
+@keyframes clipPathReveal {
   0% {
-    transform: translateX(-100%) scaleX(var(--sx)) scaleY(var(--sy));
-    opacity: 0;
-  }
-  60% {
-    transform: translateX(-50%) scaleX(var(--sx)) scaleY(var(--sy));
-    opacity: 1;
+    clip-path: inset(0 100% 0 0);
   }
   100% {
-    transform: translateX(0%) scaleX(var(--sx)) scaleY(var(--sy));
-    opacity: 1;
+    clip-path: inset(0 0 0 0);
   }
 }
 
-@keyframes WordslideInFromRight {
-  0% {
-    transform: translateX(100%) scaleX(var(--sx)) scaleY(var(--sy));
-    opacity: 0;
-  }
-  60% {
-    transform: translateX(50%) scaleX(var(--sx)) scaleY(var(--sy));
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(0%) scaleX(var(--sx)) scaleY(var(--sy));
-    opacity: 1;
+/* Fallback for browsers that don't support scroll-driven animations */
+@supports not (animation-timeline: view()) {
+  .shape-title1 .shape-word::before,
+  .shape-title2 .shape-word::before {
+    clip-path: inset(0 0 0 0%);
   }
 }
 
@@ -300,13 +327,6 @@
     animation: none;
     opacity: 1;
     transform: translate(-50%, -50%) skewX(-15deg);
-  }
-
-  .shape-title1 .shape-word,
-  .shape-title2 .shape-word {
-    animation: none !important;
-    opacity: 1;
-    transform: translateX(0) scaleX(var(--sx)) scaleY(var(--sy));
   }
 }
 
