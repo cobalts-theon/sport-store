@@ -1,6 +1,5 @@
 import "./pages-style/review.css";
 import soccerimg from "/src/assets/image/Soccer.jpg";
-import removebgimg from "/src/assets/image/Soccer-Photoroom.png";
 import transparentimg from "/src/assets/image/transparent-Photoroom.png";
 import shoe from "/src/assets/image/shoe.png";
 import topolanding from "/src/assets/video/topo-landing.webm";
@@ -34,7 +33,6 @@ function Review() {
                 </div>
                 <img src={soccerimg} alt="Soccer" />
                 <img src={transparentimg} alt="Transparent" className="removebg-img1" />
-                <img src={removebgimg} alt="Removebg" className="removebg-img2" />
                 <h2 className="white-lime-text" >Zinedine Zidane <FontAwesomeIcon icon={faFutbol} /></h2>
             </div>
             <div className="review-container-bento-grid-item" id="box-2">
@@ -42,7 +40,7 @@ function Review() {
                 <p className="product-name2"><FontAwesomeIcon icon={faSquare} /> PS LXCX Trainer</p>
                 <img src={calloutlineup} alt="Calloutlineup" className="calloutlineup-img" />
                 <img src={calloutlinedown} alt="Calloutlinedown" className="calloutlinedown-img" />
-                <p className="product-material">100% Cotton</p>
+                <p className="product-material">Cotton</p>
                 <p className="product-material1-des"><FontAwesomeIcon icon={faSquare} /> Shoelaces made from 100% cotton, making them soft and comfortable to wear.</p>
                 <p className="product-material2">Rubber</p>
                 <p className="product-material2-des">The rubber sole provides excellent grip and durability, making it perfect for outdoor activities.<FontAwesomeIcon icon={faSquare} /> </p>

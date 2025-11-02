@@ -8,7 +8,7 @@
     linear-gradient(135deg, rgba(10, 10, 20, 1) 0%, rgba(20, 20, 35, 1) 50%, rgba(15, 15, 28, 1) 100%);
   padding: 0px 0px 60px;
   transform: translateY(-2%);
-  border: 1px solid #ffffffff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
   position: relative;
   overflow: hidden;
 }

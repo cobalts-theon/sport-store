@@ -164,15 +164,16 @@
 
 /* Pseudo-element for filled text */
 .shape-title1 .shape-word::before{
-  line-height: 0.9;
-  content: attr(data-text);
+  line-height: 2;
+  content: attr(data-text);   
   position: absolute;
   color: black;
   clip-path: inset(0 0 0 100%);
+  transform: translateY(-27%);
   
   /* Scroll-driven animation */
   animation: clipPathReveal both;
-  animation-timeline: view(0% -60%);
+  animation-timeline: view(0% -70%);
 }
 
 /* nếu muốn mỗi dòng có tỉ lệ khác nhau, có thể điều chỉnh nth-child */
@@ -235,13 +236,13 @@
   content: attr(data-text);
   position: absolute;
   color: #000000ff;
-  line-height: 0.9;
-  -webkit-text-stroke: 2px black;
+  line-height: 2;
   clip-path: inset(0 0 0 100%);
+  transform: translateY(-27%);
   
   /* Scroll-driven animation */
   animation: clipPathReveal both;
-  animation-timeline: view(0% -60%);
+  animation-timeline: view(0% -70%);
 }
 .shape-title2 .shape-word:nth-child(1){
   padding-left: 2.19rem;
@@ -394,7 +395,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
   width: 100%;
   box-sizing: border-box;
   transform: translateY(-11%); /* Để tránh bị che khuất bởi navbar */
