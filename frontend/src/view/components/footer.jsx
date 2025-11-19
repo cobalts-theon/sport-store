@@ -1,6 +1,7 @@
 import React from "react";
 import "./components-style/footer.css";
 import footerImage from "/src/assets/image/running.jpg";
+import { Link } from "react-router-dom";
 
 function Footer() {
     return (
@@ -19,7 +20,7 @@ function Footer() {
                     {/* Company Section */}
                     <div className="ps-footer__column">
                         <h3 className="ps-footer__title">Company</h3>
-                        <a href="/about">About Us</a>
+                        <Link to="/about">About Us</Link>
                         <a href="/blog">Blog</a>
                         <a href="/careers">Careers</a>
                         <a href="/partnerships">Partnerships</a>
@@ -28,7 +29,7 @@ function Footer() {
                     {/* Account Section */}
                     <div className="ps-footer__column">
                         <h3 className="ps-footer__title">Account</h3>
-                        <a href="/login">Log-in</a>
+                        <Link to="/login">Log-in</Link>
                         <a href="/cart">Cart</a>
                         <a href="/order">Order</a>
                     </div>

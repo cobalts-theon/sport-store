@@ -62,7 +62,7 @@ function ProductCard({ product, index }) {
       {/* Product Image */}
       <div className="product-image-container">
         <img 
-          src={product.image} 
+          src={product.img || product.image} 
           alt={product.name}
           className="product-image"
         />
@@ -100,9 +100,6 @@ function ProductCard({ product, index }) {
           </button>
         </div>
       </div>
-
-      {/* Decorative Elements */}
-      <div className="card-decoration"></div>
     </div>
   );
 }

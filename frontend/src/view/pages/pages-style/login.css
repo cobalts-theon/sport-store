@@ -1,0 +1,636 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.login-page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-top: 30px;
+    font-family: 'JetBrains Mono', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.silk-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.8;
+    pointer-events: none;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.silk-background canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.login-page::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(208, 254, 29, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+    z-index: 1;
+}
+
+.login-page::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 10s ease-in-out infinite reverse;
+    z-index: 1;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(30px, 30px) rotate(5deg); }
+}
+
+.login-container {
+    display: flex;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: -40px;
+    padding-left: 50px;
+    width: 100%;
+    min-height: 70vh;
+    max-height: 80vh;
+    background: rgba(138, 138, 138, 0.25);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    clip-path: polygon(6% 0, 100% 0, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 76%, 6% 63%);
+    position: relative;
+    z-index: 10;
+}
+
+/* Close Button */
+.login-close-btn {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 20px;
+    z-index: 10;
+    text-decoration: none;
+}
+
+.login-close-btn:hover {
+    background: rgba(208, 254, 29, 0.1);
+    border-color: #D0FE1D;
+    color: #D0FE1D;
+}
+
+/* Left Side - Login Form */
+.login-form-section {
+    flex: 1;
+    padding: 30px 30px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(10, 10, 20, 0);
+    position: relative;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+.login-form-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.login-form-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.login-form-section::-webkit-scrollbar-thumb {
+    background: rgba(208, 254, 29, 0.3);
+}
+
+.login-form-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(208, 254, 29, 0.5);
+}
+
+.login-logo {
+    margin-top: -10px;
+    margin-bottom: -10px;
+    margin-left: -10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.login-logo img {
+    width: 40px;
+    height: 44px;
+}
+
+.login-logo h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: #D0FE1D;
+    margin: 0;
+    letter-spacing: 1.5px;
+}
+
+.login-form-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 320px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.login-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: -8px;
+    letter-spacing: 1.5px;
+    line-height: 1;
+}
+
+.login-subtitle {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 16px;
+    font-weight: 400;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 10px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.form-group input {
+    font-family: 'JetBrains Mono', sans-serif;
+    width: 100%;
+    padding: 13px 16px;
+    background: rgba(101, 76, 76, 0);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: 'JetBrains Mono', sans-serif;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.form-group input:focus {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 11px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    accent-color: #D0FE1D;
+}
+
+.forgot-password {
+    color: #D0FE1D;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    font-size: 11px;
+}
+
+.forgot-password::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: #D0FE1D;
+    transition: width 0.3s ease;
+}
+
+.forgot-password:hover::after {
+    width: 100%;
+}
+
+.login-submit-btn {
+    width: 110%;
+    padding: 14px;
+    background: #D0FE1D;
+    border: none;
+    border-radius: 10px;
+    color: #000000;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', sans-serif;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 100%, 0 0);
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.login-submit-btn:hover::before {
+    width: 400px;
+    height: 400px;
+}
+
+.login-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(208, 254, 29, 0.3);
+}
+
+.login-submit-btn:active {
+    transform: translateY(0);
+}
+
+.alt-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    width: 100%;
+    gap: 12px;
+}
+
+.alt-login::before,
+.alt-login::after {
+    content: '';
+    display: block;
+    height: 1px;
+    flex: 1 1 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(208,254,29,0.5) 60%, rgba(255,255,255,0) 100%);
+}
+
+.alt-login-text {
+    padding: 0 8px;
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+}
+
+
+
+
+/* Social Login */
+.social-login {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.social-btn {
+    font-family: 'JetBrains Mono', sans-serif;
+    color: white;
+    width: 110%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -35px;
+    gap: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 100%, 0 0);
+    overflow: hidden;
+}
+
+.social-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(208, 254, 29, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.social-btn:hover::before {
+    opacity: 1;
+}
+
+.social-btn:hover {
+    transform: translateY(-4px);
+    border-color: #D0FE1D;
+    box-shadow: 0 8px 20px rgba(208, 254, 29, 0.2);
+}
+
+.signup-link {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+}
+
+.signup-link a {
+    color: #D0FE1D;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.signup-link a:hover {
+    opacity: 0.8;
+}
+
+/* Right Side - Testimonials */
+.login-testimonial-section {
+    flex: 1;
+    padding: 80px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    position: relative;
+}
+
+.login-testimonial-section::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: 10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(208, 254, 29, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.testimonial-card {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    height: 100%;
+    padding: 35px;
+    height: 100%;
+    padding-bottom: 70px;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s ease;
+    clip-path: polygon(0 0, 94% 0, 94% 28%, 100% 36%, 100% 100%, 8% 100%, 0 88%, 0 0);
+}
+
+.testimonial-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1.5px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+}
+
+.testimonial-content {
+    position: relative;
+    z-index: 2;
+}
+
+.quote-mark {
+    font-size: 80px;
+    color: rgb(209, 254, 29);
+    line-height: 0;
+    margin-bottom: 15px;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+.testimonial-text {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: -20px;
+    min-height: 80px;
+    font-style: italic;
+}
+
+.testimonial-author h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.testimonial-author p {
+    font-size: 11px;
+    color: #D0FE1D;
+    font-weight: 500;
+}
+
+.testimonial-navigation {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.testimonial-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.testimonial-btn.prev {
+    color: #D0FE1D;
+}
+
+.testimonial-btn.next {
+    color: #ffffff;
+}
+
+.testimonial-btn:hover {
+    background: #D0FE1D;
+    color: #000000;
+    border-color: #D0FE1D;
+}
+
+/* Promo Card */
+.promo-card {
+    background: #D0FE1D;
+    width: 85%;
+    height: 100%;
+    margin-left: 10px;
+    margin-top: -80px;
+    padding: 10px;
+    margin-bottom: -25px;
+    position: relative;
+    clip-path: polygon(0 0, 94% 0, 94% 28%, 100% 36%, 100% 100%, 8% 100%, 0 88%, 0 0);
+}
+
+/* Decorative bubble for promo card */
+.promo-bubble {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.3) 0%, rgba(167, 139, 250, 0.2) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    animation: float-bubble 6s ease-in-out infinite;
+}
+
+@keyframes float-bubble {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(-10px, -10px);
+    }
+}
+
+.promo-card::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.promo-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    max-width: 200px;
+    color:rgb(0, 0, 0);
+    margin-bottom: 5px;
+    letter-spacing: 0.8px;
+    position: relative;
+    z-index: 1;
+}
+
+.promo-card p {
+    font-family: 'JetBrains Mono', sans-serif;
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 1.5;
+    margin-bottom: 18px;
+    max-width: 220px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .login-container {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .login-form-section,
+    .login-testimonial-section {
+        padding: 40px;
+    }
+
+    .login-testimonial-section {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-page {
+        padding: 10px;
+    }
+
+    .login-container {
+        border-radius: 20px;
+    }
+
+    .login-form-section {
+        padding: 30px 20px;
+    }
+
+    .login-title {
+        font-size: 42px;
+    }
+
+    .form-group input {
+        padding: 14px 18px;
+    }
+}

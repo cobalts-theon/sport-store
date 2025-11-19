@@ -1,0 +1,394 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+.about-container {
+    color: #ffffff;
+    font-family: 'Bebas Neue', sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    min-height: 100vh;
+    width: 100%;
+    padding-top: 12px; /* Để tránh bị che khuất bởi navbar */
+    overflow: clip;
+    position: relative;
+}
+
+.about-container-content {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    height: 100%;
+    height: 50vh;
+    margin-top: 50px;
+}
+
+.about-container-content h1 {
+    text-indent: 130px;
+    line-height: 1;
+    font-size: 4rem;
+    max-width: 1200px;
+    transform: translate(30px, -50px);
+    padding-top: 10px;
+}
+
+.about-container-content p {
+    font-family: 'JetBrains Mono', sans-serif;
+    transform: translate(30px, 20px);
+    font-size: 0.7rem;
+}
+
+.about-container-image {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    overflow: clip;
+    position: relative;
+}
+/* 1 thanh border nằm giữa 2 ảnh - Move to precisely in the middle */
+.about-container-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.about-container-image img {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-container-image img:nth-child(3) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; 
+    height: auto;
+    z-index: 10;
+    object-fit: contain;
+}
+
+.about-container-image img:nth-child(1) {
+    animation: scale-up-left 0.5s both;
+    animation-timeline: view();
+    animation-range: entry 30% cover 40%; 
+}
+
+.about-container-image img:nth-child(2) {
+    animation: scale-up-right 0.5s both;
+    animation-timeline: view();
+    animation-range: entry 40% cover 40%; 
+    /* margin-top: -200px; */
+}
+
+.about-container-image img:nth-child(3) {
+    animation: logoapear 0.5s both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%; 
+}
+
+@keyframes scale-up-left {
+    from {
+        width: 25%;
+        height: 75%;
+        padding-top: 50px;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 100% 100%, 10% 100%, 10% 10%, 0 20%);
+    }
+    to {
+        width: 50%;
+        height: 100%;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 100%, 0 0);
+    }
+}
+
+@keyframes scale-up-right {
+    from {
+        width: 25%;
+        height: 75%;
+        padding-top: 100px;
+        clip-path: polygon(0 0, 50% 0, 100% 30%, 100% 100%, 100% 100%, 0 100%, 0 100%, 0 0);
+    }
+    to {
+        width: 50%;
+        height: 100%;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 100%, 0 0);
+    }
+}
+
+@keyframes logoapear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.what-about-us {
+    display: flex;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    height: 40vh;
+}
+
+.what-about-us p {
+    font-size: 0.7rem;
+    width: 50%;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    font-family: 'JetBrains Mono', sans-serif;
+    padding: 20px;
+    padding-top: 40px;
+    display: flex;
+    justify-content: start;
+}
+
+.what-about-us h2 {
+    width: 70%;
+    max-width: 40%;
+    padding: 20px 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.why-choose-us {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow-x: clip; /* Prevent horizontal scrollbar from flying items */
+    padding: 50px 0; /* Add spacing */
+}
+
+.why-choose-us h2 {
+    font-size: 4rem;
+    font-family: 'Bebas Neue', sans-serif;
+    text-transform: uppercase;
+    margin-bottom: -10px;
+    z-index: 2;
+}
+
+.why-choose-us p {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    z-index: 2;
+}
+
+/* Keep existing img styles for basketball and shoes, 
+   but exclude .float-item from them if needed or override */
+.why-choose-us img:not(.float-item) {
+    width: 40%;
+    height: 40%;
+    object-fit: cover;
+    animation: rotate both;
+    animation-timeline: view();
+    z-index: 2;
+}
+
+/* Floating Items Styles */
+.float-item {
+    position: absolute;
+    width: 150px !important; /* Override general img style */
+    height: auto !important;
+    object-fit: contain;
+    z-index: 1; /* Behind text if desired, or 3 to be on top */
+    opacity: 0;
+}
+
+/* Item 1: Pickleball - Top Left (coming from Left) */
+.item-1 {
+    top: 10%;
+    left: 5%;
+    animation: fly-in-rand-1 linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+/* Item 2: Volleyball - Top Right (coming from Right) */
+.item-2 {
+    top: 20%;
+    right: 5%;
+    animation: fly-in-rand-2 linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+/* Item 3: Shoe - Bottom Left (coming from Left) */
+.item-3 {
+    bottom: 15%;
+    left: 8%;
+    width: 200px !important;
+    animation: fly-in-rand-3 linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+/* Item 4: Bottle - Bottom Right (coming from Right) */
+.item-4 {
+    bottom: 10%;
+    right: 8%;
+    width: 120px !important;
+    animation: fly-in-rand-4 linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+/* Item 5: Football - Middle Left (coming from Left) */
+.item-5 {
+    top: 35%;
+    left: 2%;
+    width: 180px !important;
+    animation: fly-in-rand-5 linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+/* Item 6: Soccer - Middle Right (coming from Right) */
+.item-6 {
+    top: 40%;
+    right: 2%;
+    width: 140px !important;
+    animation: fly-in-rand-6 linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+/* Item 7: Shorts - Bottom Left Center (coming from Left) */
+.item-7 {
+    bottom: 5%;
+    left: 25%;
+    width: 160px !important;
+    animation: fly-in-rand-7 linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+/* Item 8: Orange Ball - Bottom Right Center (coming from Right) */
+.item-8 {
+    bottom: 25%;
+    right: 20%;
+    width: 130px !important;
+    animation: fly-in-rand-8 linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+@keyframes fly-in-rand-1 {
+    from {
+        transform: translateX(-150%) rotate(-120deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(-15deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fly-in-rand-2 {
+    from {
+        transform: translateX(150%) rotate(120deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(20deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fly-in-rand-3 {
+    from {
+        transform: translateX(-150%) rotate(-60deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(10deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fly-in-rand-4 {
+    from {
+        transform: translateX(150%) rotate(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(-5deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fly-in-rand-5 {
+    from {
+        transform: translateX(-150%) rotate(-180deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(-10deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fly-in-rand-6 {
+    from {
+        transform: translateX(150%) rotate(180deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(15deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fly-in-rand-7 {
+    from {
+        transform: translateX(-150%) rotate(-45deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(5deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fly-in-rand-8 {
+    from {
+        transform: translateX(150%) rotate(45deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(-5deg);
+        opacity: 1;
+    }
+}
+
+#shoes {
+    margin-top: -200px;
+    animation: fadein both;
+    animation-timeline: view(100% 0%);
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}

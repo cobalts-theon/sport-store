@@ -5,6 +5,8 @@ import football from '/src/assets/image/football(glitch).png';
 import shoe from '/src/assets/image/shoe.png';
 import volleyball from '/src/assets/image/volleyball(graffiti).png';
 import waterbottle from '/src/assets/image/waterbottle(orange).png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Trang chủ của ứng dụng, hiển thị hình ảnh chuyển đổi và chuỗi vòng tròn.
@@ -65,6 +67,7 @@ function Home() {
         <div className="start-word">
             <h1 className="home-title">PRIME SOULS</h1>
             <h2 className="home-subtitle">Elevate your game with premium sportswear.</h2>
+            <p className="scorll-text"><FontAwesomeIcon icon={faAngleDown} /> Scroll </p>
         </div>
         <svg className="ring-text" viewBox="0 0 200 200" aria-hidden="true"> {/* Vòng tròn văn bản trang trí */}
           <defs>

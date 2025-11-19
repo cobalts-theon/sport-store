@@ -1,43 +1,61 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaGithub, FaFacebookF, FaArrowLeft, FaArrowRight, FaTimes, FaGoogle } from 'react-icons/fa';
+import { FaGoogle, FaGithub, FaFacebookF, FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa';
 import logo from '/src/assets/image/white-logo.png';
 import "./pages-style/login.css";
 import Silk from '../components/Silk';
 
-function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+function Signup() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+    const [agreeToTerms, setAgreeToTerms] = useState(false);
     const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
     const testimonials = [
         {
-            quote: "Prime Souls transformed my athletic journey. The quality and comfort are unmatched. Every product feels premium!",
-            name: "Jordan Mitchell",
-            role: "Professional Runner"
+            quote: "Signing up was the best decision for my fitness journey. Prime Souls delivers quality every time!",
+            name: "Alex Thompson",
+            role: "Marathon Runner"
         },
         {
-            quote: "Shopping here is effortless. The website is intuitive, and the customer service is exceptional. Highly recommended!",
-            name: "Sarah Chen",
-            role: "Fitness Enthusiast"
+            quote: "The seamless shopping experience and premium products make Prime Souls my go-to athletic brand.",
+            name: "Emma Williams",
+            role: "Yoga Instructor"
         },
         {
-            quote: "I've never experienced such attention to detail in sportswear. Prime Souls truly understands athletes' needs.",
-            name: "Marcus Rodriguez",
-            role: "Basketball Coach"
+            quote: "From registration to delivery, everything exceeded my expectations. Truly a premium experience!",
+            name: "David Kim",
+            role: "Personal Trainer"
         }
     ];
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle login logic here
-        console.log('Login attempt:', { email, password, keepLoggedIn });
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
-    const handleSocialLogin = (provider) => {
-        console.log(`Login with ${provider}`);
-        // Handle social login logic
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords don't match!");
+            return;
+        }
+        if (!agreeToTerms) {
+            alert("Please agree to the terms and conditions");
+            return;
+        }
+        console.log('Signup attempt:', formData);
+    };
+
+    const handleSocialSignup = (provider) => {
+        console.log(`Sign up with ${provider}`);
     };
 
     const nextTestimonial = () => {
@@ -65,23 +83,36 @@ function Login() {
                     <FaTimes />
                 </Link>
                 
-                {/* Left Side - Login Form */}
+                {/* Left Side - Signup Form */}
                 <div className="login-form-section">
                     <div className="login-logo">
                         <img src={logo} alt="Prime Souls Logo" />
                     </div>
 
                     <div className="login-form-content">
-                        <h1 className="login-title">Welcome back</h1>
-                        <p className="login-subtitle">Please Enter your Account details</p>
+                        <h1 className="login-title">Create Account</h1>
+                        <p className="login-subtitle">Join Prime Souls community today</p>
 
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    placeholder="Full Name"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <input
                                     type="email"
                                     id="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
                                     placeholder="Email"
                                     required
                                 />
@@ -91,9 +122,22 @@ function Login() {
                                 <input
                                     type="password"
                                     id="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
                                     placeholder="Password"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleInputChange}
+                                    placeholder="Confirm Password"
                                     required
                                 />
                             </div>
@@ -102,29 +146,26 @@ function Login() {
                                 <label className="checkbox-container">
                                     <input
                                         type="checkbox"
-                                        checked={keepLoggedIn}
-                                        onChange={(e) => setKeepLoggedIn(e.target.checked)}
+                                        checked={agreeToTerms}
+                                        onChange={(e) => setAgreeToTerms(e.target.checked)}
                                     />
-                                    <span>Keep me logged in</span>
+                                    <span>I agree to Terms & Conditions</span>
                                 </label>
-                                <Link to="/forgot-password" className="forgot-password">
-                                    Forgot Password?
-                                </Link>
                             </div>
 
                             <button type="submit" className="login-submit-btn">
-                                Sign in
+                                Sign up
                             </button>
                         </form>
 
                         <div className="alt-login">
                             <div className="alt-login-text">or continue with</div>
                         </div>
-                        
+
                         <div className="social-login">
                             <button 
                                 className="social-btn google"
-                                onClick={() => handleSocialLogin('Google')}
+                                onClick={() => handleSocialSignup('Google')}
                                 type="button"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">
@@ -133,18 +174,18 @@ function Login() {
                                     <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
                                     <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
                                 </svg>
-                                Login with Google
+                                Sign up with Google
                             </button>
                             {/* <button 
                                 className="social-btn github"
-                                onClick={() => handleSocialLogin('GitHub')}
+                                onClick={() => handleSocialSignup('GitHub')}
                                 type="button"
                             >
                                 <FaGithub />
                             </button>
                             <button 
                                 className="social-btn facebook"
-                                onClick={() => handleSocialLogin('Facebook')}
+                                onClick={() => handleSocialSignup('Facebook')}
                                 type="button"
                             >
                                 <FaFacebookF />
@@ -152,7 +193,7 @@ function Login() {
                         </div>
 
                         <p className="signup-link">
-                            Don't have an account? <Link to="/signup">Sign up</Link>
+                            Already have an account? <Link to="/login">Sign in</Link>
                         </p>
                     </div>
                 </div>
@@ -192,8 +233,14 @@ function Login() {
 
                     <div className="promo-card">
                         <div className="promo-bubble"></div>
-                        <h3>Get your premium gear at prime quality</h3>
-                        <p>Be among the first to experience the ultimate athletic performance with our exclusive collection.</p>
+                        <h3>Start your athletic journey today</h3>
+                        <p>Join thousands of athletes who trust Prime Souls for their premium sportswear needs.</p>
+                        <div className="user-avatars">
+                            <div className="avatar avatar1"></div>
+                            <div className="avatar avatar2"></div>
+                            <div className="avatar avatar3"></div>
+                            <div className="avatar avatar4"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -201,4 +248,5 @@ function Login() {
     );
 }
 
-export default Login;
+export default Signup;
+

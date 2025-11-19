@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.product-flex-title {
+    font-family: 'Bebas Neue', sans-serif;
+    color: #ffffff;
+    margin: 40px 0 0px 10px;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.product-flex-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.product-flex-container {
+    display: flex;
+    width: 100%;
+    height: 70vh;
+    gap: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+.product-flex-container::-webkit-scrollbar {
+    display: none;
+}
+
+.product-flex-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Navigation Buttons */
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: rgba(208, 254, 29, 0.9);
+    border: none;
+    color: #000;
+    font-size: 48px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Bebas Neue', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.scroll-btn:hover {
+    background-color: #D0FE1D;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 0 25px rgba(208, 254, 29, 0.8);
+}
+
+.scroll-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.scroll-btn-left {
+    left: 20px;
+}
+
+.scroll-btn-right {
+    right: 20px;
+}
+
+.product-flex-item {
+    flex: 0 0 25%;
+    min-width: 25%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-flex-item img.modelimg {
+    width: 80%;
+    height: auto;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.hover-background {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.hover-background img.hoverbgimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-flex-item:hover .hover-background {
+    opacity: 1;
+}
+
+.product-flex-item:hover {
+    flex: 0 0 35%;
+    min-width: 35%;
+    transform: scale(1.01);
+}
+
+/* Product name - top left */
+.product-flex-name { /* CHANGED: đổi từ .product-name → .product-flex-name */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: #ffffff;
+    z-index: 3;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    transition: all 0.3s ease-in-out; /* ADDED: smooth animation */
+}
+
+.product-flex-item:hover .product-flex-name { /* CHANGED: đổi selector */
+    transform: translateX(30px);
+    scale: 1.5;
+}
+
+/* Cập nhật style gốc cho nút */
+.shop-now-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    /* Giữ nguyên vị trí ẩn ban đầu */
+    transform: translateX(-50%) translateY(10px); 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    padding: 13px 32px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000;
+    border: none;
+    cursor: pointer;
+    z-index: 3;
+    opacity: 0;
+    text-decoration: none;
+    display: inline-block;
+    overflow: hidden; /* Quan trọng: để ẩn lớp màu trượt bên ngoài */
+    
+    /* Tăng thời gian transition lên 0.3s để mượt hơn */
+    transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Tạo lớp nền màu sẽ trượt vào (Pseudo-element) */
+.shop-now-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #D0FE1D; /* Màu neon chủ đạo */
+    z-index: -1; /* Nằm dưới chữ */
+    
+    /* Ban đầu dịch chuyển nó ra khỏi khung nhìn */
+    transform: translateX(-101%); 
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Hiệu ứng trượt mượt mà */
+}
+
+/* 1. Khi hover vào khung sản phẩm (Hiện nút lên) */
+.product-flex-item:hover .shop-now-btn {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* 2. Khi hover vào chính cái nút (Kích hoạt hiệu ứng đặc biệt) */
+.product-flex-item:hover .shop-now-btn:hover {
+    color: #000; /* Đảm bảo chữ màu đen để tương phản tốt với nền neon */
+    background-color: #ffffff; /* Giữ nền gốc */
+    
+    /* Kết hợp: Căn giữa + Skew nút + Đổ bóng Neon (Glow) */
+    transform: translateX(-50%) translateY(0) skewX(-15deg);
+    box-shadow: 0 0 20px rgba(208, 254, 29, 0.6); 
+}
+
+/* Kích hoạt lớp nền trượt vào khi hover nút */
+.product-flex-item:hover .shop-now-btn:hover::before {
+    transform: translateX(0); /* Trượt vào lấp đầy nút */
+}
+
+/* Xử lý chữ bên trong (Counter-skew) */
+.shop-now-btn div {
+    position: relative;
+    z-index: 2; /* Đảm bảo chữ nằm trên lớp nền màu */
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.product-flex-item:hover .shop-now-btn:hover div {
+    /* Skew ngược lại để chữ thẳng hàng khi nút bị nghiêng */
+    transform: skewX(15deg); 
+}

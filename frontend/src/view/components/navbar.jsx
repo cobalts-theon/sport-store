@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import pswhitelogo from "/src/assets/image/white-logo.png";
 import "./components-style/navbar.css";
+import ProductDropdown from "./product-dropdown";
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping, faVenus, faMars} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 //Audio
 import backgroundMusic from '/src/assets/audio/Memory-Reboot-Hatsune-Miku&Shrek.mp3';
@@ -17,10 +18,9 @@ function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);  
   const [searchQuery, setSearchQuery] = useState('');
   const [musicPlaying, setMusicPlaying] = useState(false);
-  const [hoveredText, setHoveredText] = useState('PRIMESOULS'); //Gọi tên hiện tại của link
-  const [hoveredImage, setHoveredImage] = useState('/src/assets/icon/sales.svg'); //Hình ảnh mặc định
   const searchRef = useRef(null); // Dùng để phát hiện click ngoài search box
   const audioRef = useRef(new Audio(backgroundMusic));
+  const location = useLocation(); // Get current path
 
   //giảm âm lượng
   useEffect(() => {
@@ -55,152 +55,16 @@ function Navbar() {
         </Link>
 
         <div className="nav-links" id="main">
-          <Link to="/"><span className="nav-link-label">Home</span></Link>
+          <Link to="/">
+            <span className={`nav-link-label ${location.pathname === '/' ? 'active-link' : ''}`}>Home</span>
+          </Link>
 
           {/* Products with full-width hover panel */}
-          <div className="has-dropdown">
-            <Link to="/products" id="products"><span className="nav-link-label">Products</span></Link>
-            {/* empty panel, stays visible when mouse is over it because it's a child of .has-dropdown */}
-            <div className="product-panel" onMouseDown={(e) => e.stopPropagation()}>
-              <div className="first-rectangle-image">
-                <img src={hoveredImage} alt={hoveredText} className="rectangle-image" />
-              </div>
-              <div className="second-rectangle">
-                <h1 className="second-rectangle-text">{hoveredText}</h1>
-              </div>
-              <div className="product-panel-grid">
-                <div className="product-category">
-                  <h3>Categories</h3>
-                  <Link 
-                    to="/products?category=shoes" 
-                    className="product-link" 
-                    onClick={() => setMobileOpen(false)}
-                    onMouseEnter={() => {
-                      setHoveredText('SHOES');
-                      setHoveredImage('/src/assets/image/shoess.jpg');
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredText('PRIMESOULS');
-                      setHoveredImage('/src/assets/icon/sales.svg');
-                    }}
-                  >
-                    Shoes
-                  </Link>
-                  <Link 
-                    to="/products?category=clothes" 
-                    className="product-link" 
-                    onClick={() => setMobileOpen(false)}
-                    onMouseEnter={() => {
-                      setHoveredText('CLOTHES');
-                      setHoveredImage('/src/assets/image/unnamed.jpg');
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredText('PRIMESOULS');
-                      setHoveredImage('/src/assets/icon/sales.svg');
-                    }}
-                  >
-                    Clothes
-                  </Link>
-                </div>
-                <div className="product-category">
-                  <h3>By Sport</h3>
-                  <Link 
-                    to="/products?sport=running" 
-                    className="product-link" 
-                    onClick={() => setMobileOpen(false)}
-                    onMouseEnter={() => {
-                      setHoveredText('RUNNING')
-                      setHoveredImage('/src/assets/image/running.jpg');
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredText('PRIMESOULS')
-                      setHoveredImage('/src/assets/icon/sales.svg');}}
-                  >
-                    Running
-                  </Link>
-                  <Link 
-                    to="/products?sport=basketball" 
-                    className="product-link" 
-                    onClick={() => setMobileOpen(false)}
-                    onMouseEnter={() => {
-                      setHoveredText('BASKETBALL')
-                      setHoveredImage('/src/assets/image/5.jpg');
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredText('PRIMESOULS')
-                      setHoveredImage('/src/assets/icon/sales.svg');
-                    }}
-                  >
-                    Basketball
-                  </Link>
-                  <Link 
-                    to="/products?sport=soccer" 
-                    className="product-link" 
-                    onClick={() => setMobileOpen(false)}
-                    onMouseEnter={() => {
-                      setHoveredText('SOCCER')
-                      setHoveredImage('/src/assets/image/Soccer.jpg');
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredText('PRIMESOULS')
-                      setHoveredImage('/src/assets/icon/sales.svg');
-                    }}
-                  >
-                    Soccer
-                  </Link>
-                  <Link 
-                    to="/products?sport=skateboarding" 
-                    className="product-link" 
-                    onClick={() => setMobileOpen(false)}
-                    onMouseEnter={() => {
-                      setHoveredText('PICKLEBALL')
-                      setHoveredImage('/src/assets/image/pickle.jpg');
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredText('PRIMESOULS')
-                      setHoveredImage('/src/assets/icon/sales.svg');
-                    }}
-                  >
-                    Pickleball
-                  </Link>
-                </div>
-                <div className="product-category">
-                  <h3>Target</h3>
-                  <Link 
-                    to="/products?target=men" 
-                    className="product-link" 
-                    onClick={() => setMobileOpen(false)}
-                    onMouseEnter={() => {
-                      setHoveredText('MEN')
-                      setHoveredImage('/src/assets/image/Male.png');
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredText('PRIMESOULS')
-                      setHoveredImage('/src/assets/icon/sales.svg');
-                    }}
-                  >
-                    Men <FontAwesomeIcon icon={faMars}/>
-                  </Link>
-                  <Link 
-                    to="/products?target=women" 
-                    className="product-link" 
-                    onClick={() => setMobileOpen(false)}
-                    onMouseEnter={() => {
-                      setHoveredText('WOMEN')
-                      setHoveredImage('/src/assets/image/Female.png');
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredText('PRIMESOULS')
-                      setHoveredImage('/src/assets/icon/sales.svg');
-                    }}
-                  >
-                    Women <FontAwesomeIcon icon={faVenus}/>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-          <Link to="/services"><span className="nav-link-label">Help</span></Link>
+          <ProductDropdown setMobileOpen={setMobileOpen} />
+          
+          <Link to="/services">
+            <span className={`nav-link-label ${location.pathname === '/services' ? 'active-link' : ''}`}>Help</span>
+          </Link>
         </div>
 
         {/* --- SEARCH BUTTON --- */}
@@ -266,13 +130,13 @@ function Navbar() {
 
         {/* --- USER ICON --- */}
         <div className="nav-links" id="alter">
-          <Link to="/order" className="order-icon">
+          <Link to="/order" className={`order-icon ${location.pathname === '/order' ? 'active' : ''}`}>
             <FontAwesomeIcon icon={faBox} className="nav-user-icon"/>
           </Link>
-          <Link to="/cart" className="order-icon">
+          <Link to="/cart" className={`order-icon ${location.pathname === '/cart' ? 'active' : ''}`}>
             <FontAwesomeIcon icon={faCartShopping} className="nav-user-icon"/>
           </Link>
-          <Link to="/login"> 
+          <Link to="/login" className={location.pathname === '/login' ? 'active' : ''}> 
             <FontAwesomeIcon icon={faUser} className="nav-user-icon"/> 
           </Link>
         </div>

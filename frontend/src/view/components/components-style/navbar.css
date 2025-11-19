@@ -272,14 +272,24 @@
     height: 112%;
 }
 
-/* khi hover mở nền link */
-.nav-links a:hover::after {
+/* khi hover hoặc active đổi màu chữ link */
+.nav-links a:hover,
+.nav-links a .active-link,
+.nav-links a.active {
+    border: #D0FE1D 1px solid;
+    color: black; 
+}
+
+/* khi hover hoặc active mở nền link */
+.nav-links a:hover::after,
+.nav-links a:has(.active-link)::after,
+.nav-links a.active::after {
     height: 100%; 
 }
 
-/* khi hover đổi màu chữ link */
-.nav-links a:hover {
-    color: black; 
+/* Active state for user icons in #alter */
+.nav-links#alter a.active .nav-user-icon {
+    color: black;
 }
 
 .music-button {
@@ -979,6 +989,8 @@
 
 /* Product links styling */
 .product-category .product-link {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px;
   color: #ffffff;
   text-decoration: none;
   transition: all 140ms ease;

@@ -14,7 +14,7 @@ function Review() {
 
     return (
         <div className="review-container-bento-grid">
-            <div className="review-container-bento-grid-title" id="title">
+            <div className="review-container-bento-grid-title" id="title" style={{ color: 'white' }}>
                 <h1><FontAwesomeIcon icon={faSquare} style={{ fontSize: '30px' }}/> ABOUT OUR PRODUCT</h1>
             </div>
             <div className="review-container-bento-grid-item" id="box-1">
@@ -51,8 +51,8 @@ function Review() {
                 <img src={degrees} alt="Degrees" />
             </div>
             <div className="review-container-bento-grid-item" id="box-4">
-                <h1>Welcome to <span style={{ color: '#D0FE1D' }}>PRIME SOULS</span> – your trusted destination for high-quality sports gear and apparel, empowering you to push your limits and elevate your active lifestyle.</h1>
-                <p><FontAwesomeIcon icon={faSquare} /> The Best Choice for Your Sports Gear</p>
+                <h1 style={{ color: 'white' }}>Welcome to <span style={{ color: '#D0FE1D' }}>PRIME SOULS</span> – your trusted destination for high-quality sports gear and apparel, empowering you to push your limits and elevate your active lifestyle.</h1>
+                <p style={{ color: 'white' }}><FontAwesomeIcon icon={faSquare} /> The Best Choice for Your Sports Gear</p>
             </div>
         </div>
     );

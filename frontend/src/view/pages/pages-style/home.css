@@ -90,9 +90,26 @@
     transition-delay: 1.5s; /* delay để chữ nhỏ hiện sau chữ lớn */
 }
 
+.scorll-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    margin-left: 30px;
+    border: 1px solid #ffffff;
+    padding: 5px;
+    width: 60px;
+    margin-top: 10px;
+    margin-bottom: -20px;
+    font-weight: normal;
+    color: #ffffff;
+    clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
+    transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1s;
+    transition-delay: 1.7s; /* delay để chữ nhỏ hiện sau chữ lớn */
+}
+
 /* Khi animation bắt đầu - mở rộng từ giữa ra */
 .home-rectangle.expand .start-word .home-title,
-.home-rectangle.expand .start-word .home-subtitle {
+.home-rectangle.expand .start-word .home-subtitle,
+.home-rectangle.expand .scorll-text {
     clip-path: inset(0% 0 0 0);
 }
 

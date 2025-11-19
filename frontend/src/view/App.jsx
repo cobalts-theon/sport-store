@@ -1,7 +1,5 @@
-import { useState } from 'react'
-import {Router, Routes, Route, Link} from "react-router-dom"
-// import reactLogo from '/src/assets/icon/react.svg'
-// import pslogo from '/src/assets/image/white-logo.png'
+import { useState, useEffect } from 'react'
+import {Router, Routes, Route, Link, useLocation} from "react-router-dom"
 
 //Components
 import Header from './components/navbar'
@@ -15,58 +13,49 @@ import Slogan from './pages/slogan'
 import Home from './pages/home'
 import HomeProduct from './pages/home-product'
 import Review from './pages/review'
+import Flex from './pages/product-flex'
+import Login from './pages/login'
+import Signup from './pages/signup'
+import About from './pages/about'
 
-function App() {
+function AppContent() {
+  //scroll to top when change page
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
   return (
     <>
-      <StartupLoader duration={2000}/> {/* Thời gian hiển thị logo khởi động */}
+      <StartupLoader duration={2000}/> 
       <Commercre/>
       <Header/>
-      <Routes> {/* Dùng Routes để định nghĩa các tuyến đường trong ứng dụng mà không cần load lại trang */} 
+      <Routes>
         <Route
          path="/" 
          element={ 
           <>
             <Home/>
+            <Flex/>
             <Review/>
+            <Infbar/>
+            <HomeProduct/>
             <div className="slogan-page-container">
               <Slogan />
             </div>
-            <Infbar/>
-            <HomeProduct/>
           </>
           }/>
         <Route path="/products" element={<HomeProduct/>}/>
-        {/* <Route path="/about" element={<About/>}/>
-        <Route path="/contact" element={<Contact/>}/>
-        <Route path="/profile" element={<Profile/>}/>
-        <Route path="/services" element={<Services/>}/> */}
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/signup" element={<Signup/>}/>
+        <Route path="/about" element={<About/>}/>
       </Routes>
       <Footer/>
-      {/* <div className="pt-20">
-        <div>
-          <a href="https://vite.dev" target="_blank">
-            <img src={pslogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
-      </div> */}
     </>
   )
+}
+
+function App() {
+  return <AppContent />
 }
 
 export default App
