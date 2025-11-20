@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 //Audio
-import backgroundMusic from '/src/assets/audio/Memory-Reboot-Hatsune-Miku&Shrek.mp3';
+import backgroundMusic from '/src/assets/audio/theme.mp3';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -25,7 +25,7 @@ function Navbar() {
   //giảm âm lượng
   useEffect(() => {
     const audio = audioRef.current;
-    audio.volume = 0.1; // Giảm âm lượng xuống 20%
+    audio.volume = 0.2; // Giảm âm lượng xuống 20%
   }, []);
   
   // Theo dõi cuộn trang
@@ -110,7 +110,7 @@ function Navbar() {
             if (musicPlaying) {
               audioRef.current.pause(); // Tạm dừng nhạc
             } else {
-              audioRef.current.volume = 0.1;  // Đảm bảo âm lượng thấp khi bắt đầu phát
+              audioRef.current.volume = 0.3;  // Đảm bảo âm lượng thấp khi bắt đầu phát
               audioRef.current.play();  // Phát nhạc
               audioRef.current.loop = true; // Lặp lại nhạc
             }

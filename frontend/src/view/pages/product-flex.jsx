@@ -1,6 +1,8 @@
 import "./pages-style/product-flex.css";
 import { useRef } from "react";
 import productsData from "../data/products.json";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquare } from "@fortawesome/free-solid-svg-icons";
 
 function ProductFlex() {
     const containerRef = useRef(null);
@@ -24,7 +26,7 @@ function ProductFlex() {
     
     return (
         <div className="product-flex">
-            <h1 className="product-flex-title">FEATURED</h1>
+            <h1 className="product-flex-title"><FontAwesomeIcon icon={faSquare} style={{ fontSize: '30px' }}/> FEATURED</h1>
             <div className="product-flex-wrapper">
                 <button className="scroll-btn scroll-btn-left" onClick={scrollLeft}>
                     &#8249;

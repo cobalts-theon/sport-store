@@ -17,6 +17,7 @@ import Flex from './pages/product-flex'
 import Login from './pages/login'
 import Signup from './pages/signup'
 import About from './pages/about'
+import ProductsPage from './pages/products-page'
 
 function AppContent() {
   //scroll to top when change page
@@ -44,7 +45,7 @@ function AppContent() {
             </div>
           </>
           }/>
-        <Route path="/products" element={<HomeProduct/>}/>
+        <Route path="/products" element={<ProductsPage/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/about" element={<About/>}/>

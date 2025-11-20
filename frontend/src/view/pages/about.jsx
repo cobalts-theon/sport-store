@@ -27,11 +27,11 @@ function About() {
                 <img src={whitelogo} alt="About" />
             </div>
             <div className="what-about-us">
-                <p>//What's Prime Souls about?</p>
-                <h2>Prime Souls is a brand made by a student with big dreams and bigger hustle. <br></br>It's about buying and managing your own sports products.</h2>
+                <p>//What's Prime Soulsabout?</p>
+                <h2><span style={{ color: '#D0FE1D' }}>Prime Souls</span> is a brand made by a student with big dreams and bigger hustle. <br></br>It's about buying and managing your own sports products.</h2>
             </div>
             <div className="why-choose-us">
-                <h2>Why choose Prime Souls?</h2>
+                <h2>Why choose <span style={{ color: '#D0FE1D' }}>Prime Souls</span>?</h2>
                 <p>Quality that punches way above its price: same performance fabrics as the big names, but without the markup.</p>
                 <img src={basketball} alt="basketball" />
                 <h2>And the best part?</h2>

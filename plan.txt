@@ -20,3 +20,5 @@
     -Product Info: Xem chi tiết thông tin sản phẩm, giá, năm sx, tình trạng (Hết hay còn)
     -Search product: Tìm tên sản phẩm
     -Filter: Lọc theo địa chỉ, loại(Áo, quần, dụng cụ thể thao,...)
+    -Sort Product: Lọc sản phẩm
+    -

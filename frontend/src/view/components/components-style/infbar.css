@@ -1,9 +1,7 @@
 .infbar-container { 
   width: 100%;
-  transform: translateY(-80%);
-  border: 1px solid rgba(255, 255, 255, 1); 
-  height:60px;
   background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   overflow: hidden; 
   display: flex;
   overflow-x: hidden; /* Ngăn cuộn ngang */
