@@ -18,6 +18,8 @@ import Login from './pages/login'
 import Signup from './pages/signup'
 import About from './pages/about'
 import ProductsPage from './pages/products-page'
+import DiImage from './pages/di-image'
+import PopularCategories from './pages/popular-categories'
 
 function AppContent() {
   //scroll to top when change page
@@ -40,6 +42,8 @@ function AppContent() {
             <Review/>
             <Infbar/>
             <HomeProduct/>
+            <DiImage/>
+            <PopularCategories/>
             <div className="slogan-page-container">
               <Slogan />
             </div>

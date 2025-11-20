@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.popular-categories {
+    width: 100%;
+    min-height: 100vh;
+    background: #1a1a1a;
+}
+
+.popular-categories-title {
+    font-family: 'Bebas Neue', sans-serif;
+    color: #ffffff;
+    font-size: 48px;
+    margin: 0 0 40px 0;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #1a1a1a;
+    padding: 20px 0;
+}
+
+.popular-categories-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    width: 100%;
+    margin-bottom: 60px;
+}
+
+.popular-categories-item {
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.popular-categories-item img.modelimg {
+    width: 80%;
+    height: auto;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Product name - top left */
+.popular-categories-name {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: #ffffff;
+    z-index: 3;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* Shop now button styling */
+.shop-now-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%, 10px); 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    padding: 13px 32px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000;
+    border: none;
+    cursor: pointer;
+    z-index: 3;
+    opacity: 0;
+    visibility: hidden;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+}
+
+.popular-categories-item:hover .shop-now-btn {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+}
+
+.popular-categories-item:hover .shop-now-btn:hover {
+    background-color: #D0FE1D;
+}
+
+.shop-now-btn div {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .popular-categories-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .popular-categories-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .popular-categories-title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .popular-categories-container {
+        grid-template-columns: 1fr;
+    }
+}
+

@@ -395,10 +395,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.5);
   width: 100%;
   box-sizing: border-box;
-  transform: translateY(-11%); /* Để tránh bị che khuất bởi navbar */
+  transform: translateY(-2%); /* Để tránh bị che khuất bởi navbar */
 
   /* Thêm dòng này để tạo khoảng cách */
   margin-bottom: 0rem; /* Bạn có thể thay đổi giá trị 5rem theo ý muốn */

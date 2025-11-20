@@ -1,0 +1,78 @@
+.di-image-container {
+    width: 100%;
+    height: 100vh;
+    background: #1a1a1a;
+}
+
+.di-image-slogan {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.di-image-slogan h1 {
+    margin: 0;
+    padding: 0;
+    line-height: 0.8;
+}
+
+.di-image-slogan h1:first-child {
+    position: sticky;
+    top: 150px;
+    margin-bottom: -0.1em;
+    margin-left: -0.05em;
+    align-self: flex-start;
+}
+
+.di-image-slogan h1:last-child {
+    position: sticky;
+    bottom: -0.1em;
+    margin-bottom: -0.1em;
+    margin-right: -0.05em;
+    align-self: flex-end;
+}
+
+.di-image-content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+    position: relative;
+}
+
+.di-image-first-wrapper {
+    width: 50%;
+    height: 120%;
+    position: relative;
+}
+
+.di-image-first,
+.di-image-first-overlay {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.di-image-first {
+    z-index: 1;
+}
+
+.di-image-first-overlay {
+    z-index: 2;
+}
+
+.di-image-second {
+    width: 50%;
+    height: 120%;
+    object-fit: cover;
+}

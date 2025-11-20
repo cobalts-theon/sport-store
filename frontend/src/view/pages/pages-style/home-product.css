@@ -8,7 +8,9 @@
   background: #0f0f0f;
   padding: 0px 0px 60px;
   position: relative;
+  overflow: hidden;
 }
+
 
 /* Header Section */
 .home-product-header {
@@ -17,6 +19,8 @@
   margin: 0 auto 60px;
   padding: 60px 20px 40px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .home-product-title {
@@ -59,7 +63,8 @@
 
 .filter-btn {
   font-family: 'Inter', sans-serif;
-  background: transparent;
+  background:rgba(26, 26, 26, 0.1);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.8);
   padding: 10px 24px;
@@ -90,6 +95,8 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Call to Action Section */
@@ -98,9 +105,13 @@
   max-width: 1200px;
   margin: 100px auto 0;
   padding: 60px 20px;
-  background: #1a1a1a;
+  background:rgba(26, 26, 26, 0.26);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .cta-content {

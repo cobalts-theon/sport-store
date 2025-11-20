@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './pages-style/home-product.css';
 import ProductCard from '../components/product-card';
 import productsData from '../data/products.json';
+import Silk from '../components/Silk';
 
 /**
  * Home Product Page - Hiển thị các sản phẩm trong grid layout
@@ -21,6 +22,15 @@ function HomeProduct() {
 
   return (
     <div className="home-product-container">
+      <div className="silk-background">
+        <Silk
+          speed={10}
+          scale={2}
+          color="#363636"
+          noiseIntensity={2}
+          rotation={0}
+        />
+      </div>
       {/* Header Section */}
       <div className="home-product-header">
         <h1 className="home-product-title">
