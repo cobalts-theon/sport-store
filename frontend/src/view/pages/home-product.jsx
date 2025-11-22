@@ -13,12 +13,12 @@ function HomeProduct() {
   const [filter, setFilter] = useState('all'); // all, featured, new, sale
 
   // Filter products starting from ID 8 for the grid section
-  const gridProducts = productsData.filter(p => p.id >= 8);
+  const gridProducts = productsData.filter(p => p.id >= 10);
 
   // Lọc sản phẩm theo tag
   const filteredProducts = filter === 'all' 
-    ? gridProducts.slice(0, 8) // Show only first 8 products for 2 rows of 4
-    : gridProducts.filter(product => product.tag === filter).slice(0, 8);
+    ? gridProducts.slice(0, 10) // Show only first 10 products for 2 rows of 4
+    : gridProducts.filter(product => product.tag === filter).slice(0, 10);
 
   return (
     <div className="home-product-container">

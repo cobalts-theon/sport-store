@@ -111,6 +111,7 @@
   border-radius: 12px;
   text-align: center;
   position: relative;
+  
   z-index: 1;
 }
 
@@ -146,6 +147,7 @@
   letter-spacing: 1px;
   transition: all 0.3s ease;
   border-radius: 4px;
+  clip-path: polygon(0 0, 100% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 100%, 0 0);
 }
 
 .cta-button:hover {

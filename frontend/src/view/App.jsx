@@ -20,6 +20,7 @@ import About from './pages/about'
 import ProductsPage from './pages/products-page'
 import DiImage from './pages/di-image'
 import PopularCategories from './pages/popular-categories'
+import UserReview from './pages/userreview'
 
 function AppContent() {
   //scroll to top when change page
@@ -47,6 +48,7 @@ function AppContent() {
             <div className="slogan-page-container">
               <Slogan />
             </div>
+            <UserReview/>
           </>
           }/>
         <Route path="/products" element={<ProductsPage/>}/>

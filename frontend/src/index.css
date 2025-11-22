@@ -16,6 +16,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+::selection {
+  background-color: #D0FE1D;
+  color: #000000;
+}
+
 body {
   margin: 0;
   min-width: 320px;

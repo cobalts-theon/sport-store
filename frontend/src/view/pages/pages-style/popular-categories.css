@@ -1,124 +1,171 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
 .popular-categories {
     width: 100%;
-    min-height: 100vh;
-    background: #1a1a1a;
+    padding: 60px 0;
+    background-color: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.Circle-background {
+    position: absolute;
+    top: 160%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(2000px, 200vw);
+    height: min(2000px, 200vw);
+    max-width: 3000px;
+    max-height: 3000px;
+    border: 20px dashed rgba(255, 255, 255, 0.21);
+    background: radial-gradient(circle at center, rgba(208,254,29,0.02), transparent 60%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .popular-categories-title {
     font-family: 'Bebas Neue', sans-serif;
     color: #ffffff;
-    font-size: 48px;
-    margin: 0 0 40px 0;
-    letter-spacing: 2px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background: #1a1a1a;
-    padding: 20px 0;
+    font-size: 42px;
+    margin-bottom: 30px;
+    transform: translateY(-100%);
+    text-align: center;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 10;
+    position: relative;
 }
 
-.popular-categories-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
+.popular-categories-subtitle {
+    font-family: 'Jetbrains Mono', monospace;
+    color: #ffffff;
+    font-size: 8px;
+    letter-spacing: 1px;
+    width: 150px;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    z-index: 10;
+    position: absolute;
+    transform: translateY(-220%) translateX(900%);
+}
+
+.arc-slider-container {
+    position: relative;
     width: 100%;
-    margin-bottom: 60px;
+    height: 500px;
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+    touch-action: none; /* Prevent scrolling while dragging */
 }
 
-.popular-categories-item {
-    aspect-ratio: 1;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+.arc-slider-container:active {
+    cursor: grabbing;
+}
+
+.arc-center {
+    position: absolute;
+    left: 50%;
+    /* top is set inline */
+    width: 0;
+    height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arc-item-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    /* transform-origin is set inline to 0 0 */
+}
+
+.arc-item-card {
+    width: 320px;
+    height: 480px;
+    background: rgba(255, 255, 255, 0.1); /* Border color */
+    padding: 1px; /* Border width */
+    /* Center the card on the radius line */
+    margin-left: -160px; 
+    margin-top: -240px; 
+    user-select: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    clip-path: polygon(10% 0, 100% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 70%, 10% 56%);
+    transition: background-color 0.3s ease;
+}
+
+.arc-item-content {
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    position: relative;
-    overflow: hidden;
+    justify-content: space-between;
+    padding: 30px;
+    clip-path: polygon(10% 0, 100% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 70%, 10% 56%); /* Ensure inner content matches shape */
+    transition: background-color 0.3s ease;
 }
 
-.popular-categories-item img.modelimg {
-    width: 80%;
-    height: auto;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 2;
+.arc-item-card:hover {
+    background-color: rgba(208, 254, 29, 0.5); /* Hover border color */
+    z-index: 10;
 }
 
-/* Product name - top left */
-.popular-categories-name {
-    position: absolute;
-    top: 20px;
-    left: 20px;
+.arc-item-card:hover .arc-item-content {
+    background-color: #222;
+}
+
+.arc-img {
+    width: 100%;
+    height: 260px;
+    object-fit: contain;
+    pointer-events: none;
+    transition: transform 0.3s ease;
+}
+
+.arc-item-card:hover .arc-img {
+    transform: scale(1.1);
+}
+
+.arc-item-info {
+    text-align: center;
+    width: 100%;
+    transform: translateY(-50px);
+}
+
+.arc-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
+    font-size: 24px;
     color: #ffffff;
-    z-index: 3;
+    margin: 10px 0;
     letter-spacing: 1px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
-/* Shop now button styling */
-.shop-now-btn {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translate(-50%, 10px); 
+.arc-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 1.5px;
-    padding: 13px 32px;
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #000;
-    border: none;
-    cursor: pointer;
-    z-index: 3;
-    opacity: 0;
-    visibility: hidden;
+    font-size: 16px;
+    letter-spacing: 1px;
     text-decoration: none;
-    display: inline-block;
-    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    transition: all 0.3s ease;
 }
 
-.popular-categories-item:hover .shop-now-btn {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, 0);
+.arc-item-card:hover .arc-btn {
+    background: #D0FE1D;
+    color: #000;
+    border-color: #D0FE1D;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 100%, 0 0);
 }
-
-.popular-categories-item:hover .shop-now-btn:hover {
-    background-color: #D0FE1D;
-}
-
-.shop-now-btn div {
-    position: relative;
-    z-index: 2;
-    display: inline-block;
-}
-
-/* Responsive design */
-@media (max-width: 1200px) {
-    .popular-categories-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .popular-categories-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .popular-categories-title {
-        font-size: 36px;
-    }
-}
-
-@media (max-width: 480px) {
-    .popular-categories-container {
-        grid-template-columns: 1fr;
-    }
-}
-
