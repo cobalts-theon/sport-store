@@ -6,10 +6,12 @@
         "hover": "/src/assets/image/blue.png",
         "link": "/product/prime-runner",
         "tag": "featured",
-        "description": "Premium running shoes with advanced cushioning.",
+        "description": "Experience the pinnacle of performance with the PS LXCX B-O Trainer. Engineered with cutting-edge cushioning technology, these shoes provide unparalleled comfort and support for long-distance runs. The breathable mesh upper ensures optimal airflow, while the durable outsole offers superior traction on various surfaces.",
         "category": "Shoes",
         "price": 2500000,
-        "originalPrice": 3000000
+        "originalPrice": 3000000,
+        "material": "Mesh / Synthetic",
+        "brand": "Prime Souls"
     },
     {
         "id": 2,
@@ -18,10 +20,12 @@
         "hover": "/src/assets/image/hoverbackground.jpg",
         "link": "/product/soul-walker",
         "tag": "new",
-        "description": "Comfortable cotton t-shirt for everyday wear.",
+        "description": "Elevate your everyday style with the PS Black T-Shirt. Crafted from 100% premium cotton, this tee offers a soft, breathable feel that keeps you comfortable all day long. Its classic fit and minimalist design make it a versatile addition to any wardrobe, perfect for layering or wearing on its own.",
         "category": "Clothing",
         "price": 450000,
-        "originalPrice": null
+        "originalPrice": null,
+        "material": "100% Cotton",
+        "brand": "Prime Souls"
     },
     {
         "id": 3,
@@ -31,10 +35,12 @@
         "link": "/product/elite-sport",
         "style": {"width": "60%", "height": "auto"},
         "tag": "featured",
-        "description": "Professional pickleball paddle for competitive play.",
+        "description": "Dominate the court with the SLK Pickleball Paddle. Designed for competitive play, this paddle features a lightweight carbon fiber face for explosive power and a honeycomb core for precise control. Its ergonomic grip ensures comfort during intense matches, making it the choice of champions.",
         "category": "Accessories",
         "price": 1200000,
-        "originalPrice": 1500000
+        "originalPrice": 1500000,
+        "material": "Carbon Fiber",
+        "brand": "SLK"
     },
     {
         "id": 4,
@@ -43,10 +49,12 @@
         "hover": "/src/assets/image/purple.png",
         "link": "/product/urban-stride",
         "tag": "sale",
-        "description": "Lightweight shorts perfect for workouts.",
+        "description": "Stay cool and agile with Lados Shorts. Made from a lightweight, moisture-wicking polyester blend, these shorts are perfect for high-intensity workouts or casual wear. Featuring an elastic waistband with a drawstring for a secure fit and side pockets for convenience.",
         "category": "Clothing",
         "price": 350000,
-        "originalPrice": 500000
+        "originalPrice": 500000,
+        "material": "Polyester Blend",
+        "brand": "Lados"
     },
     {
         "id": 5,
@@ -55,10 +63,12 @@
         "hover": "/src/assets/image/hoverbackground.jpg",
         "link": "/product/trainer-pro",
         "tag": "featured",
-        "description": "High-performance training shoes.",
+        "description": "Push your limits with the PS Trainer Pro. These high-performance training shoes are built for stability and responsiveness. The reinforced heel counter locks your foot in place, while the flexible forefoot allows for natural movement. Ideal for cross-training, gym sessions, and agility drills.",
         "category": "Shoes",
         "price": 2800000,
-        "originalPrice": 3200000
+        "originalPrice": 3200000,
+        "material": "Synthetic / Rubber",
+        "brand": "Prime Souls"
     },
     {
         "id": 6,
@@ -67,10 +77,12 @@
         "hover": "/src/assets/image/orange.png",
         "link": "/product/sport-essentials",
         "tag": "new",
-        "description": "Essential gear for your sports activities.",
+        "description": "Gear up with the Sport Essentials pack. This curated collection includes everything you need to kickstart your fitness journey. From resistance bands to a quick-dry towel, each item is selected for quality and durability. Perfect for home workouts or taking to the gym.",
         "category": "Accessories",
         "price": 600000,
-        "originalPrice": null
+        "originalPrice": null,
+        "material": "Mixed Materials",
+        "brand": "Prime Souls"
     },
     {
         "id": 7,
@@ -80,10 +92,12 @@
         "link": "/product/active-wear",
         "style": {"width": "60%", "height": "auto"},
         "tag": "sale",
-        "description": "Comfortable active wear for gym and outdoor.",
+        "description": "Experience freedom of movement with our Active Wear line. This set features a fitted top and matching leggings made from a high-stretch spandex and nylon blend. The fabric is breathable and squat-proof, ensuring you stay confident and comfortable during any activity, from yoga to running.",
         "category": "Clothing",
         "price": 850000,
-        "originalPrice": 1200000
+        "originalPrice": 1200000,
+        "material": "Spandex / Nylon",
+        "brand": "Prime Souls"
     },
     {
         "id": 8,
@@ -94,9 +108,11 @@
         "img": "/src/assets/image/basketball.png",
         "hover": "/src/assets/image/basketball.png",
         "tag": "featured",
-        "description": "Premium basketball for professional players",
+        "description": "Take your game to the next level with the PS C12 Basic Basketball. Constructed with premium composite leather, this ball offers superior grip and durability for both indoor and outdoor play. Its balanced weight and deep channels ensure optimal control and shooting accuracy.",
         "link": "/product/basketball",
-        "isHotDeal": true
+        "isHotDeal": true,
+        "material": "Composite Leather",
+        "brand": "Prime Souls"
     },
     {
         "id": 9,
@@ -107,8 +123,10 @@
         "img": "/src/assets/image/football(glitch).png",
         "hover": "/src/assets/image/football(glitch).png",
         "tag": "new",
-        "description": "Advanced glitch design for better grip",
-        "link": "/product/football"
+        "description": "Stand out on the pitch with the PS GlitchX Football. Featuring a unique glitch design for enhanced visibility, this ball is made from high-quality synthetic leather for consistent flight and touch. The reinforced bladder ensures excellent air retention, keeping you in the game longer.",
+        "link": "/product/football",
+        "material": "Synthetic Leather",
+        "brand": "Prime Souls"
     },
     {
         "id": 10,
@@ -119,8 +137,10 @@
         "img": "/src/assets/image/shoe.png",
         "hover": "/src/assets/image/shoe.png",
         "tag": "featured",
-        "description": "Ultimate training shoes for athletes",
-        "link": "/product/trainer"
+        "description": "The PS LXCX Trainer is the ultimate shoe for athletes who demand versatility. With a lightweight mesh upper for breathability and a responsive foam midsole for shock absorption, it's perfect for running, jumping, and lateral movements. Train harder and smarter with PS LXCX.",
+        "link": "/product/trainer",
+        "material": "Mesh / Foam",
+        "brand": "Prime Souls"
     },
     {
         "id": 11,
@@ -131,9 +151,11 @@
         "img": "/src/assets/image/volleyball(graffiti).png",
         "hover": "/src/assets/image/volleyball(graffiti).png",
         "tag": "sale",
-        "description": "Professional volleyball with graffiti style",
+        "description": "Serve, set, and spike with style using the PS V675 Volleyball. Its eye-catching graffiti design is matched by professional-grade performance. The soft composite cover reduces impact on arms, while the sturdy construction ensures shape retention through intense matches.",
         "link": "/product/volleyball",
-        "isHotDeal": true
+        "isHotDeal": true,
+        "material": "Composite Leather",
+        "brand": "Prime Souls"
     },
     {
         "id": 12,
@@ -144,8 +166,10 @@
         "img": "/src/assets/image/waterbottle(orange).png",
         "hover": "/src/assets/image/waterbottle(orange).png",
         "tag": "new",
-        "description": "Stylish water bottle for hydration",
-        "link": "/product/waterbottle"
+        "description": "Stay hydrated in style with the PS (O) Water Bottle. Made from durable stainless steel, this double-walled insulated bottle keeps drinks cold for 24 hours or hot for 12. The leak-proof cap and sleek design make it the perfect companion for the gym, office, or outdoor adventures.",
+        "link": "/product/waterbottle",
+        "material": "Stainless Steel",
+        "brand": "Prime Souls"
     },
     {
         "id": 13,
@@ -156,8 +180,10 @@
         "img": "/src/assets/image/1.png",
         "hover": "/src/assets/image/1.png",
         "tag": "featured",
-        "description": "Elite running shoes for speed",
-        "link": "/product/running-shoes"
+        "description": "Achieve your personal best with PS Pro Running Shoes. Designed for speed, these shoes feature an engineered mesh upper that adapts to your foot shape and a lightweight sole that returns energy with every stride. The streamlined profile reduces drag, helping you fly past the competition.",
+        "link": "/product/running-shoes",
+        "material": "Engineered Mesh",
+        "brand": "Prime Souls"
     },
     {
         "id": 14,
@@ -168,8 +194,10 @@
         "img": "/src/assets/image/2.png",
         "hover": "/src/assets/image/2.png",
         "tag": "new",
-        "description": "Breathable performance jersey",
-        "link": "/product/jersey"
+        "description": "Perform at your peak with the PS Elite Jersey. Constructed with advanced Dri-Fit fabric, it wicks sweat away from your body to keep you dry and focused. The athletic cut offers a full range of motion, making it ideal for team sports and individual training alike.",
+        "link": "/product/jersey",
+        "material": "Dri-Fit Fabric",
+        "brand": "Prime Souls"
     },
     {
         "id": 15,
@@ -180,8 +208,10 @@
         "img": "/src/assets/image/5.jpg",
         "hover": "/src/assets/image/5.jpg",
         "tag": "featured",
-        "description": "High-top basketball sneakers",
-        "link": "/product/basketball-shoes"
+        "description": "Dominate the paint with PS Basketball Shoes. These high-tops provide exceptional ankle support and stability for quick cuts and jumps. The combination of leather and synthetic materials offers durability and style, while the herringbone traction pattern ensures you stay grounded on the court.",
+        "link": "/product/basketball-shoes",
+        "material": "Leather / Synthetic",
+        "brand": "Prime Souls"
     },
     {
         "id": 16,
@@ -192,9 +222,11 @@
         "img": "/src/assets/image/6.jpg",
         "hover": "/src/assets/image/6.jpg",
         "tag": "sale",
-        "description": "Complete training equipment set",
+        "description": "Equip yourself for success with PS Training Gear. This versatile set is designed to enhance your workout routine. Whether you're focusing on strength, agility, or flexibility, these durable accessories will help you reach your fitness goals faster and more efficiently.",
         "link": "/product/training-gear",
-        "isHotDeal": true
+        "isHotDeal": true,
+        "material": "Various",
+        "brand": "Prime Souls"
     },
     {
         "id": 17,
@@ -205,8 +237,10 @@
         "img": "/src/assets/image/7.jpg",
         "hover": "/src/assets/image/7.jpg",
         "tag": "new",
-        "description": "Smart sports tracking watch",
-        "link": "/product/smart-watch"
+        "description": "Track your progress with precision using the PS Sport Watch. Featuring a comfortable silicone strap and a scratch-resistant glass face, this smart watch monitors heart rate, steps, and calories burned. Stay connected and motivated with real-time data on your wrist.",
+        "link": "/product/smart-watch",
+        "material": "Silicone / Glass",
+        "brand": "Prime Souls"
     },
     {
         "id": 18,
@@ -217,8 +251,10 @@
         "img": "/src/assets/image/8.jpg",
         "hover": "/src/assets/image/8.jpg",
         "tag": "featured",
-        "description": "Lightweight performance cap",
-        "link": "/product/cap"
+        "description": "Shield your eyes and stay cool with the PS Running Cap. Made from ultra-lightweight polyester, this cap features breathable panels and a moisture-wicking sweatband. The adjustable strap ensures a custom fit, making it the perfect accessory for sunny runs and outdoor workouts.",
+        "link": "/product/cap",
+        "material": "Polyester",
+        "brand": "Prime Souls"
     },
     {
         "id": 19,
@@ -229,8 +265,10 @@
         "img": "/src/assets/image/shoe.png",
         "hover": "/src/assets/image/shoe.png",
         "tag": "sale",
-        "description": "Versatile training footwear",
+        "description": "Versatility meets comfort in the PS Training Shoes. With a breathable mesh upper and a durable rubber outsole, these shoes are ready for anything. From weightlifting to cardio, they provide the support and cushioning you need to tackle any workout with confidence.",
         "link": "/product/training-shoes-v2",
-        "isHotDeal": true
+        "isHotDeal": true,
+        "material": "Mesh / Rubber",
+        "brand": "Prime Souls"
     }
 ]

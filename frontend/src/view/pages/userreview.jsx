@@ -51,7 +51,7 @@ function UserReview() {
                     </div>
                     <div className="user-name-role second-role-info">
                         <h3 className="user-name second-name">Grey</h3>
-                        <p className="user-role second-role">THE ONE WHO ASK</p>
+                        <p className="user-role second-role">THE ONE WHO ASK </p>
                         <div className="user-rating second-rating">
                             {[...Array(4)].map((_, i) => (
                                 <FontAwesomeIcon key={i} icon={faStar} className="star-icon" />

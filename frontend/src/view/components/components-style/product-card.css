@@ -169,17 +169,29 @@
   letter-spacing: 0.5px;
 }
 
-.product-description {
-  font-family: 'Inter', sans-serif;
+/* Rating Section - Replacing Description */
+.product-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star-icon {
+  color: #FFD700; /* Gold color for stars */
   font-size: 12px;
+}
+
+.rating-count {
+  margin-left: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.6);
-  line-height: 1.4;
-  margin: 0 0 12px 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 34px; /* Fixed height for 2 lines */
+  font-weight: 500;
 }
 
 /* Product Bottom */

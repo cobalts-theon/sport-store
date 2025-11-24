@@ -58,12 +58,17 @@ function ProductsPage() {
     // Parse query params if any (e.g. from navbar dropdown)
     const params = new URLSearchParams(location.search);
     const categoryParam = params.get('category');
+    const searchParam = params.get('search');
     
     if (categoryParam) {
       let filtered = productsData;
       filtered = filtered.filter(p => p.category && p.category.toLowerCase().includes(categoryParam.toLowerCase()));
       setFilteredProducts(filtered);
       setActiveFilters(prev => ({ ...prev, category: filtered.length > 0 ? filtered[0].category : null }));
+    }
+
+    if (searchParam) {
+      setSearchQuery(searchParam);
     }
   }, [location.search]);
 

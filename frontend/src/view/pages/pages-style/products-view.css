@@ -1,0 +1,416 @@
+.products-view-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    margin-top: 65px;
+    background-color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
+    color: #000000;
+}
+
+.products-view-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center;  Removed to allow scrolling content if needed */
+    align-items: center;
+    background-color:rgba(255, 255, 255, 1);
+    border-right: 1px solid #e0e0e0;
+    padding: 0px 0px; /* Added top padding */
+    position: relative;
+    overflow-y: auto; /* Allow scrolling if description is long */
+    overflow-x: hidden;
+}
+
+/* Fixed container for main image */
+.fixed-image-container {
+    background: url("/src/assets/image/topo.jpeg") no-repeat center center / cover;
+    width: 750px;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #000000ff;
+    margin-bottom: 20px; /* Replaces margin-top logic */
+    flex-shrink: 0; /* Prevent shrinking */
+    overflow: hidden;
+    object-fit: contain;
+}
+
+.products-view-image {
+    max-width: 120%;
+    max-height: 120%;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+}
+
+.products-view-image-carsousel {
+    display: flex;
+    gap: 15px;
+    z-index: 10;
+    margin-top: -14px;
+    margin-bottom: 40px; /* Space before details */
+}
+
+.carousel-thumbnail {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-thumbnail img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.carousel-thumbnail:hover,
+.carousel-thumbnail.active {
+    border-color: #000;
+    transform: translateY(-2px);
+}
+
+/* Left Details Section */
+.product-left-details {
+    width: 100%;
+    max-width: 450px; /* Align width generally with image */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    text-align: left;
+}
+
+.details-section h3 {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.details-section p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.detail-label {
+    color: #666;
+    font-weight: bold;
+}
+
+.detail-value {
+    color: #000;
+}
+
+
+.products-view-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 65px); /* Fixed height for right panel to align scroll */
+    position: sticky;
+    top: 65px;
+}
+
+/* Header Section (ID) */
+.pv-header-row {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    min-height: 150px;
+}
+
+.pv-label-col {
+    width: 150px;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+}
+
+.pv-content-col {
+    flex: 1;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+}
+
+.keeper-number {
+    font-family: 'Bebas Neue', 'Arial', sans-serif;
+    font-size: 60px;
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+/* Body Section (Traits) */
+.pv-body-row {
+    display: flex;
+    flex: 1;
+    overflow-y: auto; /* Allow scrolling inside body if content is tall */
+}
+
+.traits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+    align-content: start;
+}
+
+.trait-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: -20px;
+}
+
+.trait-label {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+}
+
+.trait-value {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #000;
+}
+
+/* Size Selector Styles */
+.size-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.size-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e0e0e0;
+    background: transparent;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.size-btn:hover {
+    border-color: #000;
+}
+
+.size-btn.active {
+    background: #000;
+    color: #D0FE1D;
+    border-color: #000;
+}
+
+/* Color Selector Styles */
+.color-selector {
+    display: flex;
+    gap: 10px;
+}
+
+.color-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    position: relative;
+}
+
+.color-btn:hover {
+    transform: scale(1.1);
+}
+
+.color-btn.active {
+    border: 2px solid #000;
+    transform: scale(1.1);
+}
+
+/* Quantity Selector Styles */
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    width: fit-content;
+}
+
+.qty-btn {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.qty-btn:hover {
+    background: #D0FE1D;
+}
+
+.qty-value {
+    width: 40px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Footer/Button Area */
+.pv-footer {
+    padding: 10px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+}
+
+.view-opensea-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 40px;
+    border: 1px solid #000;
+    background: transparent;
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    min-width: 180px;
+}
+
+.view-opensea-btn:hover {
+    background: #000;
+    color: #D0FE1D;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 100%, 0 0);
+}
+
+/* Buy Now Button specific style */
+.buy-now-btn {
+    background: #D0FE1D;
+    color: #000000ff;
+}
+
+.buy-now-btn:hover {
+    background: #333;
+    border-color: #333;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 100%, 0 0);
+}
+
+.opensea-icon {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+/* Custom bullet for traits label */
+.bullet {
+    color: #000;
+    margin-right: 8px;
+    font-size: 10px;
+    vertical-align: middle;
+}
+
+/* Make sure label col in body stretches */
+.pv-body-row .pv-label-col {
+    display: block; 
+    padding-top: 40px;
+}
+
+/* Modal Styles */
+.image-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.image-modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    background-color:rgb(255, 255, 255);
+    animation: zoomIn 0.3s ease;
+}
+
+.image-modal-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #D0FE1D;
+    border: none;
+    font-size: 24px;
+    color: #000;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    transition: all 0.2s ease;
+    clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);
+}
+
+.image-modal-close:hover {
+    color: #000 ;
+    background: rgb(255, 255, 255);
+    transform: scale(1.1);
+    transform: rotate(-90deg);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}

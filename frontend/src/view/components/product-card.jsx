@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './components-style/product-card.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faStarHalf, faFire } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +7,7 @@ import { faStar, faStarHalf, faFire } from '@fortawesome/free-solid-svg-icons';
 
 function ProductCard({ product, index }) {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   // Calculate discount percentage if there's an original price
   const discountPercentage = product.originalPrice && product.price 
@@ -23,14 +25,14 @@ function ProductCard({ product, index }) {
     return price;
   };
 
-  const handleQuickView = () => {
-    // TODO: Implement quick view modal
-    console.log('Quick view:', product.name);
+  const handleQuickView = (e) => {
+    e.preventDefault(); 
+    navigate(`/product/${product.id}`);
   };
 
-  const handleAddToCart = () => {
-    // TODO: Implement add to cart functionality
-    console.log('Add to cart:', product.name);
+  const handleAddToCart = (e) => {
+    e.preventDefault(); 
+    navigate(`/product/${product.id}`);
   };
 
   return (
@@ -61,11 +63,13 @@ function ProductCard({ product, index }) {
 
       {/* Product Image */}
       <div className="product-image-container">
+        <Link to={`/product/${product.id}`} className="product-image-link">
         <img 
           src={product.img || product.image} 
           alt={product.name}
           className="product-image"
         />
+        </Link>
         <div className="product-overlay">
           <button 
             className="quick-view-btn"
@@ -79,8 +83,20 @@ function ProductCard({ product, index }) {
       {/* Product Info */}
       <div className="product-info">
         <span className="product-category">{product.category}</span>
+        <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <h3 className="product-name">{product.name}</h3>
-        <p className="product-description">{product.description}</p>
+        </Link>
+        
+        {/* 5-Star Rating Display replacing Description */}
+        <div className="product-rating">
+            <div className="stars">
+                {[...Array(5)].map((_, i) => (
+                    <FontAwesomeIcon key={i} icon={faStar} className="star-icon" />
+                ))}
+            </div>
+            <span className="rating-count">(5.0)</span>
+        </div>
+
         <div className="product-bottom">
           <div className="price-container">
             {hasDiscount ? (
@@ -105,4 +121,3 @@ function ProductCard({ product, index }) {
 }
 
 export default ProductCard;
-

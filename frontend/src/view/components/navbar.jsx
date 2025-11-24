@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import pswhitelogo from "/src/assets/image/white-logo.png";
 import "./components-style/navbar.css";
@@ -16,11 +16,29 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);  
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); //Khai báo biến searchQuery để lưu giá trị tìm kiếm và setState để cập nhật giá trị 
   const [musicPlaying, setMusicPlaying] = useState(false);
   const searchRef = useRef(null); // Dùng để phát hiện click ngoài search box
   const audioRef = useRef(new Audio(backgroundMusic));
   const location = useLocation(); // Get current path
+  const navigate = useNavigate();
+
+  // Lấy query từ URL params và cập nhật giá trị searchQuery
+  useEffect(() => {
+    const params = new URLSearchParams(location.search); //Lấy URL params
+    const query = params.get('search') || ''; //Lấy query từ URL params
+    setSearchQuery(query); //Cập nhật giá trị searchQuery
+    if (query) setSearchOpen(true); //Nếu có query thì mở search box
+  }, [location.search, location.pathname]); //Khi URL params thay đổi thì cập nhật giá trị searchQuery
+
+  //Chức năng tìm kiếm
+  const handleSearch = () => {
+    if (searchQuery.trim()) { //Nếu có query thì chuyển hướng đến trang products và truyền query tìm kiếm
+      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`); //Chuyển hướng đến trang products và truyền query tìm kiếm
+      setSearchOpen(false); //Đóng search box
+      setMobileOpen(false); //Đóng mobile menu  
+    }
+  };
 
   //giảm âm lượng
   useEffect(() => {
@@ -70,26 +88,36 @@ function Navbar() {
         {/* --- SEARCH BUTTON --- */}
         <button 
             ref={searchRef}
-            className={`search-button ${searchOpen ? 'active' : ''}`}
+            className={`search-button ${searchOpen ? 'active' : ''}`} //Thêm class để thay đổi giao diện khi search box đang mở
             onClick={() => {
-              if (searchOpen) setSearchQuery('');
-              setSearchOpen(v => !v);
+              if (searchOpen) setSearchQuery(''); //Nếu search box đang mở thì xóa query
+              setSearchOpen(v => !v); //Mở/Đóng search box
             }}
             type="button"
         >
             <FontAwesomeIcon 
               icon={searchOpen ? faTimes : faSearch}  
               className="search-icon"
+              onClick={(e) => {
+                if (searchOpen && searchQuery.trim()) {
+                  e.stopPropagation(); //Ngăn không cho event bubble lên button parent
+                  handleSearch(); //Thực hiện tìm kiếm khi click vào icon search
+                }
+              }}
+              style={{ cursor: searchOpen && searchQuery.trim() ? 'pointer' : 'default' }}
             />
 
             <input
               type="text"
               placeholder="Search for products"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onClick={(e) => e.stopPropagation()}
-              onFocus={() => setSearchOpen(true)}
+              onChange={(e) => setSearchQuery(e.target.value)} //Cập nhật giá trị searchQuery khi người dùng nhập
+              onClick={(e) => e.stopPropagation()} //Ngăn không cho event bubble lên button parent
+              onFocus={() => setSearchOpen(true)} //Mở search box khi focus vào input
               onKeyDown={(e) => {
+                if (e.key === 'Enter') { //Khi nhấn Enter thì thực hiện tìm kiếm
+                  handleSearch();
+                }
                 // Fix Space không đóng search box
                 if (e.key === ' ' || e.code === 'Space') {
                   e.preventDefault();
@@ -158,10 +186,18 @@ function Navbar() {
                 type="text"
                 placeholder="Search for products"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)} //Cập nhật giá trị searchQuery
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSearch(); //Khi nhấn Enter thì thực hiện tìm kiếm
+                }}
                 className="mobile-search-input"
               />
-              <FontAwesomeIcon icon={faSearch} className="mobile-search-icon" />
+              <FontAwesomeIcon 
+                icon={faSearch} 
+                className="mobile-search-icon" 
+                onClick={handleSearch} //Thực hiện tìm kiếm khi click vào icon search
+                style={{ cursor: 'pointer' }}
+              />
             </div>
 
             <Link to="/" onClick={() => setMobileOpen(false)}>Home</Link>

@@ -1,5 +1,6 @@
 import "./pages-style/product-flex.css";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import productsData from "../data/products.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare } from "@fortawesome/free-solid-svg-icons";
@@ -42,9 +43,9 @@ function ProductFlex() {
                             </div>
                             <h3 className="product-flex-name">{product.name}</h3>
                             <img src={product.img} alt={product.name} className="modelimg" style={product.style || {}}/>
-                            <a href={product.link} className="shop-now-btn">
+                            <Link to={product.link} className="shop-now-btn">
                                 <div>SHOP NOW</div>
-                            </a>
+                            </Link>
                         </div>
                     ))}
                 </div>

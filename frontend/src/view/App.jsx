@@ -16,11 +16,13 @@ import Review from './pages/review'
 import Flex from './pages/product-flex'
 import Login from './pages/login'
 import Signup from './pages/signup'
+import ForgotPassword from './pages/forgot-password'
 import About from './pages/about'
 import ProductsPage from './pages/products-page'
 import DiImage from './pages/di-image'
 import PopularCategories from './pages/popular-categories'
 import UserReview from './pages/userreview'
+import ProductsView from './pages/products-view'
 
 function AppContent() {
   //scroll to top when change page
@@ -55,6 +57,8 @@ function AppContent() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/about" element={<About/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/product/:id" element={<ProductsView/>}/>
       </Routes>
       <Footer/>
     </>
