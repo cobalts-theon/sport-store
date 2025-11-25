@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
     padding-top: 12px; /* Để tránh bị che khuất bởi navbar */
-    overflow: hidden;
+    overflow: clip;
     position: relative;
 }   
 
@@ -19,7 +19,7 @@
     height: 84vh;
     max-width: 100%;;
     border: 1px solid rgba(255, 255, 255, 0.5);
-    overflow: hidden;
+    overflow: clip;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,7 +56,6 @@
     line-height: 0.88;
     clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
     transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1s;
-    transition-delay: 1s; /* delay để chữ nhỏ hiện sau chữ lớn */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: gradient-move 12s ease-in-out infinite;
@@ -83,11 +82,10 @@
     display: inline-block;
     max-width: 20ch;    /* giới hạn độ dài */
     white-space: wrap;      /* xuống dòng */
-    overflow: hidden;
+    overflow: clip;
     text-overflow: ellipsis;    /* nếu quá dài thì hiện "..." */
     clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
-    transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1s;
-    transition-delay: 1.5s; /* delay để chữ nhỏ hiện sau chữ lớn */
+    transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1.5s;
 }
 
 .scorll-text {
@@ -102,15 +100,14 @@
     font-weight: normal;
     color: #ffffff;
     clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
-    transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1s;
-    transition-delay: 1.7s; /* delay để chữ nhỏ hiện sau chữ lớn */
+    transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1.7s;
 }
 
 /* Khi animation bắt đầu - mở rộng từ giữa ra */
 .home-rectangle.expand .start-word .home-title,
 .home-rectangle.expand .start-word .home-subtitle,
 .home-rectangle.expand .scorll-text {
-    clip-path: inset(0% 0 0 0);
+    clip-path: inset(0 0 0 0);
 }
 
 .home-shape {
@@ -126,7 +123,7 @@
     transition: width 600ms cubic-bezier(0.4,0,0.2,1), right 600ms cubic-bezier(0.4,0,0.2,1), opacity 300ms ease;
     opacity: 0.98;
     will-change: width, right;
-    overflow: visible;
+    overflow: clip;
     background-split: text;
 }
 
@@ -248,56 +245,195 @@
     transform: skewX(-15deg) scale(1.4);
 }
 
-/* ensure buttons don't show on very small screens if desired */
-@media (max-width: 480px) {
-  .image-Carousel .carousel-btn { display: none; }
-}
+/* Responsive Design */
 
-/* Responsive */
+
+/* Tablet */
 @media (max-width: 768px) {
     .home-rectangle {
-        height: 70vh;
-        border-radius: 8px;
+        height: 75vh;
     }
 
     .home-rectangle.expand {
         width: 95vw;
     }
 
-    .home-image {
-        width: 200px;
-        height: 200px;
+    .start-word {
+        padding-right: 50%;
+        margin-top: -10%;
+    }
+
+    .start-word .home-title {
+        font-size: 7rem;
+        padding-left: 30px;
+        margin-bottom: -15px;
+    }
+
+    .start-word .home-subtitle {
+        font-size: 1.6rem;
+        padding-left: 35px;
+        max-width: 18ch;
+    }
+
+    .scorll-text {
+        font-size: 0.8rem;
+        margin-left: 20px;
+        padding: 4px;
+        width: 55px;
     }
 
     .home-shape {
-        right: -4vw;
-        width: clamp(60vw, 80vw, 1000px);
         height: calc(100vh - 70px);
     }
 
-    .image-Carousel { width: 260px; height: 260px; }
+    .home-rectangle.expand .home-shape {
+        width: clamp(50vw, 70vw, 900px);
+    }
+
+
+    .home-rectangle {
+        height: 65vh;
+    }
+
+    .home-rectangle.expand {
+        width: 98vw;
+    }
+
+    .start-word {
+        padding-right: 40%;
+        margin-top: -15%;
+    }
+
+    .start-word .home-title {
+        font-size: 4rem;
+        padding-left: 20px;
+        margin-bottom: -10px;
+    }
+
+    .start-word .home-subtitle {
+        font-size: 1.1rem;
+        padding-left: 25px;
+        max-width: 14ch;
+    }
+
+    .scorll-text {
+        font-size: 0.7rem;
+        margin-left: 10px;
+        padding: 3px;
+        width: 50px;
+    }
+
+    .home-shape {
+        top: 55%;
+        height: calc(100vh - 100px);
+        transform: translateY(-55%) skewX(-12deg);
+    }
+
+    .home-rectangle.expand .home-shape {
+        width: 85vw;
+    }
+
+    .image-Carousel {
+        width: 220px;
+        height: 220px;
+    }
+
+    .image-Carousel .carousel-btn {
+        display: none;
+    }
+
+    .image-Carousel .carousel-dots {
+        bottom: 15px;
+    }
+
+    .image-Carousel .dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .product-name .product-name-text {
+        font-size: 2.8rem;
+        left: 62%;
+        top: 20%;
+        max-width: 14ch;
+        border-bottom: 12px solid black;
+    }
+
+    .product-name .product-description-text {
+        font-size: 0.85rem;
+        left: 62%;
+        max-width: 18ch;
+        line-height: 1.1;
+        border-bottom: 12px solid black;
+    }
+
+    .product-actions {
+        transform: translate(120%, -150%);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .buy-btn, .learn-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        width: 100%;
+    }
+
+    .learn-btn {
+        margin-left: 0;
+    }
 }
 
-@media (max-width: 480px) {
+/* Very Small Mobile */
+@media (max-width: 360px) {
     .home-rectangle {
         height: 60vh;
     }
 
-    .home-image {
-        width: 150px;
-        height: 150px;
+    .start-word .home-title {
+        font-size: 3.2rem;
+        padding-left: 15px;
     }
 
-    .home-shape {
-        right: -2vw;
-        top: 55%;
-        width: 95vw;
-        height: calc(100vh - 120px);
-        transform: translateY(-55%) skewX(-12deg);
-        border-radius: 6px;
+    .start-word .home-subtitle {
+        font-size: 0.95rem;
+        padding-left: 20px;
+        max-width: 12ch;
     }
 
-    .image-Carousel { width: 180px; height: 180px; }
+    .scorll-text {
+        font-size: 0.65rem;
+        width: 45px;
+    }
+
+    .image-Carousel {
+        width: 180px;
+        height: 180px;
+    }
+
+    .product-name .product-name-text {
+        font-size: 2.2rem;
+        left: 60%;
+        top: 22%;
+        border-bottom: 8px solid black;
+    }
+
+    .product-name .product-description-text {
+        font-size: 0.75rem;
+        left: 60%;
+        max-width: 16ch;
+        border-bottom: 8px solid black;
+    }
+
+    .product-actions {
+        transform: translate(100%, -150%);
+    }
+
+    .buy-btn, .learn-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
 }
 
 /* product name + buy button inside .home-shape */
@@ -314,8 +450,7 @@
     color: #0b0b0b;           /* dark on yellow bg */
     z-index: 6;
     clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
-    transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1.2s;
-    
+    transition: all 700ms cubic-bezier(.2,.9,.2,1) 1.2s;
 }
 
 .product-name .product-description-text {
@@ -331,24 +466,26 @@
     z-index: 6;
     font-weight: normal;
     clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
-    transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1.2s;
-    transition-delay: 1.7s; /* delay để chữ nhỏ hiện sau chữ lớn */
+    transition: all 700ms cubic-bezier(.2,.9,.2,1) 1.9s;
 }
 
 /* container for actions so we can layout multiple elements */
 .product-actions {
     position: absolute;
     top: 50%;
-    pointer-events: auto;
+    pointer-events: none;
     transform: translate(218%, -150%);
     z-index: 20; /* above ring / overlays */
     left: 50%;
     bottom: 28px;
     top: auto;
     clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
-    transition: clip-path 700ms cubic-bezier(.2,.9,.2,1) 1.2s;
-    transition-delay: 2s; /* delay để chữ nhỏ hiện sau chữ lớn */
+    transition: all 700ms cubic-bezier(.2,.9,.2,1) 2.2s;
     overflow: visible;
+}
+
+.product-actions > * {
+    pointer-events: auto;
 }
 
 /* Khi animation bắt đầu - mở rộng từ giữa ra */
@@ -429,12 +566,17 @@
     pointer-events: auto;
 }
 
-/* responsive */
+/* Better touch targets on mobile */
 @media (max-width: 768px) {
-    .home-shape .product-name { font-size: 1rem; left: 16px; top: 14px; }
-    .home-shape .buy-btn { padding: 8px 12px; border-radius: 6px; }
-}
-@media (max-width: 480px) {
-    .home-shape .product-name { font-size: 0.95rem; }
-    .home-shape .buy-btn { font-size: 0.9rem; padding: 7px 10px; }
+    .buy-btn, .learn-btn {
+        min-height: 44px;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    .image-Carousel .dot {
+        min-width: 32px;
+        min-height: 32px;
+        padding: 4px;
+    }
 }

@@ -23,6 +23,7 @@ import DiImage from './pages/di-image'
 import PopularCategories from './pages/popular-categories'
 import UserReview from './pages/userreview'
 import ProductsView from './pages/products-view'
+import Order from './pages/order'
 
 function AppContent() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -60,6 +61,7 @@ function AppContent() {
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/order" element={<Order/>}/>
         <Route path="/product/:id" element={<ProductsView openCart={() => setCartOpen(true)}/>}/>
       </Routes>
       <Footer/>

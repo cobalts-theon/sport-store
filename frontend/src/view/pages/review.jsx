@@ -1,6 +1,6 @@
 import "./pages-style/review.css";
 import soccerimg from "/src/assets/image/Soccer.jpg";
-import transparentimg from "/src/assets/image/transparent-Photoroom.png";
+import transparentimgaa from "/src/assets/image/transparent-Photoroom.png";
 import shoe from "/src/assets/image/shoe.png";
 import topolanding from "/src/assets/video/topo-landing.webm";
 import degrees from "/src/assets/icon/degrees.svg";
@@ -32,12 +32,12 @@ function Review() {
                     <img src={lime} alt="Lime" className="lime-img"/>
                 </div>
                 <img src={soccerimg} alt="Soccer" />
-                <img src={transparentimg} alt="Transparent" className="removebg-img1" />
+                <img src={transparentimgaa} alt="Transparent" className="removebg-img123" />
                 <h2 className="white-lime-text" >Zinedine Zidane <FontAwesomeIcon icon={faFutbol} /></h2>
             </div>
             <div className="review-container-bento-grid-item" id="box-2">
                 <img src={shoe} alt="Shoe" className="shoe-img" />
-                <p className="product-name2"><FontAwesomeIcon icon={faSquare} /> PS LXCX Trainer</p>
+                <p className="product-name2"><FontAwesomeIcon icon={faSquare} />PS LXCX Trainer</p>
                 <img src={calloutlineup} alt="Calloutlineup" className="calloutlineup-img" />
                 <img src={calloutlinedown} alt="Calloutlinedown" className="calloutlinedown-img" />
                 <p className="product-material">Cotton</p>

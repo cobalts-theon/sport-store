@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import productsData from '../data/products.json';
 import './pages-style/products-view.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faBolt, faStar, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faBolt, faStar, faTimes, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 function ProductsView({ openCart }) {
     const { id } = useParams();
@@ -67,8 +67,9 @@ function ProductsView({ openCart }) {
     if (!product) {
         return (
             <div className="products-view-container">
-                <div className="products-view-right" style={{ padding: '40px' }}>
-                    <h2>Product not found</h2>
+                <div className="products-view-right" style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <FontAwesomeIcon icon={faTriangleExclamation} style={{ color: '#333', fontSize: '40px' }} />
+                    <h2 style={{ color: '#333' }}>Product not found</h2>
                 </div>
             </div>
         );
@@ -128,7 +129,7 @@ function ProductsView({ openCart }) {
                 <div className="product-left-details">
                     <div className="details-section">
                         <h3>DESCRIPTION</h3>
-                        <p>{product.description}</p>
+                        <p style={{ color: '#333'}}>{product.description}</p>
                     </div>
                     <div className="details-section">
                         <h3>DETAILS</h3>
@@ -284,35 +285,33 @@ function ProductsView({ openCart }) {
                             {/* Combined Price Section */}
                             <div className="trait-item" style={{ gridColumn: 'span 2' }}>
                                 <span className="trait-label">PRICE</span>
-                                <div className="price-container-view" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <span className="trait-value" style={{ fontSize: '34px', marginRight: '15px' , color: '#BF1A1A'}}>
-                                        {formatPrice(product.price)}
-                                    </span>
-                                    
+                                <div className="price-container-view">
                                     {product.originalPrice && (
-                                        <>
-                                            <span className="original-price" style={{ 
-                                                textDecoration: 'line-through', 
-                                                color: '#999', 
-                                                fontSize: '16px',
-                                                marginRight: '15px'
-                                            }}>
-                                                {formatPrice(product.originalPrice)}
-                                            </span>
-                                            {discountPercentage > 0 && (
-                                                <span className="discount-tag-view" style={{
-                                                    backgroundColor: '#BF1A1A',
-                                                    color: '#fff',
-                                                    padding: '4px 8px',
-                                                    fontSize: '12px',
-                                                    fontWeight: 'bold',
-                                                    borderRadius: '2px'
-                                                }}>
-                                                    -{discountPercentage}%
-                                                </span>
-                                            )}
-                                        </>
+                                        <span className="original-price" style={{ 
+                                            textDecoration: 'line-through', 
+                                            color: '#999', 
+                                            fontSize: '16px'
+                                        }}>
+                                            {formatPrice(product.originalPrice)}
+                                        </span>
                                     )}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <span className="trait-value" style={{ fontSize: '34px', color: '#BF1A1A'}}>
+                                            {formatPrice(product.price)}
+                                        </span>
+                                        {product.originalPrice && discountPercentage > 0 && (
+                                            <span className="discount-tag-view" style={{
+                                                backgroundColor: '#BF1A1A',
+                                                color: '#fff',
+                                                padding: '4px 8px',
+                                                fontSize: '12px',
+                                                fontWeight: 'bold',
+                                                borderRadius: '2px'
+                                            }}>
+                                                -{discountPercentage}%
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -349,9 +348,11 @@ function ProductsView({ openCart }) {
             {isModalOpen && (
                 <div className="image-modal-overlay" onClick={toggleModal}>
                     <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="image-modal-close" onClick={toggleModal}>
-                            <FontAwesomeIcon icon={faTimes} />
-                        </button>
+                        <div className="image-modal-close-wrapper" onClick={toggleModal}>
+                            <button className="image-modal-close">
+                                <FontAwesomeIcon icon={faTimes} />
+                            </button>
+                        </div>
                         <img src={selectedImage} alt={product.name} className="modal-image" />
                     </div>
                 </div>

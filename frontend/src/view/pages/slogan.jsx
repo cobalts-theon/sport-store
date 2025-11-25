@@ -39,7 +39,7 @@ function Slogan() {
           <p>Move with Soul. Live in Prime.</p>
         </div>
         <div className="slogan-shape">
-          <div className="shape-shape1">
+          <div className="shape-shape13">
             <h1 className="shape-title1">
               <span className="shape-word" data-text="||||||||MOVE">||||||||MOVE</span>
               <span className="shape-word" data-text="||||||||WITH">||||||||WITH</span>

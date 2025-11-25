@@ -11,6 +11,7 @@ function ProductsPage() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     status: true,
     category: true,
@@ -50,6 +51,18 @@ function ProductsPage() {
     { name: 'Green', code: '#008000' },
     { name: 'Purple', code: '#800080' }
   ];
+
+  // Prevent body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (isSidebarOpen && window.innerWidth <= 768) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isSidebarOpen]);
 
   useEffect(() => {
     setProducts(productsData);
@@ -150,17 +163,36 @@ function ProductsPage() {
     setSearchQuery('');
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
     <div className="products-page">
+      {/* Overlay for mobile */}
+      <div 
+        className={`sidebar-overlay ${isSidebarOpen ? 'open' : ''}`}
+        onClick={closeSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <aside className="products-sidebar">
+      <aside className={`products-sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <h2>FILTERS</h2>
-          {(Object.keys(activeFilters).length > 0 || searchQuery) && (
-            <button onClick={clearFilters} className="clear-filters-btn">
-              Clear All
+          <div className="sidebar-actions">
+            {(Object.keys(activeFilters).length > 0 || searchQuery) && (
+              <button onClick={clearFilters} className="clear-filters-btn">
+                Clear All
+              </button>
+            )}
+            <button className="close-sidebar-btn" onClick={closeSidebar}>
+              <FontAwesomeIcon icon={faTimes} />
             </button>
-          )}
+          </div>
         </div>
 
         <div className="search-box">
@@ -256,6 +288,13 @@ function ProductsPage() {
       {/* Main Content */}
       <main className="products-main">
         <div className="products-header">
+          <button className="filter-toggle-btn" onClick={toggleSidebar}>
+            <FontAwesomeIcon icon={faFilter} />
+            <span>FILTERS</span>
+            {Object.keys(activeFilters).length > 0 && (
+              <span className="filter-badge">{Object.keys(activeFilters).length}</span>
+            )}
+          </button>
           <span className="products-count">{filteredProducts.length} PRODUCTS</span>
           <button className="shuffle-btn">
             <FontAwesomeIcon icon={faSort} />

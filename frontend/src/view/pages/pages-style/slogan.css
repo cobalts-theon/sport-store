@@ -108,18 +108,16 @@
   z-index: 1;
 }
 
-.slogan-shape .shape-shape1 {
+.slogan-shape .shape-shape13 {
   background: white;
   position: absolute;
+  overflow: visible;
   top: 50%;
   left: 15%;
-  transform: translate(-50%, -50%) skewX(-15deg);
-  overflow: visible;
   width: 50%;
   height: 100%;
   z-index: 1;
-  opacity: 0;
-  animation: slideInFromLeft 3000ms cubic-bezier(.2,.9,.2,1) 120ms both;
+  transform: translate(-50%, -50%) skewX(-15deg);
 }
 
 .slogan-shape .shape-shape2 {
@@ -132,8 +130,7 @@
   width: 50%;
   height: 100%;
   z-index: 1;
-  opacity: 0;
-  animation: slideInFromRight 3000ms cubic-bezier(.2,.9,.2,1) 120ms both;
+  opacity: 1;
 }
 
 .shape-title1{
@@ -287,37 +284,6 @@
   .shape-title1 .shape-word::before,
   .shape-title2 .shape-word::before {
     clip-path: inset(0 0 0 0%);
-  }
-}
-
-/* shape */
-@keyframes slideInFromLeft {
-  0% {
-    transform: translate(-150%, -50%) skewX(-15deg);
-    opacity: 0;
-  }
-  60% {
-    transform: translate(-130%, -50%) skewX(-15deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) skewX(-15deg);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInFromRight {
-  0% {
-    transform: translate(50%, -50%) skewX(-15deg);
-    opacity: 0;
-  }
-  60% {
-    transform: translate(20%, -50%) skewX(-15deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) skewX(-15deg);
-    opacity: 1;
   }
 }
 

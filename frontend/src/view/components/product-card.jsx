@@ -82,7 +82,7 @@ function ProductCard({ product, index }) {
 
       {/* Product Info */}
       <div className="product-info">
-        <span className="product-category">{product.category}</span>
+        <span className="product-category-card">{product.category}</span>
         <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <h3 className="product-name">{product.name}</h3>
         </Link>

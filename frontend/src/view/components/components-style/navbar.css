@@ -294,7 +294,8 @@
 
 .music-button {
     left: 78%;
-    padding: 5px 50px;
+    padding: 5px 15px;
+    gap: 10px;
     margin: 0 14px 10px 0;
     position: absolute;
     display: flex;
@@ -305,19 +306,16 @@
     border: #D0FE1D 1px solid;
     border-radius: 50px;
     background: transparent;
-    
+    z-index: 10;
 }
 
 .nav-music-icon {
     position: relative; /* Đã thêm */
     display: inline-block; /* Đã thêm */
     width: 20px;
-    height: 20px;
-    margin-right: -45px;
-    margin-left: 21px; /* nhích icon sang phải một chút */
+    height: 20px; /* nhích icon sang phải một chút */
     color: #D0FE1D;          /* color dùng làm currentColor cho SVG */
     z-index: 1;
-    vertical-align: middle;
 }
 
 .music-button::before {
@@ -387,10 +385,8 @@
 .music-visualizer {
     display: flex;
     gap: 5px;                /* khoảng cách giữa các thanh */
-    align-items: flex-end;   /* căn đáy để các thanh "vươn" lên từ dưới */
-    margin-left: -30px;
-    vertical-align: middle;
     height: 20px;
+    margin-top: 1px;
     position: relative;
     z-index: 1;
 }
@@ -675,8 +671,8 @@
         filter: invert(70%) sepia(60%) saturate(420%) hue-rotate(29deg) brightness(200%) contrast(200%);
     }
     
-    /* pseudo-elemen     nền nút (phía sau) */
-    .nav-mobile-button ::after {
+    /* pseudo-element nền nút (phía sau) */
+    .nav-mobile-button::after {
         content: "";
         position: absolute;
         right: -50%;
@@ -684,12 +680,12 @@
         width: 0;
         height: 100%;
         background: #D0FE1D;
-        transform: skewX(135deg); /* trạng thái thu gọn */
+        transform: skewX(135deg);
         transition: width 0.1s ease-in-out;
         z-index: -2;
     }
 
-    .nav-mobile-button.open ::after {
+    .nav-mobile-button.open::after {
         width: 140%;
     }
 
@@ -744,16 +740,16 @@
     
     /* các liên kết trong panel */
     .nav-mobile-panel a {
+        font-family: 'BBH Sans Bartle', sans-serif;
         text-decoration: none;
         color: white;
-        padding: 0.1rem 0.5rem;
         border-radius: 8px;
         display: flex;
         padding: 0 0 0 1rem;
         overflow: hidden;
         align-items: center;
-        gap: 0.6rem;
-        font-size: 40px;
+        gap: 0.1rem;
+        font-size: 35px;
     }
 }
 
@@ -994,6 +990,7 @@
   color: #ffffff;
   text-decoration: none;
   transition: all 140ms ease;
+  transform: skewX(0deg);
   background: transparent;
   position: relative;
   overflow: hidden;
@@ -1083,8 +1080,8 @@
     border: 1px solid #D0FE1D;
     border-radius: 12px;
     color: #D0FE1D;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
+    font-family: 'BBH Sans Bartle', sans-serif;
+    font-size: 20px;
     cursor: pointer;
     transition: all 180ms ease;
     position: relative;

@@ -64,6 +64,7 @@ function Navbar({ cartOpen, setCartOpen }) {
   }, []);
 
   return (
+    <>
     <nav className={`nav ${scrolled ? 'scrolled' : ''} ${mobileOpen ? 'mobile-open' : 'not-mobile-open'}`}>
       <div className="nav-content">
         <Link to="/" className="nav-logo">
@@ -145,7 +146,6 @@ function Navbar({ cartOpen, setCartOpen }) {
           }}
           type="button"
         >
-          <FontAwesomeIcon icon={musicPlaying ? faPause : faPlay} className="nav-music-icon" />
           <span className="music-visualizer">
             <span className="bar1"></span>  
             <span className="bar2"></span>
@@ -153,6 +153,7 @@ function Navbar({ cartOpen, setCartOpen }) {
             <span className="bar4"></span>
             <span className="bar5"></span>
           </span>
+          <FontAwesomeIcon icon={musicPlaying ? faPause : faPlay} className="nav-music-icon" />
         </button>
 
         {/* --- USER ICON --- */}
@@ -210,7 +211,7 @@ function Navbar({ cartOpen, setCartOpen }) {
             <Link to="/products" onClick={() => setMobileOpen(false)}>Products</Link>
             <Link to="/services" onClick={() => setMobileOpen(false)}>Services</Link>
             <Link to="/contact" onClick={() => setMobileOpen(false)}>Contact</Link>
-            <Link to="/order" onClick={() => setMobileOpen(false)}>Order<FontAwesomeIcon icon={faBox} /></Link>
+            <Link to="/order" onClick={() => setMobileOpen(false)}>Order</Link>
             <Link 
               to="#" 
               onClick={(e) => {
@@ -219,9 +220,9 @@ function Navbar({ cartOpen, setCartOpen }) {
                 if (setCartOpen) setCartOpen(true);
               }}
             >
-              Cart<FontAwesomeIcon icon={faCartShopping} />
+              Cart
             </Link>
-            <Link to="/profile" onClick={() => setMobileOpen(false)}>Profile<FontAwesomeIcon icon={faUser} /></Link>
+            <Link to="/login" onClick={() => setMobileOpen(false)}>Profile<FontAwesomeIcon icon={faUser} /></Link>
 
             {/* Music button at bottom of mobile panel */}
             <button
@@ -251,8 +252,9 @@ function Navbar({ cartOpen, setCartOpen }) {
           </div>
         </div>
       </div>
-      <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen && setCartOpen(false)} />
     </nav>
+    <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen && setCartOpen(false)} />
+    </>
   );
 }
 
