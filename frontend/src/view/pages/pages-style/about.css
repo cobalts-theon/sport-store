@@ -186,9 +186,14 @@
     width: 40%;
     height: 40%;
     object-fit: cover;
-    animation: rotate both;
-    animation-timeline: view();
     z-index: 2;
+    display: block;
+    margin: 0 auto;
+}
+
+#basketball {
+    animation: rotate-basketball both;
+    animation-timeline: view();
 }
 
 /* Floating Items Styles */
@@ -373,12 +378,12 @@
     animation-timeline: view(100% 0%);
 }
 
-@keyframes rotate {
+@keyframes rotate-basketball {
     from {
         transform: rotate(0deg);
     }
     to {
-        transform: rotate(180deg);
+        transform: rotate(360deg);
     }
 }
 

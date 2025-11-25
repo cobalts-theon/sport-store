@@ -25,6 +25,8 @@ import UserReview from './pages/userreview'
 import ProductsView from './pages/products-view'
 
 function AppContent() {
+  const [cartOpen, setCartOpen] = useState(false);
+  
   //scroll to top when change page
   const location = useLocation();
   useEffect(() => {
@@ -34,7 +36,7 @@ function AppContent() {
     <>
       <StartupLoader duration={2000}/> 
       <Commercre/>
-      <Header/>
+      <Header cartOpen={cartOpen} setCartOpen={setCartOpen}/>
       <Routes>
         <Route
          path="/" 
@@ -58,7 +60,7 @@ function AppContent() {
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
-        <Route path="/product/:id" element={<ProductsView/>}/>
+        <Route path="/product/:id" element={<ProductsView openCart={() => setCartOpen(true)}/>}/>
       </Routes>
       <Footer/>
     </>

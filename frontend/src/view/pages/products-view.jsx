@@ -5,7 +5,7 @@ import './pages-style/products-view.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faBolt, faStar, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-function ProductsView() {
+function ProductsView({ openCart }) {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -17,9 +17,6 @@ function ProductsView() {
     // Mock multiple images for the carousel
     const [productImages, setProductImages] = useState([]);
 
-    // Mock Sizes
-    const sizes = ['S', 'M', 'L', 'XL'];
-
     // Mock Colors
     const colors = [
         { name: 'Black', code: '#000000' },
@@ -27,6 +24,30 @@ function ProductsView() {
         { name: 'Blue', code: '#0000ff' },
         { name: 'Orange', code: '#ffa500' }
     ];
+
+    // Size Chart Data
+    const sizeChart = {
+        clothing: {
+            headers: ['Size', 'Chest (cm)', 'Length-T-Shirt (cm)', 'Shoulder (cm)'],
+            rows: [
+                ['S', '90-94', '65', '40-42'],
+                ['M', '95-99', '67', '42-44'],
+                ['L', '100-104', '69', '44-46'],
+                ['XL', '105-110', '71', '46-48']
+            ]
+        },
+        shoes: {
+            headers: ['Size VN', 'Length-Foot (cm)'],
+            rows: [
+                ['39', '24.5'],
+                ['40', '25'],
+                ['41', '26'],
+                ['42', '26.5'],
+                ['43', '27.5'],
+                ['44', '28']
+            ]
+        }
+    };
 
     useEffect(() => {
         const foundProduct = productsData.find(p => p.id === parseInt(id));
@@ -139,6 +160,33 @@ function ProductsView() {
                         </div>
                     </div>
 
+                    {/* Size Guide Section */}
+                    {['Clothing', 'Shoes'].includes(product.category) && (
+                        <div className="details-section">
+                            <h3>SIZE GUIDE</h3>
+                            <div className="size-chart-container">
+                                <table className="size-chart-table">
+                                    <thead>
+                                        <tr>
+                                            {(product.category === 'Shoes' ? sizeChart.shoes.headers : sizeChart.clothing.headers).map((h, i) => (
+                                                <th key={i}>{h}</th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {(product.category === 'Shoes' ? sizeChart.shoes.rows : sizeChart.clothing.rows).map((row, i) => (
+                                            <tr key={i}>
+                                                {row.map((cell, j) => (
+                                                    <td key={j}>{cell}</td>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="details-section">
                         <h3>SHIPPING & RETURNS</h3>
                         <div className="detail-row">
@@ -183,7 +231,7 @@ function ProductsView() {
                     <div className="pv-label-col">
                         <span className="bullet">■</span> TRAITS
                     </div>
-                    <div className="pv-content-col" style={{ alignItems: 'flex-start', paddingTop: '40px' }}>
+                    <div className="pv-content-col" style={{ alignItems: 'flex-start', paddingTop: '40px',  }}>
                         <div className="traits-grid">
                             {/* Reviews Section replaces Category */}
                             <div className="trait-item">
@@ -196,21 +244,26 @@ function ProductsView() {
                                 </div>
                             </div>
                             
-                            {/* Size Selector */}
-                            <div className="trait-item" style={{ gridColumn: 'span 2' }}>
-                                <span className="trait-label">SIZE</span>
-                                <div className="size-selector">
-                                    {sizes.map((size) => (
-                                        <button
-                                            key={size}
-                                            className={`size-btn ${selectedSize === size ? 'active' : ''}`}
-                                            onClick={() => setSelectedSize(size)}
-                                        >
-                                            {size}
-                                        </button>
-                                    ))}
+                            {/* Size Selector - Conditional Rendering */}
+                            {['Clothing', 'Shoes'].includes(product.category) && (
+                                <div className="trait-item" style={{ gridColumn: 'span 2' }}>
+                                    <span className="trait-label">SIZE</span>
+                                    <div className="size-selector">
+                                        {(product.category === 'Shoes' 
+                                            ? ['39', '40', '41', '42', '43', '44'] 
+                                            : ['S', 'M', 'L', 'XL']
+                                        ).map((size) => (
+                                            <button
+                                                key={size}
+                                                className={`size-btn ${selectedSize === size ? 'active' : ''}`}
+                                                onClick={() => setSelectedSize(size)}
+                                            >
+                                                {size}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Color Selector */}
                             <div className="trait-item" style={{ gridColumn: 'span 2' }}>
@@ -274,7 +327,13 @@ function ProductsView() {
                         <span className="qty-value">{quantity}</span>
                         <button className="qty-btn" onClick={() => handleQuantityChange(1)}>+</button>
                     </div>
-                    <button className="view-opensea-btn add-cart-btn">
+                    <button 
+                        className="view-opensea-btn add-cart-btn"
+                        onClick={() => {
+                            // Logic to add to cart would go here
+                            if (openCart) openCart();
+                        }}
+                    >
                         <span className="opensea-icon"><FontAwesomeIcon icon={faCartShopping} /></span>
                         ADD TO CART
                     </button>

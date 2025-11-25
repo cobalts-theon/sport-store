@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import pswhitelogo from "/src/assets/image/white-logo.png";
 import "./components-style/navbar.css";
 import ProductDropdown from "./product-dropdown";
-
+import CartDrawer from "./cart-drawer";
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping } fro
 //Audio
 import backgroundMusic from '/src/assets/audio/theme.mp3';
 
-function Navbar() {
+function Navbar({ cartOpen, setCartOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);  
@@ -22,7 +22,6 @@ function Navbar() {
   const audioRef = useRef(new Audio(backgroundMusic));
   const location = useLocation(); // Get current path
   const navigate = useNavigate();
-
   // Lấy query từ URL params và cập nhật giá trị searchQuery
   useEffect(() => {
     const params = new URLSearchParams(location.search); //Lấy URL params
@@ -161,7 +160,14 @@ function Navbar() {
           <Link to="/order" className={`order-icon ${location.pathname === '/order' ? 'active' : ''}`}>
             <FontAwesomeIcon icon={faBox} className="nav-user-icon"/>
           </Link>
-          <Link to="/cart" className={`order-icon ${location.pathname === '/cart' ? 'active' : ''}`}>
+          <Link 
+            to="#" 
+            className={`order-icon ${cartOpen ? 'active' : ''}`}
+            onClick={(e) => {
+              e.preventDefault();
+              if (setCartOpen) setCartOpen(true);
+            }}
+          >
             <FontAwesomeIcon icon={faCartShopping} className="nav-user-icon"/>
           </Link>
           <Link to="/login" className={location.pathname === '/login' ? 'active' : ''}> 
@@ -205,7 +211,16 @@ function Navbar() {
             <Link to="/services" onClick={() => setMobileOpen(false)}>Services</Link>
             <Link to="/contact" onClick={() => setMobileOpen(false)}>Contact</Link>
             <Link to="/order" onClick={() => setMobileOpen(false)}>Order<FontAwesomeIcon icon={faBox} /></Link>
-            <Link to="/cart" onClick={() => setMobileOpen(false)}>Cart<FontAwesomeIcon icon={faCartShopping} /></Link>
+            <Link 
+              to="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileOpen(false);
+                if (setCartOpen) setCartOpen(true);
+              }}
+            >
+              Cart<FontAwesomeIcon icon={faCartShopping} />
+            </Link>
             <Link to="/profile" onClick={() => setMobileOpen(false)}>Profile<FontAwesomeIcon icon={faUser} /></Link>
 
             {/* Music button at bottom of mobile panel */}
@@ -236,6 +251,7 @@ function Navbar() {
           </div>
         </div>
       </div>
+      <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen && setCartOpen(false)} />
     </nav>
   );
 }

@@ -33,7 +33,7 @@ function About() {
             <div className="why-choose-us">
                 <h2>Why choose <span style={{ color: '#D0FE1D' }}>Prime Souls</span>?</h2>
                 <p>Quality that punches way above its price: same performance fabrics as the big names, but without the markup.</p>
-                <img src={basketball} alt="basketball" />
+                <img src={basketball} alt="basketball" id="basketball"/>
                 <h2>And the best part?</h2>
                 <p>You can buy and sell your own products to other athletes.</p>
                 <img src={shoes} alt="shoes" id="shoes"/>

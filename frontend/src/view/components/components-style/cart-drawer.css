@@ -1,0 +1,113 @@
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998; /* Just below drawer (999 or 1000) */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    backdrop-filter: blur(2px);
+    will-change: opacity;
+    backface-visibility: hidden;
+}
+
+.cart-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    max-width: 90vw;
+    background: rgba(18, 18, 18, 0.98);
+    z-index: 999;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1), visibility 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #D0FE1D;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+.cart-drawer.open {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cart-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: #D0FE1D;
+    margin: 0;
+    font-size: 32px;
+    letter-spacing: 1px;
+}
+
+.close-cart-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-cart-btn:hover {
+    color: #D0FE1D;
+}
+
+.cart-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    color: white;
+    font-family: 'BBH Sans Bartle', sans-serif;
+}
+
+.empty-cart-msg {
+    text-align: center;
+    margin-top: 50px;
+    opacity: 0.7;
+    font-size: 18px;
+}
+
+.cart-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background: #D0FE1D;
+    color: black;
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    cursor: pointer;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    transition: all 0.2s ease;
+}
+
+.checkout-btn:hover {
+    background: white;
+    transform: translateY(-2px);
+}
+
