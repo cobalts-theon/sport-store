@@ -181,12 +181,12 @@
 }
 
 /* Form Styles */
-.form-group {
+.login-page .form-group-authen {
     margin-bottom: 16px;
     position: relative;
 }
 
-.form-group label {
+.login-page .form-group-authen label {
     display: block;
     color: rgba(255, 255, 255, 0.8);
     font-size: 10px;
@@ -196,13 +196,13 @@
     letter-spacing: 0.8px;
 }
 
-.form-group input {
+.login-page .form-group-authen input {
     font-family: 'JetBrains Mono', sans-serif;
     width: 100%;
     padding: 13px 16px;
     background: rgba(101, 76, 76, 0);
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
     color: #ffffff;
     font-size: 12px;
     transition: all 0.3s ease;
@@ -210,15 +210,50 @@
     font-family: 'JetBrains Mono', sans-serif;
 }
 
-.form-group input::placeholder {
+.login-page .form-group-authen input::placeholder  {
     color: rgba(255, 255, 255, 0.3);
 }
 
-.form-group input:focus {
+.login-page .form-group-authen input:focus {
     background: rgba(255, 255, 255, 0.05);
 }
 
-.form-options {
+.authen .form-group-authen  {
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.authen .form-group-authen label {
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 10px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.authen .form-group-authen input {
+    font-family: 'JetBrains Mono', sans-serif;
+    width: 100%;
+    padding: 13px 16px;
+    background: rgba(101, 76, 76, 0);
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.authen .form-group-authen input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.authen .form-group-authen input:focus {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.login-page .form-options  {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -226,7 +261,7 @@
     font-size: 11px;
 }
 
-.checkbox-container {
+.login-page .checkbox-container  {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -235,7 +270,7 @@
     user-select: none;
 }
 
-.checkbox-container input[type="checkbox"] {
+.login-page .checkbox-container input[type="checkbox"] {
     width: 14px;
     height: 14px;
     cursor: pointer;
@@ -630,7 +665,7 @@
         font-size: 42px;
     }
 
-    .form-group input {
+    .login-page .form-group-authen input {
         padding: 14px 18px;
     }
 }

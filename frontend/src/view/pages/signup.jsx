@@ -94,7 +94,7 @@ function Signup() {
                         <p className="login-subtitle">Join Prime Souls community today</p>
 
                         <form onSubmit={handleSubmit}>
-                            <div className="form-group">
+                            <div className="form-group-authen">
                                 <input
                                     type="text"
                                     id="name"
@@ -106,7 +106,7 @@ function Signup() {
                                 />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group-authen">
                                 <input
                                     type="email"
                                     id="email"
@@ -118,7 +118,7 @@ function Signup() {
                                 />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group-authen">
                                 <input
                                     type="password"
                                     id="password"
@@ -130,7 +130,7 @@ function Signup() {
                                 />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group-authen">
                                 <input
                                     type="password"
                                     id="confirmPassword"

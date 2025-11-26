@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
+
+.verification-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0a0a0a;
+    font-family: 'JetBrains Mono', monospace;
+    position: relative;
+    overflow: hidden;
+}
+
+.verification-page .silk-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.verification-container {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 500px;
+    background: rgba(108, 108, 108, 0.33);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transform: translateY(2%);
+    backdrop-filter: blur(10px);
+    clip-path: polygon(50px 0, 100% 0, 100% calc(100% - 50px), calc(100% - 50px) 100%, 0 100%, 0 50px);
+    overflow: hidden;
+}
+
+.verification-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    font-size: 18px;
+}
+
+.verification-close-btn:hover {
+    background: rgba(208, 254, 29, 0.2);
+    border: 1px solid rgba(208, 254, 29, 0.5);
+    color: #D0FE1D;
+}
+
+/* Verification Form */
+.verification-form-section {
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.verification-logo {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.verification-logo img {
+    height: 50px;
+    width: auto;
+}
+
+.verification-form-content {
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.verification-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.verification-subtitle {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 40px;
+}
+
+.verification-code-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 35px;
+    justify-content: center;
+}
+
+.verification-code-input {
+    width: 55px;
+    height: 65px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: white;
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.3s ease;
+}
+
+.verification-code-input:focus {
+    outline: none;
+    border-color: #D0FE1D;
+    background: rgba(208, 254, 29, 0.05);
+    box-shadow: 0 0 20px rgba(208, 254, 29, 0.2);
+    transform: scale(1.05);
+}
+
+.verification-code-input:not(:placeholder-shown) {
+    border-color: rgba(208, 254, 29, 0.5);
+    background: rgba(208, 254, 29, 0.03);
+}
+
+.verification-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.verification-resend-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.verification-resend-btn:hover:not(:disabled) {
+    border-color: #D0FE1D;
+    color: #D0FE1D;
+    background: rgba(208, 254, 29, 0.05);
+}
+
+.verification-resend-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.verification-back-link {
+    text-align: center;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+}
+
+.verification-back-link a {
+    color: #D0FE1D;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.verification-back-link a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .verification-container {
+        width: 95%;
+    }
+
+    .verification-form-section {
+        padding: 50px 30px;
+    }
+
+    .verification-title {
+        font-size: 28px;
+    }
+
+    .verification-subtitle {
+        font-size: 14px;
+    }
+
+    .verification-code-input {
+        width: 50px;
+        height: 60px;
+        font-size: 24px;
+    }
+
+    .verification-code-inputs {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .verification-form-section {
+        padding: 40px 20px;
+    }
+
+    .verification-logo img {
+        height: 40px;
+    }
+
+    .verification-title {
+        font-size: 24px;
+    }
+
+    .verification-code-input {
+        width: 44px;
+        height: 54px;
+        font-size: 22px;
+    }
+
+    .verification-code-inputs {
+        gap: 6px;
+    }
+
+    .verification-close-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}

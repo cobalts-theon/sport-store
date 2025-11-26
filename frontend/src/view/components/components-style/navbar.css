@@ -1168,3 +1168,106 @@
   .mobile-music-visualizer .bar4 { animation-delay: 100ms; }
   .mobile-music-visualizer .bar5 { animation-delay: 0ms; }
 }
+
+/* 
+   ========================================
+   HELP DROPDOWN - Simple Order Style
+   ========================================
+*/
+
+/* Help Panel - minimal dropdown */
+.has-dropdown .help-panel {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-21%) translateY(-5%) skewX(25deg);
+    top: 100%;
+    width: auto;
+    min-width: 1500px;
+    background: #0f0f10;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 40px;
+    pointer-events: none;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.1s ease;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+}
+
+/* Show help panel on hover */
+.has-dropdown:hover .help-panel,
+.has-dropdown:focus-within .help-panel {
+    clip-path: inset(0 0 0 0);
+    pointer-events: auto;
+}
+
+/* Help panel grid - simple 3 column layout */
+.help-panel-grid {
+    display: flex;
+    gap: 40px;
+    transform: skewX(0deg);
+}
+
+/* Category columns */
+.help-category {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Category title - minimal style */
+.help-category h3 {
+    font-family: 'Bebas Neue', monospace;
+    color: #D0FE1D;
+    font-size: 2rem;
+    margin: 0 0 15px 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+/* Help links - clean and simple */
+.help-category .help-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 1);
+    text-decoration: none;
+    font-family: 'Bebas Neue', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transform: skewX(0deg);
+    transition: all 0.2s ease;
+    background: transparent;
+}
+
+.help-category .help-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #000000ff;
+}
+
+/* Icon styling - minimal */
+.help-category .help-link svg {
+    width: 16px;
+    height: 16px;
+    color: #888;
+    transition: color 0.2s ease;
+}
+
+.help-category .help-link:hover svg {
+    color: #000000ff;
+}
+
+/* Divider between columns */
+.help-category:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding-right: 40px;
+}

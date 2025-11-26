@@ -17,6 +17,7 @@ import Flex from './pages/product-flex'
 import Login from './pages/login'
 import Signup from './pages/signup'
 import ForgotPassword from './pages/forgot-password'
+import Verify from './pages/verify-code'
 import About from './pages/about'
 import ProductsPage from './pages/products-page'
 import DiImage from './pages/di-image'
@@ -24,6 +25,8 @@ import PopularCategories from './pages/popular-categories'
 import UserReview from './pages/userreview'
 import ProductsView from './pages/products-view'
 import Order from './pages/order'
+import CheckOut from './pages/checkout'
+import Admin from './pages/admin'
 
 function AppContent() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -33,11 +36,15 @@ function AppContent() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  // Check if current route is admin page
+  const isAdminPage = location.pathname.startsWith('/admin');
+
   return (
     <>
       <StartupLoader duration={2000}/> 
-      <Commercre/>
-      <Header cartOpen={cartOpen} setCartOpen={setCartOpen}/>
+      {!isAdminPage && <Commercre/>}
+      {!isAdminPage && <Header cartOpen={cartOpen} setCartOpen={setCartOpen}/>}
       <Routes>
         <Route
          path="/" 
@@ -61,10 +68,13 @@ function AppContent() {
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/verify-code" element={<Verify/>}/>
         <Route path="/order" element={<Order/>}/>
+        <Route path="/checkout" element={<CheckOut/>}/>
         <Route path="/product/:id" element={<ProductsView openCart={() => setCartOpen(true)}/>}/>
+        <Route path="/admin/*" element={<Admin/>}/>
       </Routes>
-      <Footer/>
+      {!isAdminPage && <Footer/>}
     </>
   )
 }

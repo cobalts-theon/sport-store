@@ -76,7 +76,7 @@ function Login() {
                         <p className="login-subtitle">Please Enter your Account details</p>
 
                         <form onSubmit={handleSubmit}>
-                            <div className="form-group">
+                            <div className="form-group-authen">
                                 <input
                                     type="email"
                                     id="email"
@@ -87,7 +87,7 @@ function Login() {
                                 />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group-authen">
                                 <input
                                     type="password"
                                     id="password"

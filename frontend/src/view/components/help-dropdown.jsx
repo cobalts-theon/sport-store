@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -14,155 +14,114 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 function HelpDropdown({ setMobileOpen }) {
-  // State mặc định
-  const defaultText = "SUPPORT HUB";
-  const defaultImage = "/src/assets/image/about1.png"; // Ảnh mặc định (About)
-
-  const [hoveredText, setHoveredText] = useState(defaultText);
-  const [hoveredImage, setHoveredImage] = useState(defaultImage);
-  
   const location = useLocation();
-  const isActive = location.pathname.includes('/services') || location.pathname.includes('/about');
+  const [isOpen, setIsOpen] = useState(true);
 
-  // Hàm xử lý khi hover vào link
-  const handleMouseEnter = (text, image) => {
-    setHoveredText(text);
-    setHoveredImage(image);
-  };
+  useEffect(() => {
+    setIsOpen(false);
+    const timer = setTimeout(() => setIsOpen(true), 100);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
-  // Hàm xử lý khi chuột rời khỏi link (reset về mặc định)
-  const handleMouseLeave = () => {
-    setHoveredText(defaultText);
-    setHoveredImage(defaultImage);
+  const handleLinkClick = () => {
+    setIsOpen(false);
+    setMobileOpen(false);
   };
 
   return (
     <div className="has-dropdown">
-      <Link to="/services" id="help">
-        <span className={`nav-link-label ${isActive ? 'active-link' : ''}`}>Help</span>
+      <Link to="#" id="help" onClick={null}>
+        <span className="nav-link-label">Help</span>
       </Link>
       
-      {/* Panel chính */}
-      <div className="product-panel" onMouseDown={(e) => e.stopPropagation()}>
+      {/* Help Panel - Simple Order Style */}
+      {isOpen && (
+        <div className="help-panel" onMouseDown={(e) => e.stopPropagation()}>
         
-        {/* Phần hình ảnh bên phải (First Rectangle) */}
-        <div className="first-rectangle-image">
-          <img 
-            src={hoveredImage} 
-            alt={hoveredText} 
-            className="rectangle-image" 
-            style={{ objectFit: 'cover', width: '100%', height: '100%' }} 
-          />
-          {/* Overlay tối để text dễ đọc hơn nếu cần */}
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.2)' }}></div>
-        </div>
-
-        {/* Phần text dọc bên dưới (Second Rectangle) */}
-        <div className="second-rectangle">
-          <h1 className="second-rectangle-text">{hoveredText}</h1>
-        </div>
-
         {/* Grid chứa các link (Content) */}
-        <div className="product-panel-grid">
+        <div className="help-panel-grid">
           
           {/* Cột 1: Hỗ trợ khách hàng */}
-          <div className="product-category">
+          <div className="help-category">
             <h3>Assistance</h3>
             <Link 
               to="/services" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('SERVICES', '/src/assets/image/blue-orange.png')}
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              Help Center <FontAwesomeIcon icon={faHeadset}/>
+              <FontAwesomeIcon icon={faHeadset}/> Help Center
             </Link>
             <Link 
               to="/contact" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('CONTACT US', '/src/assets/image/white-logo.png')}
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              Contact Support <FontAwesomeIcon icon={faEnvelope}/>
+              <FontAwesomeIcon icon={faEnvelope}/> Contact Support
             </Link>
             <Link 
               to="/order" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('TRACK ORDER', '/src/assets/image/shoe.png')}
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              Track Order <FontAwesomeIcon icon={faBoxOpen}/>
+              <FontAwesomeIcon icon={faBoxOpen}/> Track Order
             </Link>
           </div>
           
           {/* Cột 2: Về thương hiệu */}
-          <div className="product-category">
+          <div className="help-category">
             <h3>The Brand</h3>
             <Link 
               to="/about" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('OUR STORY', '/src/assets/image/about2.png')}
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              About Us <FontAwesomeIcon icon={faUsers}/>
+              <FontAwesomeIcon icon={faUsers}/> About Us
             </Link>
             <Link 
               to="/blog" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('LATEST NEWS', '/src/assets/image/running.jpg')} // Giả sử có ảnh này, nếu không dùng ảnh khác
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              Blog & News <FontAwesomeIcon icon={faNewspaper}/>
+              <FontAwesomeIcon icon={faNewspaper}/> Blog & News
             </Link>
              <Link 
               to="/careers" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('JOIN TEAM', '/src/assets/image/basketball.png')}
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              Careers <FontAwesomeIcon icon={faBriefcase}/>
+              <FontAwesomeIcon icon={faBriefcase}/> Careers
             </Link>
           </div>
 
           {/* Cột 3: Pháp lý & Đối tác */}
-          <div className="product-category">
+          <div className="help-category">
             <h3>Legal & B2B</h3>
             <Link 
               to="/terms" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('TERMS', '/src/assets/image/about1.png')}
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              Terms of Service <FontAwesomeIcon icon={faScaleBalanced}/>
+              <FontAwesomeIcon icon={faScaleBalanced}/> Terms of Service
             </Link>
             <Link 
               to="/privacy" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('PRIVACY', '/src/assets/image/about1.png')}
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              Privacy Policy <FontAwesomeIcon icon={faShieldHalved}/>
+              <FontAwesomeIcon icon={faShieldHalved}/> Privacy Policy
             </Link>
              <Link 
               to="/partnerships" 
-              className="product-link" 
-              onClick={() => setMobileOpen(false)}
-              onMouseEnter={() => handleMouseEnter('PARTNERS', '/src/assets/image/volleyball.png')}
-              onMouseLeave={handleMouseLeave}
+              className="help-link" 
+              onClick={handleLinkClick}
             >
-              Partnerships <FontAwesomeIcon icon={faHandshake}/>
+              <FontAwesomeIcon icon={faHandshake}/> Partnerships
             </Link>
           </div>
 
         </div>
       </div>
+      )}
     </div>
   );
 }
