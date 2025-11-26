@@ -22,7 +22,7 @@ function ProductsView({ openCart }) {
         { name: 'Black', code: '#000000' },
         { name: 'White', code: '#ffffff' },
         { name: 'Blue', code: '#0000ff' },
-        { name: 'Orange', code: '#ffa500' }
+        { name: 'Orange', code: '#ff9500ff' }
     ];
 
     // Size Chart Data

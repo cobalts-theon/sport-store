@@ -930,7 +930,8 @@
   z-index: 100;
 }
 
-#products {
+#products,
+#help {
     padding-top: 0.65rem;
 }
 

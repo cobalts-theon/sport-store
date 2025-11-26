@@ -5,6 +5,7 @@ import pswhitelogo from "/src/assets/image/white-logo.png";
 import "./components-style/navbar.css";
 import ProductDropdown from "./product-dropdown";
 import CartDrawer from "./cart-drawer";
+import HelpDropdown from "./help-dropdown";
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping } from '@fortawesome/free-solid-svg-icons';
@@ -79,10 +80,7 @@ function Navbar({ cartOpen, setCartOpen }) {
 
           {/* Products with full-width hover panel */}
           <ProductDropdown setMobileOpen={setMobileOpen} />
-          
-          <Link to="/services">
-            <span className={`nav-link-label ${location.pathname === '/services' ? 'active-link' : ''}`}>Help</span>
-          </Link>
+          <HelpDropdown setMobileOpen={setMobileOpen} />
         </div>
 
         {/* --- SEARCH BUTTON --- */}
