@@ -1,3 +1,4 @@
+// AdminSidebar.jsx dùng để hiển thị thanh điều hướng bên cho trang quản trị
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faBox,
@@ -10,8 +11,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 function AdminSidebar({ activeSection, setActiveSection }) {
-  const menuItems = [
-    { id: 'products', icon: faBox, label: 'Product Management' },
+  const menuItems = [ // Định nghĩa các mục menu với id, icon và nhãn tương ứng voi giá trị activeSection
+    { id: 'products', icon: faBox, label: 'Product Management' }, 
     { id: 'orders', icon: faShoppingCart, label: 'Order Management' },
     { id: 'users', icon: faUsers, label: 'User Management' },
     { id: 'dashboard', icon: faTachometerAlt, label: 'Dashboard' },

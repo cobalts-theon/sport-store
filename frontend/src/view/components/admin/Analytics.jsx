@@ -1,3 +1,4 @@
+// Analytics.jsx hiển thị bảng điều khiển phân tích với các chỉ số hiệu suất chính và biểu đồ cho trang quản trị
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 

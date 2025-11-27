@@ -1,3 +1,8 @@
+// frontend/src/view/components/admin/Dashboard.jsx
+// Dashboard.jsx hiển thị bảng điều khiển tổng quan với các chỉ số chính và các phần khác nhau cho trang quản trị
+//Liên quan đến frontend/src/view/components/admin/AdminHeader.jsx
+//Liên quan đến frontend/src/view/components/admin/AdminSidebar.jsx
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faDollarSign,
@@ -6,10 +11,8 @@ import {
   faBox,
   faArrowUp,
   faArrowDown,
-  faCalendarAlt,
   faChartLine,
   faStar,
-  faEye,
   faClock
 } from '@fortawesome/free-solid-svg-icons';
 

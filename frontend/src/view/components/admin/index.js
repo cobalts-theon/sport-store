@@ -1,4 +1,6 @@
-// Admin components index file for cleaner imports
+// index.js tập hợp và xuất khẩu tất cả các thành phần quản trị để sử dụng dễ dàng trong các phần khác của ứng dụng
+//Liên quan đến frontend/src/view/components/admin/AdminHeader.jsx
+//Liên quan đến frontend/src/view/components/admin/AdminSidebar.jsx
 export { default as AdminSidebar } from './AdminSidebar';
 export { default as AdminHeader } from './AdminHeader';
 export { default as SettingsSection } from './SettingsSection';

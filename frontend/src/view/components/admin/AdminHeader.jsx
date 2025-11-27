@@ -1,7 +1,8 @@
+// AdminHeader.jsx dùng để hiển thị tiêu đề và các hành động dựa trên phần quản trị đang hoạt động
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-function AdminHeader({ 
+function AdminHeader({  //khai báo props để nhận dữ liệu từ component cha là admin.jsx
   activeSection, 
   showAddForm, 
   showAddPromotion, 
@@ -9,7 +10,7 @@ function AdminHeader({
   handleAddPromotion 
 }) {
   const getTitleAndSubtitle = () => {
-    const sections = {
+    const sections = {  //Định nghĩa tiêu đề và phụ đề cho từng phần quản trị và lưu vào object sections
       dashboard: { title: 'Dashboard', subtitle: 'Analytics and overview' },
       products: { title: 'Product Management', subtitle: 'Manage your inventory and products' },
       orders: { title: 'Order Management', subtitle: 'View and manage customer orders' },

@@ -76,7 +76,7 @@ function ForgotPassword() {
 
                         {!isSubmitted ? (
                             <form onSubmit={handleSubmit}>
-                                <div className="form-group">
+                                <div className="form-group-authen">
                                     <input
                                         type="email"
                                         id="email"
@@ -88,7 +88,7 @@ function ForgotPassword() {
                                 </div>
 
                                 <button type="submit" className="login-submit-btn">
-                                    Send Reset Link
+                                    Send Reset Code
                                 </button>
 
                                 <div className="alt-login">

@@ -1,4 +1,6 @@
-// Utility functions for admin panel
+// adminUtils.js chứa các hàm tiện ích để xác định trạng thái của sản phẩm, khuyến mãi và đơn hàng trong trang quản trị
+//Liên quan đến frontend/src/view/components/admin/AdminHeader.jsx
+//Liên quan đến frontend/src/view/components/admin/AdminSidebar.jsx
 
 export const getStockStatus = (stock) => {
   if (stock === 0) return { text: 'Out of Stock', color: '#F44336' };

@@ -102,10 +102,10 @@ function ProductCard({ product, index }) {
             {hasDiscount ? (
               <>
                 <span className="product-price-original">{formatPrice(product.originalPrice)}</span>
-                <span className="product-price">{formatPrice(product.price)}</span>
+                <span className="product-price" style={{ fontSize: '24px' }}>{formatPrice(product.price)}</span>
               </>
             ) : (
-              <span className="product-price">{formatPrice(product.price)}</span>
+              <span className="product-price" style={{ fontSize: '24px'}}>{formatPrice(product.price)}</span>
             )}
           </div>
           <button 

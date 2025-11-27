@@ -1,4 +1,6 @@
-// Mock products data
+// Tạo dữ liệu giả để sử dụng trong trang quản trị
+// Dữ liệu này bao gồm sản phẩm, khuyến mãi và đơn hàng mẫu để hiển thị trong giao diện quản trị
+// Liên quan đến các trang quản trị như AdminHeader.jsx và AdminSidebar.jsx
 export const mockProducts = [
   {
     id: 1,
