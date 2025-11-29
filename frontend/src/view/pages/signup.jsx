@@ -51,7 +51,11 @@ function Signup() {
             alert("Please agree to the terms and conditions");
             return;
         }
-        console.log('Signup attempt:', formData);
+
+        // // Handle signup logic here
+        // try {
+        //     const res = await fetch()
+        // }
     };
 
     const handleSocialSignup = (provider) => {
