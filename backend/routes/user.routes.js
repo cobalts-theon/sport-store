@@ -5,8 +5,8 @@ import { verifyToken, isAdmin } from '../middleware/auth.middleware.js';
 const router = express.Router();
 
 //routes login và register được đặt trong user.controller.js public
-router.post('register', register);
-router.post('login', login);
+router.post('/register', register);
+router.post('/login', login);
 
 // Gửi mã xác thực đến email người dùng
 router.post('/forgot-password', sendVerificationCode);

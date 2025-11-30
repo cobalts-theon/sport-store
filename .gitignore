@@ -25,3 +25,9 @@ dist-ssr
 
 # Env files
 .env
+
+# Database
+*.sqlite
+*.sqlite3
+*.sql
+/backend/db.sql
