@@ -1,11 +1,23 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FaGithub, FaFacebookF, FaArrowLeft, FaArrowRight, FaTimes, FaGoogle } from 'react-icons/fa';
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";  //Dùng axios để gọi API đến backend
+import toast from "react-hot-toast";    //Dùng thư viện toast để hiển thị thông báo đẹp hơn
+import { FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa';
 import logo from '/src/assets/image/white-logo.png';
 import "./pages-style/login.css";
 import Silk from '../components/Silk';
 
 function Login() {
+    // const navigate = useNavigate();
+    // const [formData, seFormData] = useState({
+    //     name: '',
+    //     email: '',
+    //     password: '',
+    //     phone: '',
+    //     address: ''
+    // })
+
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);

@@ -10,7 +10,7 @@ router.get('/', getAllProducts);
 router.get('/:id', getProductById);
 
 // Thêm sản phẩm mới (Chỉ Admin)
-router.post('/', verifyToken, isAdmin, addProduct);
+router.post('/', verifyToken, isAdmin, upload.single('image'), addProduct);
 router.put('/:id', verifyToken, isAdmin, updateProduct);
 router.delete('/:id', verifyToken, isAdmin, deleteProduct);
 
