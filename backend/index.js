@@ -1,6 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 //import models để sequelize nhận diện các model
 import './models/user.model.js'
@@ -21,6 +23,10 @@ import usersRoutes from './routes/user.routes.js'
 dotenv.config()
 //tạo app express
 const app = express()
+
+//Middleware
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.json()) // Để xử lý dữ liệu JSON trong request
 app.use(cors()) // Cho phép các yêu cầu tài nguyên từ các nguồn khác nhau
@@ -47,6 +53,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/products', productRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

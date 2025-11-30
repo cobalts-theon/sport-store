@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllUsers, deleteUser, getProfile, register, login, sendVerificationCode, verifyCode } from '../controllers/user.controller.js';
+import { getAllUsers, deleteUser, getProfile, register, login, sendVerificationCode, verifyCode, resetPassword } from '../controllers/user.controller.js';
 import { verifyToken, isAdmin } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -13,6 +13,9 @@ router.post('/forgot-password', sendVerificationCode);
 
 // Xác thực mã code người dùng nhập
 router.post('/verify-code', verifyCode);
+
+// Đổi mật khẩu 
+router.post('/reset-password', resetPassword);
 
 // Lấy thông tin cá nhân (Cho User xem profile mình)
 router.get('/profile', verifyToken, getProfile);

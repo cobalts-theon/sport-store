@@ -72,7 +72,7 @@ const Product = sequelize.define('Product',{
     },
 }, {
     tableName: 'products',
-    underscored: false,
+    underscored: false, // Quan trọng: Tắt cái này đi để nó tìm 'createdAt' thay vì 'created_at'
     timestamps: true,
 });
 

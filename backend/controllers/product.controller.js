@@ -27,8 +27,14 @@ export const getProductById = async (req, res) => {
 // Thêm sản phẩm mới (Chỉ Admin)
 export const addProduct = async (req, res) => {
     try {
-        const { name, description, price, stock } = req.body;
-        const newProduct = await Product.create({ name, description, price, stock });
+        const { name, description, price, stock, category } = req.body;
+
+        // Xử lý ảnh nếu có
+        let imgUrl = '';
+        if (req.file) {
+            imgUrl = `/uploads/${req.file.filename}`; // Lưu đường dẫn ảnh
+        }
+        const newProduct = await Product.create({ name, description, price, stock, category, img_url: imgUrl });
         res.status(201).json(newProduct);
     } catch (error) {
         res.status(500).json({ message: error.message });

@@ -45,6 +45,11 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE, 
         allowNull: true,
         field: 'code_expired_at'
+    },
+    lastOtpSentAt: {
+        type: DataTypes.DATE, 
+        allowNull: true,
+        field: 'last_otp_send_at'
     }
 }, {
     tableName: 'users',
