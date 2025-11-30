@@ -1,103 +1,21 @@
-import User from '../models/user.model.js';
-import sendEmail from '../utils/sendEmail.js';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { Op } from 'sequelize';
+import dotenv from 'dotenv';
+import sendEmail from './utils/sendEmail.js';
 
-// Đăng ký người dùng mới
-export const register = async (req, res) => {
-    try {
-        const { name, email, password, phone, address } = req.body;
+// Nạp biến môi trường từ file .env
+dotenv.config();
 
-        // Kiểm tra nếu email đã tồn tại
-        const existingUser = await User.findOne({ where: { email } });
-        if  (existingUser) {
-            return res.status(400).json({ message: 'Email đã được sử dụng!' });
-        }
+const runTest = async () => {
+    console.log("Đang bắt đầu quá trình test...");
 
-        // Băm mật khẩu
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+    // 1. Giả lập sinh mã 6 số ngẫu nhiên
+    const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log(`Mã sinh ra là: ${randomCode}`);
 
-        // Tạo người dùng mới
-        const newUser = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-            phone,
-            address,
-            role: 'customer', // Mặc định là khách hàng
-            status: 'active'
-        });
-        res.status(201).json({ message: 'Đăng ký thành công!', userId: newUser.id });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Lỗi khi đăng ký người dùng' });
-    }
-};
+    // 2. Điền email của CHÍNH BẠN để nhận thử
+    const myEmail = "vvankhanh022@gmail.com"; // <--- SỬA LẠI EMAIL NÀY
 
-// Chức năng đăng nhập
-export const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    // Tìm người dùng theo email
-    const user = await User.findOne({ where: { email } });
-    if(!user) {
-      return res.status(400).json({ message: 'Email hoặc mật khẩu không đúng!' });
-    }
-
-    // Kiểm tra mật khẩu
-    const isMatch = await bcrypt.compare(password, user.password);
-    if(!isMatch) {
-      return res.status(400).json({ message: 'Email hoặc mật khẩu không đúng!' });
-    }
-
-    // Tạo JWT (Token để lưu phiên đăng nhập)
-    const token = jwt.sign(
-      { id: user.id, role: user.role },
-      process.env.JWT_SECRET || 'secret',
-      { expiresIn: '3d' } // Token có hạn trong 3 ngày
-    );
-
-    res.status(200).json({ 
-      message: 'Đăng nhập thành công!', 
-      token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Lỗi khi đăng nhập' });
-  }
-};
-
-//Gửi mã xác thực qua email
-export const sendVerificationCode = async (req, res) => {
-    try {
-        const { email } = req.body; //Lấy email từ yêu cầu (Email người dùng gửi lên)
-
-        //Kiểm tra email có tồn tại không
-        const user = await User.findOne({ where: { email } });
-        if (!user) {
-          return res.status(404).json({ message: 'Không tìm thấy người dùng với email này' });
-        }
-
-        //Tạo mã xác thực ngẫu nhiên 6 chữ số
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-
-        //Lưu mã và thời gian hết hạn (4 phút) vào database
-        user.verificationCode = code;
-        user.codeExpiredAt = new Date(Date.now() + 4 * 60 * 1000); //4 phút từ bây giờ
-        await user.save();
-
-        //Gửi mã xác thực qua email
-        const subject = 'Prime Souls - Code Verification';
-        const text = `
+    const subject = "Prime Souls - Email Verification Code";
+    const message = `
         <!DOCTYPE html>
         <html>
         <head>
@@ -288,9 +206,9 @@ export const sendVerificationCode = async (req, res) => {
                     
                     <div class="verification-section">
                         <div class="code-label">Your Verification Code</div>
-                        <div class="verification-code">${code}</div>
+                        <div class="verification-code">${randomCode}</div>
                         <div class="code-expiry">
-                            This code will expire in <strong>4 minutes</strong>
+                            This code will expire in <strong>10 minutes</strong>
                         </div>
                     </div>
                     
@@ -300,11 +218,13 @@ export const sendVerificationCode = async (req, res) => {
                         <div class="security-title">SECURITY NOTICE</div>
                         <div class="security-text">
                             Never share this code with anyone.<br>
+                            Prime Souls will never ask for your verification code via phone or email.
                         </div>
                     </div>
                     
                     <p class="footer-note">
-                      Please do not reply to this email.
+                        If you did not request this code, please ignore this email.<br>
+                        Your account security is our top priority.
                     </p>
                 </div>
                 
@@ -320,78 +240,16 @@ export const sendVerificationCode = async (req, res) => {
             </div>
         </body>
         </html>
-      `;
-        await sendEmail(email, subject, text);
-        res.status(200).json({ message: 'Mã xác thực đã được gửi đến email của bạn' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Lỗi khi gửi mã xác thực người dùng' });
+    `;
+
+    // 3. Gọi hàm gửi mail
+    const success = await sendEmail(myEmail, subject, message);
+
+    if (success) {
+        console.log("THÀNH CÔNG: Email đã được gửi đi! Hãy kiểm tra hộp thư.");
+    } else {
+        console.log("THẤT BẠI: Vui lòng kiểm tra lại password ứng dụng trong .env");
     }
 };
 
-//Kiểm tra mã xác thực người dùng gửi lên so với mã trong database
-export const verifyCode = async (req, res) => {
-    try {
-        const { email, code } = req.body;
-
-        //Tìm người dùng theo email và khớp mã đồng thời mã chưa hết hạn
-        const user = await User.findOne({
-            where: {
-                email,
-                verificationCode: code,
-                codeExpiredAt: { [Op.gt]: new Date() } //Op.gt nghĩa là "lớn hơn" thời gian hiện tại
-            }
-        });
-
-        if (!user) {
-            return res.status(400).json({ message: 'Mã xác thực không hợp lệ hoặc đã hết hạn' });
-        }
-
-        //Nếu mã hợp lệ, xóa mã và thời gian hết hạn khỏi database và không dùng được nữa 
-        user.verificationCode = null;
-        user.codeExpiredAt = null;
-        await user.save();
-
-        res.status(200).json({ message: 'Xác thực email thành công!' });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Lỗi khi xác thực mã' });
-    }
-};
-        
-
-export const getAllUsers = async (req, res) => {
-    try {
-        const users = await User.findAll({
-            attributes: { exclude: ['password'] } // Không trả về mật khẩu
-        });
-        res.status(200).json(users);
-    } catch (error) {   
-        res.status(500).json({ message: 'Lỗi khi lấy danh sách người dùng' });
-    }
-}
-
-// Xóa người dùng (Cho Admin)
-export const deleteUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await User.destroy({ where: { id } });
-    res.json({ message: "Đã xóa người dùng thành công!" });
-  } catch (error) {
-    res.status(500).json({ message: "Lỗi xóa người dùng" });
-  }
-};
-
-// Lấy thông tin cá nhân (Cho User xem profile mình)
-export const getProfile = async (req, res) => {
-  try {
-    const user = await User.findByPk(req.userId, {
-        attributes: { exclude: ['password'] }
-    });
-    if (!user) return res.status(404).json({ message: "Không tìm thấy User" });
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: "Lỗi lấy thông tin cá nhân" });
-  }
-};
+runTest();

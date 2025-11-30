@@ -16,12 +16,13 @@ const Product = sequelize.define('Product',{
         allowNull: true
     },
     price: {
-        type: DataTypes.FLOAT, 
+        type: DataTypes.INTEGER, 
         allowNull: false
     },
     img_url: {
         type: DataTypes.STRING, 
         allowNull: true, 
+        field: 'img',
         comment: 'Đường dẫn ảnh sản phẩm (Vì database không lưu ảnh nên chỉ lưu đường dẫn)'
     },
     hover: {
@@ -49,6 +50,7 @@ const Product = sequelize.define('Product',{
     },
     original_price: {
         type: DataTypes.FLOAT, 
+        field: 'originalPrice',
         allowNull: true
     },
     material: {
@@ -60,15 +62,17 @@ const Product = sequelize.define('Product',{
         allowNull: true},
     isHotDeal: {
         type: DataTypes.BOOLEAN, 
-        defaultValue: false
+        defaultValue: false,
+        field: 'is_hot_deal'
     },
     stock: {
         type: DataTypes.INTEGER, 
         allowNull: false, 
-        defaultValue: 0
+        defaultValue: 100
     },
 }, {
     tableName: 'products',
+    underscored: false,
     timestamps: true,
 });
 

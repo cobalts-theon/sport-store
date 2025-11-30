@@ -2,14 +2,18 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 
-//import models
+//import models để sequelize nhận diện các model
+import './models/user.model.js'
+import './models/product.model.js'
+import './models/order.model.js'
 import User from './models/user.model.js'
 import Product from './models/product.model.js'
 import { Order, OrderItem } from './models/order.model.js'
 
+
 //import routes
 import orderRoutes from './routes/order.routes.js'
-// import productRoutes from './routes/product.routes.js'
+import productRoutes from './routes/product.routes.js'
 import statsRoutes from './routes/stats.routes.js'
 import usersRoutes from './routes/user.routes.js'
 
@@ -42,6 +46,7 @@ OrderItem.belongsTo(Product, { foreignKey: 'productId' });
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/products', productRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

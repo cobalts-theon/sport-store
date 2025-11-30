@@ -36,9 +36,21 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING, 
         allowNull: true
     },
+    verificationCode: {
+        type: DataTypes.STRING, 
+        allowNull: true,
+        field: 'verification_code'
+    },
+    codeExpiredAt: {
+        type: DataTypes.DATE, 
+        allowNull: true,
+        field: 'code_expired_at'
+    }
 }, {
     tableName: 'users',
     timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
 });
 
 export default User;
