@@ -30,4 +30,11 @@ dist-ssr
 *.sqlite
 *.sqlite3
 *.sql
-/backend/db.sql
+*.db
+db.sql
+backend/db.sql
+
+
+test-code.json
+backend/test-code.json
+
