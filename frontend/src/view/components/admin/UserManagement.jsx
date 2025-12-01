@@ -22,10 +22,12 @@ import {
   faLock,
   faUser,
   faPhone,
-  faMapMarkerAlt
+  faMapMarkerAlt,
+  faThLarge,
+  faList
 } from '@fortawesome/free-solid-svg-icons';
 
-function UserManagement({ users, setUsers }) {
+function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRole, setSelectedRole] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -208,6 +210,28 @@ function UserManagement({ users, setUsers }) {
             </button>
           </div>
 
+          {/* View Mode Toggle */}
+          <div className="admin-controls" style={{marginTop: '0.5rem'}}>
+            <div className="view-mode-toggle">
+              <button 
+                className={`view-mode-btn ${viewMode === 'list' ? 'active' : ''}`}
+                onClick={() => setViewMode && setViewMode('list')}
+                title="List View"
+              >
+                <FontAwesomeIcon icon={faList} />
+                <span>List</span>
+              </button>
+              <button 
+                className={`view-mode-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                onClick={() => setViewMode && setViewMode('grid')}
+                title="Grid View"
+              >
+                <FontAwesomeIcon icon={faThLarge} />
+                <span>Grid</span>
+              </button>
+            </div>
+          </div>
+
           {/* Filters */}
           <div className="admin-filters">
             <button 
@@ -250,7 +274,7 @@ function UserManagement({ users, setUsers }) {
           </div>
 
           {/* Users List */}
-          <div className="admin-products-list">
+          <div className={`admin-products-list ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
             {filteredUsers.length === 0 ? (
               <div className="admin-no-products">
                 <FontAwesomeIcon icon={faUsers} className="admin-no-products-icon" />
@@ -265,7 +289,7 @@ function UserManagement({ users, setUsers }) {
                 const lastActive = new Date(user.lastActive);
                 
                 return (
-                  <div key={user.id} className="admin-product-card">
+                  <div key={user.id} className={`admin-product-card ${viewMode}`}>
                     {/* User Card Header */}
                     <div className="admin-product-card-header">
                       <div className="admin-product-main-info">

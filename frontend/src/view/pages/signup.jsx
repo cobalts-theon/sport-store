@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FaGoogle, FaGithub, FaFacebookF, FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa';
+import { data, Link, useNavigate } from "react-router-dom";
+import api from "../../lib/api";
+import toast from "react-hot-toast";
+import { FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa';
 import logo from '/src/assets/image/white-logo.png';
 import "./pages-style/login.css";
 import Silk from '../components/Silk';
 
 function Signup() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -41,25 +44,36 @@ function Signup() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (formData.password !== formData.confirmPassword) {
-            alert("Passwords don't match!");
-            return;
-        }
-        if (!agreeToTerms) {
-            alert("Please agree to the terms and conditions");
+        if(!agreeToTerms) {
+            toast.error("You must agree to the Terms");
             return;
         }
 
-        // // Handle signup logic here
-        // try {
-        //     const res = await fetch()
-        // }
+        if(formData.password !== formData.confirmPassword) {
+            
+            toast.error("Passwords do not match");
+            return;
+        }
+
+        try {
+            const { confirmPassword, ...datatoSend } = formData;
+
+            const res = await api.post('/users/register', datatoSend);
+
+            toast.success("Signup successful! Please log in.");
+            navigate('/login'); //Chuyển hướng đến trang login
+        } catch (error) {
+            console.error("Signup error:", error);
+            const message = error.response?.data?.message || "Signup failed. Please try again.";
+            toast.error(message);
+        }
     };
 
     const handleSocialSignup = (provider) => {
         console.log(`Sign up with ${provider}`);
+        toast.success(`Sign up with ${provider} is not implemented yet.`);
     };
 
     const nextTestimonial = () => {

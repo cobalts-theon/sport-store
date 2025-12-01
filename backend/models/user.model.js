@@ -49,7 +49,7 @@ const User = sequelize.define('User', {
     lastOtpSentAt: {
         type: DataTypes.DATE, 
         allowNull: true,
-        field: 'last_otp_send_at'
+        field: 'last_otp_sent_at'
     }
 }, {
     tableName: 'users',

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import {Router, Routes, Route, Link, useLocation} from "react-router-dom"
-
+import { Toaster } from 'react-hot-toast'
 //Components
 import Header from './components/navbar'
 import Infbar from './components/infbar'
@@ -42,6 +42,36 @@ function AppContent() {
 
   return (
     <>
+      <Toaster 
+        position="top-center" 
+        reverseOrder={false} 
+        toastOptions={{
+          style: {
+            fontFamily: 'JetBrains Mono, sans-serif',
+            clipPath: "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)"
+          },
+          success: {
+            style: {
+              background: '#4BB543',
+              color: '#fff',
+            },
+            iconTheme: {
+              primary: '#fff',
+              secondary: '#4BB543',
+            }
+          },
+          error: {
+            style: {
+              background: '#FF3333',
+              color: '#fff',
+            },
+            iconTheme: {
+              primary: '#fff',
+              secondary: '#FF3333',
+            }
+          }
+        }}
+      />
       <StartupLoader duration={2000}/> 
       {!isAdminPage && <Commercre/>}
       {!isAdminPage && <Header cartOpen={cartOpen} setCartOpen={setCartOpen}/>}

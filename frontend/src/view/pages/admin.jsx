@@ -25,7 +25,9 @@ import {
   faCheck,
   faClock,
   faTruck,
-  faEye
+  faEye,
+  faThLarge,
+  faList
 } from '@fortawesome/free-solid-svg-icons';
 import { 
   AdminSidebar, 
@@ -55,6 +57,12 @@ function Admin() {
   const [expandedProduct, setExpandedProduct] = useState(null);
   const [activeSection, setActiveSection] = useState('products');
   
+  //Chế độ xem danh sách hoặc lưới
+  const [productViewMode, setProductViewMode] = useState('list');
+  const [orderViewMode, setOrderViewMode] = useState('list');
+  const [userViewMode, setUserViewMode] = useState('list');
+  const [promotionViewMode, setPromotionViewMode] = useState('list');
+
   // Marketing/Promotions state
   const [promotions, setPromotions] = useState([]);
   const [showAddPromotion, setShowAddPromotion] = useState(false);
@@ -333,6 +341,26 @@ function Admin() {
             )}
           </div>
 
+          {/* View Mode Toggle */}
+          <div className="view-mode-toggle">
+            <button 
+              className={`view-mode-btn ${productViewMode === 'list' ? 'active' : ''}`}
+              onClick={() => setProductViewMode('list')}
+              title="List View"
+            >
+              <FontAwesomeIcon icon={faList} />
+              <span>List</span>
+            </button>
+            <button 
+              className={`view-mode-btn ${productViewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setProductViewMode('grid')}
+              title="Grid View"
+            >
+              <FontAwesomeIcon icon={faThLarge} />
+              <span>Grid</span>
+            </button>
+          </div>
+
           <div className="admin-filters">
             <button 
               className={`filter-btn-admin ${selectedCategory === 'all' ? 'active' : ''}`}
@@ -381,7 +409,7 @@ function Admin() {
         </div>
 
         {/* Products List */}
-        <div className="admin-products-list">
+        <div className={`admin-products-list ${productViewMode === 'list' ? 'list-view' : 'grid-view'}`}>
           {filteredProducts.length === 0 ? (
             <div className="admin-no-products">
               <FontAwesomeIcon icon={faBox} className="admin-no-products-icon" />
@@ -392,7 +420,7 @@ function Admin() {
             filteredProducts.map(product => {
               const stockStatus = getStockStatus(product.stock);
               return (
-                <div key={product.id} className="admin-product-card">
+                <div key={product.id} className={`admin-product-card ${productViewMode}`}>
                   {/* Product Header */}
                   <div className="admin-product-card-header">
                     <div className="admin-product-main-info">
@@ -623,8 +651,29 @@ function Admin() {
               </div>
             </div>
 
-            {/* Order Filters */}
-            <div className="admin-filters">
+            {/* Order Filters and View Toggle */}
+            <div className="admin-controls">
+              {/* View Mode Toggle */}
+              <div className="view-mode-toggle">
+                <button 
+                  className={`view-mode-btn ${orderViewMode === 'list' ? 'active' : ''}`}
+                  onClick={() => setOrderViewMode('list')}
+                  title="List View"
+                >
+                  <FontAwesomeIcon icon={faList} />
+                  <span>List</span>
+                </button>
+                <button 
+                  className={`view-mode-btn ${orderViewMode === 'grid' ? 'active' : ''}`}
+                  onClick={() => setOrderViewMode('grid')}
+                  title="Grid View"
+                >
+                  <FontAwesomeIcon icon={faThLarge} />
+                  <span>Grid</span>
+                </button>
+              </div>
+
+              <div className="admin-filters">
               <button 
                 className={`filter-btn-admin ${selectedOrderStatus === 'all' ? 'active' : ''}`}
                 onClick={() => setSelectedOrderStatus('all')}
@@ -661,10 +710,11 @@ function Admin() {
               >
                 <FontAwesomeIcon icon={faTimes} /> Cancelled
               </button>
+              </div>
             </div>
 
             {/* Orders List */}
-            <div className="admin-products-list">
+            <div className={`admin-products-list ${orderViewMode === 'list' ? 'list-view' : 'grid-view'}`}>
               {filteredOrders.length === 0 ? (
                 <div className="admin-no-products">
                   <FontAwesomeIcon icon={faShoppingCart} className="admin-no-products-icon" />
@@ -677,7 +727,7 @@ function Admin() {
                   const orderDate = new Date(order.orderDate);
                   
                   return (
-                    <div key={order.id} className="admin-product-card">
+                    <div key={order.id} className={`admin-product-card ${orderViewMode}`}>
                       {/* Order Card Header */}
                       <div className="admin-product-card-header">
                         <div className="admin-product-main-info">
@@ -823,7 +873,12 @@ function Admin() {
         )}
 
         {activeSection === 'users' && (
-          <UserManagement users={users} setUsers={setUsers} />
+          <UserManagement 
+            users={users} 
+            setUsers={setUsers} 
+            viewMode={userViewMode}
+            setViewMode={setUserViewMode}
+          />
         )}
 
         {activeSection === 'analytics' && (
@@ -837,6 +892,28 @@ function Admin() {
         {/* Marketing/Promotions Section */}
         {activeSection === 'marketing' && !showAddPromotion && (
           <>
+          {/* View Mode Toggle */}
+          <div className="admin-controls" style={{marginBottom: '1.5rem'}}>
+            <div className="view-mode-toggle">
+              <button 
+                className={`view-mode-btn ${promotionViewMode === 'list' ? 'active' : ''}`}
+                onClick={() => setPromotionViewMode('list')}
+                title="List View"
+              >
+                <FontAwesomeIcon icon={faList} />
+                <span>List</span>
+              </button>
+              <button 
+                className={`view-mode-btn ${promotionViewMode === 'grid' ? 'active' : ''}`}
+                onClick={() => setPromotionViewMode('grid')}
+                title="Grid View"
+              >
+                <FontAwesomeIcon icon={faThLarge} />
+                <span>Grid</span>
+              </button>
+            </div>
+          </div>
+
           <div className="admin-stats-grid">
             <div className="admin-stat-card">
               <FontAwesomeIcon icon={faBullhorn} className="admin-stat-icon" />
@@ -868,13 +945,13 @@ function Admin() {
             </div>
           </div>
 
-          <div className="admin-products-list">
+          <div className={`admin-products-list ${promotionViewMode === 'list' ? 'list-view' : 'grid-view'}`}>
             {promotions.map(promotion => {
               const status = getPromotionStatus(promotion);
               const usagePercent = promotion.usageLimit ? (promotion.usedCount / promotion.usageLimit * 100).toFixed(1) : 0;
               
               return (
-                <div key={promotion.id} className="admin-product-card">
+                <div key={promotion.id} className={`admin-product-card ${promotionViewMode}`}>
                   {/* Promotion Card Header */}
                   <div className="admin-product-card-header">
                     <div className="admin-product-main-info">

@@ -12,7 +12,7 @@ export const register = async (req, res) => {
         // Kiểm tra nếu email đã tồn tại
         const existingUser = await User.findOne({ where: { email } });
         if  (existingUser) {
-            return res.status(400).json({ message: 'Email đã được sử dụng!' });
+            return res.status(400).json({ message: 'Email already exists' });
         }
 
         // Băm mật khẩu
@@ -29,10 +29,10 @@ export const register = async (req, res) => {
             role: 'customer', // Mặc định là khách hàng
             status: 'active'
         });
-        res.status(201).json({ message: 'Đăng ký thành công!', userId: newUser.id });
+        res.status(201).json({ message: 'Sign up successfully', userId: newUser.id });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Lỗi khi đăng ký người dùng' });
+        res.status(500).json({ message: 'Error signing up' });
     }
 };
 
@@ -44,13 +44,13 @@ export const login = async (req, res) => {
     // Tìm người dùng theo email
     const user = await User.findOne({ where: { email } });
     if(!user) {
-      return res.status(400).json({ message: 'Email hoặc mật khẩu không đúng!' });
+      return res.status(400).json({ message: 'Email or Password is incorrect' });
     }
 
     // Kiểm tra mật khẩu
     const isMatch = await bcrypt.compare(password, user.password);
     if(!isMatch) {
-      return res.status(400).json({ message: 'Email hoặc mật khẩu không đúng!' });
+      return res.status(400).json({ message: 'Email or Password is incorrect' });
     }
 
     // Tạo JWT (Token để lưu phiên đăng nhập)
@@ -61,7 +61,7 @@ export const login = async (req, res) => {
     );
 
     res.status(200).json({ 
-      message: 'Đăng nhập thành công!', 
+      message: 'Login successful', 
       token,
       user: {
         id: user.id,
@@ -72,7 +72,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Lỗi khi đăng nhập' });
+    res.status(500).json({ message: 'Error logging in' });
   }
 };
 
@@ -84,7 +84,7 @@ export const sendVerificationCode = async (req, res) => {
         //Kiểm tra email có tồn tại không
         const user = await User.findOne({ where: { email } });
         if (!user) {
-          return res.status(404).json({ message: 'Không tìm thấy người dùng với email này' });
+          return res.status(404).json({ message: 'User not found' });
         }
 
         //Tạo mã xác thực ngẫu nhiên 6 chữ số
@@ -322,10 +322,10 @@ export const sendVerificationCode = async (req, res) => {
         </html>
       `;
         await sendEmail(email, subject, text);
-        res.status(200).json({ message: 'Mã xác thực đã được gửi đến email của bạn' });
+        res.status(200).json({ message: 'Verification code sent successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Lỗi khi gửi mã xác thực người dùng' });
+        res.status(500).json({ message: 'Error sending verification code' });
     }
 };
 
@@ -344,7 +344,7 @@ export const verifyCode = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(400).json({ message: 'Mã xác thực không hợp lệ hoặc đã hết hạn' });
+            return res.status(400).json({ message: 'Verification code is incorrect' });
         }
 
         //Nếu mã hợp lệ, xóa mã và thời gian hết hạn khỏi database và không dùng được nữa 
@@ -352,11 +352,11 @@ export const verifyCode = async (req, res) => {
         user.codeExpiredAt = null;
         await user.save();
 
-        res.status(200).json({ message: 'Xác thực email thành công!' });
+        res.status(200).json({ message: 'Verification code is correct' });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Lỗi khi xác thực mã' });
+        res.status(500).json({ message: 'Error verifying code' });
     }
 };
 
@@ -376,7 +376,7 @@ export const resetPassword = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(400).json({ message: 'Mã xác thực không hợp lệ hoặc đã hết hạn' });
+            return res.status(400).json({ message: 'Verification code is incorrect' });
         }
 
         //Băm mật khẩu mới
@@ -389,11 +389,11 @@ export const resetPassword = async (req, res) => {
         user.codeExpiredAt = null;
         await user.save();
 
-        res.status(200).json({ message: 'Đặt lại mật khẩu thành công!' });
+        res.status(200).json({ message: 'Password reset successfully' });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Lỗi khi đặt lại mật khẩu người dùng' });
+        res.status(500).json({ message: 'Error resetting password' });
     }
 };
         
@@ -405,7 +405,7 @@ export const getAllUsers = async (req, res) => {
         });
         res.status(200).json(users);
     } catch (error) {   
-        res.status(500).json({ message: 'Lỗi khi lấy danh sách người dùng' });
+        res.status(500).json({ message: 'Error fetching users' });
     }
 }
 
@@ -414,9 +414,9 @@ export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
     await User.destroy({ where: { id } });
-    res.json({ message: "Đã xóa người dùng thành công!" });
+    res.json({ message: "User deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Lỗi xóa người dùng" });
+    res.status(500).json({ message: "Error deleting user" });
   }
 };
 
@@ -426,9 +426,9 @@ export const getProfile = async (req, res) => {
     const user = await User.findByPk(req.userId, {
         attributes: { exclude: ['password'] }
     });
-    if (!user) return res.status(404).json({ message: "Không tìm thấy User" });
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: "Lỗi lấy thông tin cá nhân" });
+    res.status(500).json({ message: "Error fetching profile" });
   }
 };

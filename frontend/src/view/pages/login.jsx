@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";  //Dùng axios để gọi API đến backend
+import api from "../../lib/api";    
 import toast from "react-hot-toast";    //Dùng thư viện toast để hiển thị thông báo đẹp hơn
 import { FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa';
 import logo from '/src/assets/image/white-logo.png';
@@ -8,18 +8,11 @@ import "./pages-style/login.css";
 import Silk from '../components/Silk';
 
 function Login() {
-    // const navigate = useNavigate();
-    // const [formData, seFormData] = useState({
-    //     name: '',
-    //     email: '',
-    //     password: '',
-    //     phone: '',
-    //     address: ''
-    // })
-
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
@@ -41,10 +34,36 @@ function Login() {
         }
     ];
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle login logic here
-        console.log('Login attempt:', { email, password, keepLoggedIn });
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        try {
+            // Gửi yêu cầu đăng nhập đến API
+            const res = await api.post('/users/login', formData);
+            if (res.data.token) {
+                // Lưu token vào localStorage hoặc cookie nếu đăng nhập thành công
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
+
+                toast.success('Login successful!');
+
+                // Chuyển hướng đến trang chủ hoặc trang dashboard
+                if (res.data.user.role === 'admin') {
+                    navigate('/admin');
+                } else {
+                    navigate('/');
+                }
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            toast.error(error.response?.data?.message || 'Login failed. Please try again.');
+        }
     };
 
     const handleSocialLogin = (provider) => {
@@ -92,8 +111,8 @@ function Login() {
                                 <input
                                     type="email"
                                     id="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={formData.email}
+                                    onChange={handleChange}
                                     placeholder="Email"
                                     required
                                 />
@@ -103,8 +122,8 @@ function Login() {
                                 <input
                                     type="password"
                                     id="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    value={formData.password}
+                                    onChange={handleChange}
                                     placeholder="Password"
                                     required
                                 />
