@@ -27,6 +27,7 @@ import ProductsView from './pages/products-view'
 import Order from './pages/order'
 import CheckOut from './pages/checkout'
 import Admin from './pages/admin'
+import Profile from './pages/profile'
 
 function AppContent() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -103,6 +104,7 @@ function AppContent() {
         <Route path="/checkout" element={<CheckOut/>}/>
         <Route path="/product/:id" element={<ProductsView openCart={() => setCartOpen(true)}/>}/>
         <Route path="/admin/*" element={<Admin/>}/>
+        <Route path="/profile" element={<Profile/>}/>
       </Routes>
       {!isAdminPage && <Footer/>}
     </>

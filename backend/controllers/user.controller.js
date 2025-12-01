@@ -396,6 +396,45 @@ export const resetPassword = async (req, res) => {
         res.status(500).json({ message: 'Error resetting password' });
     }
 };
+
+export const updateProfile = async (req, res) => {
+    try {
+        const userId = req.userId;  // Lấy userId từ middleware xác thực token
+        const { name, phone, address } = req.body;  // Lấy các trường cần cập nhật từ req.body
+
+        const user = await User.findByPk(userId);   // Tìm người dùng theo userId
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        //Cập nhật thông tin người dùng
+        if (name) user.name = name;
+        if (phone) user.phone = phone;
+        if (address) user.address = address;
+
+        //Xử lý upload ảnh
+        if (req.file) {
+            user.avatar = `uploads/${req.file.filename}`; // Lưu đường dẫn ảnh vào trường avatar
+        }
+
+        await user.save();
+
+        res.json({
+            message: 'Profile updated successfully',
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                address: user.address,
+                avatar: user.avatar,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating profile' });
+    }
+}
         
 
 export const getAllUsers = async (req, res) => {
@@ -430,5 +469,31 @@ export const getProfile = async (req, res) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: "Error fetching profile" });
+  }
+};
+
+// Đổi mật khẩu (yêu cầu mật khẩu cũ)
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findByPk(req.userId);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Kiểm tra mật khẩu hiện tại
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    }
+
+    // Băm và lưu mật khẩu mới
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error changing password" });
   }
 };

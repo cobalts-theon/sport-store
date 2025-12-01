@@ -19,10 +19,18 @@ function Navbar({ cartOpen, setCartOpen }) {
   const [searchOpen, setSearchOpen] = useState(false);  
   const [searchQuery, setSearchQuery] = useState(''); //Khai báo biến searchQuery để lưu giá trị tìm kiếm và setState để cập nhật giá trị 
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Kiểm tra đăng nhập
   const searchRef = useRef(null); // Dùng để phát hiện click ngoài search box
   const audioRef = useRef(new Audio(backgroundMusic));
   const location = useLocation(); // Get current path
   const navigate = useNavigate();
+
+  // Kiểm tra trạng thái đăng nhập
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, [location]); // Cập nhật khi đổi route
+
   // Lấy query từ URL params và cập nhật giá trị searchQuery
   useEffect(() => {
     const params = new URLSearchParams(location.search); //Lấy URL params
@@ -169,7 +177,7 @@ function Navbar({ cartOpen, setCartOpen }) {
           >
             <FontAwesomeIcon icon={faCartShopping} className="nav-user-icon"/>
           </Link>
-          <Link to="/login" className={location.pathname === '/login' ? 'active' : ''}> 
+          <Link to={isLoggedIn ? "/profile" : "/login"} className={location.pathname === '/login' || location.pathname === '/profile' ? 'active' : ''}> 
             <FontAwesomeIcon icon={faUser} className="nav-user-icon"/> 
           </Link>
         </div>
@@ -220,7 +228,9 @@ function Navbar({ cartOpen, setCartOpen }) {
             >
               Cart
             </Link>
-            <Link to="/login" onClick={() => setMobileOpen(false)}>Profile<FontAwesomeIcon icon={faUser} /></Link>
+            <Link to={isLoggedIn ? "/profile" : "/login"} onClick={() => setMobileOpen(false)}>
+              {isLoggedIn ? 'Profile' : 'Login'}<FontAwesomeIcon icon={faUser} />
+            </Link>
 
             {/* Music button at bottom of mobile panel */}
             <button
