@@ -3,6 +3,7 @@ import sendEmail from '../utils/sendEmail.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Op } from 'sequelize';
+import { OAuth2Client } from 'google-auth-library';
 
 // Đăng ký người dùng mới
 export const register = async (req, res) => {
@@ -67,13 +68,67 @@ export const login = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar: user.avatar,
+        phone: user.phone,
+        address: user.address
       }
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error logging in' });
   }
+};
+
+//Đăng nhâp bằng Google OAuth
+export const googleLogin = async (req, res) => {
+    try {
+        // Nhận trực tiếp thông tin từ Frontend gửi về
+        const { email, name, avatar } = req.body;
+
+        // 1. Kiểm tra user có trong DB chưa
+        let user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            // 2. Nếu chưa có -> Tạo user mới
+            // Tạo mật khẩu ngẫu nhiên để thỏa mãn DB
+            const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(randomPassword, salt);
+
+            user = await User.create({
+                name: name,
+                email: email,
+                password: hashedPassword, 
+                avatar: avatar, 
+                role: 'customer',
+                status: 'active'
+            });
+        }
+
+        // 3. Tạo JWT Token của hệ thống
+        const jwtToken = jwt.sign(
+            { id: user.id, role: user.role },
+            process.env.JWT_SECRET || 'secret',
+            { expiresIn: '3d' }
+        );
+
+        res.status(200).json({
+            message: 'Google login successful',
+            token: jwtToken,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                avatar: user.avatar
+            }
+        });
+
+    } catch (error) {
+        console.error("Google Login Error:", error);
+        res.status(500).json({ message: "Lỗi đăng nhập Google" });
+    }
 };
 
 //Gửi mã xác thực qua email
@@ -347,10 +402,8 @@ export const verifyCode = async (req, res) => {
             return res.status(400).json({ message: 'Verification code is incorrect' });
         }
 
-        //Nếu mã hợp lệ, xóa mã và thời gian hết hạn khỏi database và không dùng được nữa 
-        user.verificationCode = null;
-        user.codeExpiredAt = null;
-        await user.save();
+        // Không xóa mã ở đây, để resetPassword có thể dùng lại
+        // Mã sẽ được xóa sau khi reset password thành công
 
         res.status(200).json({ message: 'Verification code is correct' });
 
@@ -399,7 +452,7 @@ export const resetPassword = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
     try {
-        const userId = req.userId;  // Lấy userId từ middleware xác thực token
+        const userId = req.user.id;  // Lấy userId từ middleware xác thực token
         const { name, phone, address } = req.body;  // Lấy các trường cần cập nhật từ req.body
 
         const user = await User.findByPk(userId);   // Tìm người dùng theo userId
@@ -462,11 +515,14 @@ export const deleteUser = async (req, res) => {
 // Lấy thông tin cá nhân (Cho User xem profile mình)
 export const getProfile = async (req, res) => {
   try {
-    const user = await User.findByPk(req.userId, {
-        attributes: { exclude: ['password'] }
-    });
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.json(user);
+    //Middleware token đã lưu req.userId
+    //nên chỉ cần trả về req.user ko cần truy vấn lại database
+    if (!req.user) {
+        return res.status(404).json({ message: "User information not found" });
+    }
+
+    // Trả về thông tin người dùng đã được lấy trong middleware
+    res.json(req.user);
   } catch (error) {
     res.status(500).json({ message: "Error fetching profile" });
   }
@@ -475,10 +531,14 @@ export const getProfile = async (req, res) => {
 // Đổi mật khẩu (yêu cầu mật khẩu cũ)
 export const changePassword = async (req, res) => {
   try {
+    const userId = req.user.id; // Lấy userId từ middleware xác thực token
     const { currentPassword, newPassword } = req.body;
-    const user = await User.findByPk(req.userId);
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    // Tìm người dùng theo userId trong database
+    const user = await User.findByPk(userId);
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
 
     // Kiểm tra mật khẩu hiện tại
     const isMatch = await bcrypt.compare(currentPassword, user.password);
@@ -487,8 +547,8 @@ export const changePassword = async (req, res) => {
     }
 
     // Băm và lưu mật khẩu mới
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    const salt = await bcrypt.genSalt(10);  // Tạo biến salt để băm mật khẩu
+    user.password = await bcrypt.hash(newPassword, salt);   // Băm mật khẩu mới và gán vào trường password
     await user.save();
 
     res.json({ message: "Password changed successfully" });

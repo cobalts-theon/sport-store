@@ -10,14 +10,16 @@ const api = axios.create({
 });
 
 // Thêm interceptor để tự động gắn token vào header Authorization nếu có trước khi gửi request
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token'); // Giả sử token được lưu trong localStorage
-    if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`; // Gắn token vào header
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token'); // Giả sử token được lưu trong localStorage
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`; // Gắn token vào header
+        }
+        return config;
+    }, (error) => {
+        return Promise.reject(error);
     }
-    return config;
-}), (error) => {
-    return Promise.reject(error);
-}
+);
 
 export default api;

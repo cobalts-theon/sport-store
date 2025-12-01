@@ -13,6 +13,9 @@ import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping } fro
 //Audio
 import backgroundMusic from '/src/assets/audio/theme.mp3';
 
+// Default avatar as inline SVG data URI
+const DEFAULT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%23374151' width='40' height='40' rx='20'/%3E%3Ccircle cx='20' cy='15' r='8' fill='%239CA3AF'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='12' fill='%239CA3AF'/%3E%3C/svg%3E";
+
 function Navbar({ cartOpen, setCartOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -20,15 +23,51 @@ function Navbar({ cartOpen, setCartOpen }) {
   const [searchQuery, setSearchQuery] = useState(''); //Khai báo biến searchQuery để lưu giá trị tìm kiếm và setState để cập nhật giá trị 
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Kiểm tra đăng nhập
+  const [userAvatar, setUserAvatar] = useState(null); // Avatar của user
   const searchRef = useRef(null); // Dùng để phát hiện click ngoài search box
   const audioRef = useRef(new Audio(backgroundMusic));
   const location = useLocation(); // Get current path
   const navigate = useNavigate();
 
-  // Kiểm tra trạng thái đăng nhập
+  // Kiểm tra trạng thái đăng nhập và lấy avatar
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
+    const updateUserState = () => {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('user');
+      setIsLoggedIn(!!token);
+      
+      if (token && userData) {
+        try {
+          const user = JSON.parse(userData);
+          if (user.avatar) {
+            const avatarUrl = user.avatar.startsWith('http') 
+              ? user.avatar 
+              : `http://localhost:3000/${user.avatar}`;
+            setUserAvatar(avatarUrl);
+          } else {
+            setUserAvatar(null);
+          }
+        } catch (e) {
+          setUserAvatar(null);
+        }
+      } else {
+        setUserAvatar(null);
+      }
+    };
+
+    // Initial check
+    updateUserState();
+
+    // Listen for storage changes (e.g., when avatar is updated in profile)
+    window.addEventListener('storage', updateUserState);
+    
+    // Custom event for same-tab updates
+    window.addEventListener('userUpdated', updateUserState);
+
+    return () => {
+      window.removeEventListener('storage', updateUserState);
+      window.removeEventListener('userUpdated', updateUserState);
+    };
   }, [location]); // Cập nhật khi đổi route
 
   // Lấy query từ URL params và cập nhật giá trị searchQuery
@@ -177,8 +216,17 @@ function Navbar({ cartOpen, setCartOpen }) {
           >
             <FontAwesomeIcon icon={faCartShopping} className="nav-user-icon"/>
           </Link>
-          <Link to={isLoggedIn ? "/profile" : "/login"} className={location.pathname === '/login' || location.pathname === '/profile' ? 'active' : ''}> 
-            <FontAwesomeIcon icon={faUser} className="nav-user-icon"/> 
+          <Link to={isLoggedIn ? "/profile" : "/login"} className={`nav-user-link ${location.pathname === '/login' || location.pathname === '/profile' ? 'active' : ''}`}> 
+            {isLoggedIn ? (
+              <img 
+                src={userAvatar || DEFAULT_AVATAR} 
+                alt="User Avatar" 
+                className="nav-user-avatar"
+                onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
+              />
+            ) : (
+              <FontAwesomeIcon icon={faUser} className="nav-user-icon"/>
+            )}
           </Link>
         </div>
 
@@ -228,8 +276,20 @@ function Navbar({ cartOpen, setCartOpen }) {
             >
               Cart
             </Link>
-            <Link to={isLoggedIn ? "/profile" : "/login"} onClick={() => setMobileOpen(false)}>
-              {isLoggedIn ? 'Profile' : 'Login'}<FontAwesomeIcon icon={faUser} />
+            <Link to={isLoggedIn ? "/profile" : "/login"} onClick={() => setMobileOpen(false)} className="mobile-user-link">
+              {isLoggedIn ? (
+                <>
+                  <img 
+                    src={userAvatar || DEFAULT_AVATAR} 
+                    alt="User Avatar" 
+                    className="mobile-user-avatar"
+                    onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
+                  />
+                  Profile
+                </>
+              ) : (
+                <>Login<FontAwesomeIcon icon={faUser} /></>
+              )}
             </Link>
 
             {/* Music button at bottom of mobile panel */}

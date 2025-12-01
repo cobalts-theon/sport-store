@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductCard from '../components/product-card';
 import productsData from '../data/products.json';
@@ -17,6 +17,8 @@ function ProductsPage() {
     category: true,
     price: true
   });
+  const [isLoading, setIsLoading] = useState(true);
+  const [visibleProducts, setVisibleProducts] = useState([]);
   
   const location = useLocation();
 
@@ -138,7 +140,30 @@ function ProductsPage() {
     }
 
     setFilteredProducts(result);
+    
+    // Reset và animate lại khi filter thay đổi
+    setVisibleProducts([]);
+    setIsLoading(true);
   }, [searchQuery, activeFilters, products]);
+
+  // Stagger animation effect
+  useEffect(() => {
+    if (filteredProducts.length > 0 && isLoading) {
+      setVisibleProducts([]);
+      
+      // Animate từng product với delay
+      filteredProducts.forEach((product, index) => {
+        setTimeout(() => {
+          setVisibleProducts(prev => [...prev, product.id]);
+          
+          // Kết thúc loading sau khi tất cả products đã hiện
+          if (index === filteredProducts.length - 1) {
+            setTimeout(() => setIsLoading(false), 100);
+          }
+        }, index * 80); // 80ms delay giữa mỗi product
+      });
+    }
+  }, [filteredProducts, isLoading]);
 
   const toggleSection = (section) => {
     setExpandedSections(prev => ({
@@ -304,7 +329,13 @@ function ProductsPage() {
         <div className="products-grid">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
+              <div 
+                key={product.id} 
+                className={`product-card-wrapper ${visibleProducts.includes(product.id) ? 'visible' : ''}`}
+                style={{ '--animation-order': index }}
+              >
+                <ProductCard product={product} index={index} />
+              </div>
             ))
           ) : (
             <div className="no-products">

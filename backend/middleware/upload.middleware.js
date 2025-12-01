@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         // Tạo tên file duy nhất: timestamp + tên gốc
-        cb(null, 'IMG-', Date.now() + path.extname(file.originalname));
+        cb(null, 'IMG-' + Date.now() + path.extname(file.originalname));
     }
 });
 

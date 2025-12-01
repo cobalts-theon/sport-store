@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../lib/api";    
 import toast from "react-hot-toast";    //Dùng thư viện toast để hiển thị thông báo đẹp hơn
+import axios from "axios";
 import { FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa';
 import logo from '/src/assets/image/white-logo.png';
 import "./pages-style/login.css";
 import Silk from '../components/Silk';
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
     const navigate = useNavigate();
@@ -65,6 +67,42 @@ function Login() {
             toast.error(error.response?.data?.message || 'Login failed. Please try again.');
         }
     };
+
+    //Loggin with Google
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            try {
+                //Lấy thông tin user từ Google APi = assces_token
+                const userInfo = await axios.get(
+                    'https://www.googleapis.com/oauth2/v3/userinfo',
+                    { headers: { Authorization: `Bearer ${tokenResponse.access_token}` }}
+                )
+
+                //Gửi thông tin user lên backend
+                const res = await api.post('/users/google-login', {
+                    email: userInfo.data.email,
+                    name: userInfo.data.name,
+                    avatar: userInfo.data.picture
+                });
+
+                //Xử lý phản hồi từ backend đăng nhập thành công (giống login thường)
+                if (res.data.token) {
+                    localStorage.setItem('token', res.data.token);
+                    localStorage.setItem('user', JSON.stringify(res.data.user));
+                    toast.success('Login with Google successful!');
+
+                    if (res.data.user.role === 'admin') {
+                        navigate('/admin');
+                    } else {
+                        navigate('/');
+                    }
+                }
+            } catch (error) {
+                console.error('Google Login error:', error);
+                toast.error(error.response?.data?.message || 'Google Login failed. Please try again.');
+            }
+        } 
+    })
 
     const handleSocialLogin = (provider) => {
         console.log(`Login with ${provider}`);
@@ -153,9 +191,21 @@ function Login() {
                         </div>
                         
                         <div className="social-login">
+                            {/* <div className="google-login-wrapper" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                <GoogleLogin
+                                    onSuccess={onGoogleSuccess}
+                                    onError={() => {
+                                        toast.error('Google Login failed. Please try again.');
+                                    }}
+                                    useOneTap
+                                    theme="filled_black"    // "outline", "filled_blue", "filled_black"
+                                    text="signin_with"
+                                    width="100%"
+                                />
+                            </div> */}
                             <button 
                                 className="social-btn google"
-                                onClick={() => handleSocialLogin('Google')}
+                                onClick={() => loginWithGoogle()}
                                 type="button"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">

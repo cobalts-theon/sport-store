@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import {Router, Routes, Route, Link, useLocation} from "react-router-dom"
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom"
 import { Toaster } from 'react-hot-toast'
 //Components
 import Header from './components/navbar'
@@ -112,7 +112,11 @@ function AppContent() {
 }
 
 function App() {
-  return <AppContent />
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  )
 }
 
 export default App

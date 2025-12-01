@@ -292,6 +292,44 @@
     color: black;
 }
 
+/* User Avatar in Navbar */
+.nav-user-avatar {
+    width: 32px;
+    height: 32px;
+    margin: -10px;
+    margin-right: 40px;
+    margin-left: 2px;
+    object-fit: cover;
+    border: 1px solid #D0FE1D;
+    transform: skewX(25deg);
+    transition: all 0.3s ease;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.nav-user-link:hover .nav-user-avatar {
+    border-color: #fff;
+}
+
+.nav-user-link.active .nav-user-avatar {
+    border-color: #000;
+    box-shadow: 0 0 15px rgba(208, 254, 29, 0.8);
+}
+
+/* Mobile User Avatar */
+.mobile-user-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #D0FE1D;
+}
+
 .music-button {
     left: 78%;
     padding: 5px 15px;

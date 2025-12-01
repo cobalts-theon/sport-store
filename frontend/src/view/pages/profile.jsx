@@ -4,6 +4,7 @@ import api from '../../lib/api';
 import toast from 'react-hot-toast';
 import { FaUser, FaBoxOpen, FaLock, FaSignOutAlt, FaCamera, FaSave, FaPhone, FaMapMarkerAlt, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
 import './pages-style/profile.css';
+import Silk from '/src/view/components/Silk';
 
 // Default avatar as inline SVG data URI - no external request needed
 const DEFAULT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect fill='%23374151' width='120' height='120'/%3E%3Ccircle cx='60' cy='45' r='25' fill='%239CA3AF'/%3E%3Cellipse cx='60' cy='110' rx='40' ry='35' fill='%239CA3AF'/%3E%3C/svg%3E";
@@ -105,8 +106,10 @@ const Profile = () => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             toast.success("Profile updated successfully!");
-            // Cập nhật lại localStorage để các component khác (như Header) cập nhật theo
+            // Cập nhật lại localStorage để các component khác (như Navbar) cập nhật theo
             localStorage.setItem('user', JSON.stringify(res.data.user));
+            // Dispatch custom event để navbar cập nhật avatar
+            window.dispatchEvent(new Event('userUpdated'));
         } catch (error) {
             toast.error("Failed to update profile!");
         }
@@ -115,6 +118,8 @@ const Profile = () => {
     // --- LOGIC ĐỔI MẬT KHẨU ---
     const handleChangePassword = async (e) => {
         e.preventDefault();
+
+        // Kiểm tra xác nhận mật khẩu
         if (passData.newPassword !== passData.confirmPassword) {
             return toast.error("Passwords do not match!");
         }
@@ -122,10 +127,13 @@ const Profile = () => {
             return toast.error("Password must be at least 6 characters!");
         }
         try {
+
+            // Gọi API đổi mật khẩu
             await api.put('/users/profile/password', {
                 currentPassword: passData.currentPassword,
                 newPassword: passData.newPassword
             });
+            //
             toast.success("Password changed successfully!");
             setPassData({ currentPassword: '', newPassword: '', confirmPassword: '' });
         } catch (error) {
@@ -149,6 +157,15 @@ const Profile = () => {
 
     return (
         <div className="profile-page">
+            <div className="silk-container-profile">
+                <Silk
+                    speed={10}
+                    scale={1}
+                    color="#7c81745c"
+                    noiseIntensity={2}
+                    rotation={0}
+                />
+            </div>
             <div className="profile-container">
                 {/* --- SIDEBAR --- */}
                 <div className="profile-sidebar">
@@ -321,73 +338,84 @@ const Profile = () => {
                                 <p>To keep your account secure, please do not share your password with others</p>
                             </div>
 
-                            <form onSubmit={handleChangePassword} style={{ maxWidth: '450px' }}>
-                                <div className="form-group-profile">
-                                    <label><FaLock /> Current Password</label>
-                                    <div className="password-input-wrapper">
-                                        <input 
-                                            type={showCurrentPass ? 'text' : 'password'}
-                                            value={passData.currentPassword}
-                                            onChange={e => setPassData({...passData, currentPassword: e.target.value})}
-                                            placeholder="Enter current password"
-                                            required
-                                        />
-                                        <button 
-                                            type="button" 
-                                            className="toggle-password"
-                                            onClick={() => setShowCurrentPass(!showCurrentPass)}
-                                        >
-                                            {showCurrentPass ? <FaEyeSlash /> : <FaEye />}
-                                        </button>
+                            <div className="password-section">
+                                <form onSubmit={handleChangePassword} className="password-form">
+                                    <div className="form-group-profile">
+                                        <label><FaLock /> Current Password</label>
+                                        <div className="password-input-wrapper">
+                                            <input 
+                                                type={showCurrentPass ? 'text' : 'password'}
+                                                value={passData.currentPassword}
+                                                onChange={e => setPassData({...passData, currentPassword: e.target.value})}
+                                                placeholder="Enter your current password"
+                                                required
+                                            />
+                                            <button 
+                                                type="button" 
+                                                className="toggle-password"
+                                                onClick={() => setShowCurrentPass(!showCurrentPass)}
+                                            >
+                                                {showCurrentPass ? <FaEyeSlash /> : <FaEye />}
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="form-group-profile">
-                                    <label><FaLock /> New Password</label>
-                                    <div className="password-input-wrapper">
-                                        <input 
-                                            type={showNewPass ? 'text' : 'password'}
-                                            value={passData.newPassword}
-                                            onChange={e => setPassData({...passData, newPassword: e.target.value})}
-                                            placeholder="Enter new password (min 6 characters)"
-                                            required
-                                            minLength={6}
-                                        />
-                                        <button 
-                                            type="button" 
-                                            className="toggle-password"
-                                            onClick={() => setShowNewPass(!showNewPass)}
-                                        >
-                                            {showNewPass ? <FaEyeSlash /> : <FaEye />}
-                                        </button>
+                                    <div className="form-group-profile">
+                                        <label><FaLock /> New Password</label>
+                                        <div className="password-input-wrapper">
+                                            <input 
+                                                type={showNewPass ? 'text' : 'password'}
+                                                value={passData.newPassword}
+                                                onChange={e => setPassData({...passData, newPassword: e.target.value})}
+                                                placeholder="Enter new password"
+                                                required
+                                                minLength={6}
+                                            />
+                                            <button 
+                                                type="button" 
+                                                className="toggle-password"
+                                                onClick={() => setShowNewPass(!showNewPass)}
+                                            >
+                                                {showNewPass ? <FaEyeSlash /> : <FaEye />}
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="form-group-profile">
-                                    <label><FaLock /> Confirm New Password</label>
-                                    <div className="password-input-wrapper">
-                                        <input 
-                                            type={showConfirmPass ? 'text' : 'password'}
-                                            value={passData.confirmPassword}
-                                            onChange={e => setPassData({...passData, confirmPassword: e.target.value})}
-                                            placeholder="Re-enter new password"
-                                            required
-                                            minLength={6}
-                                        />
-                                        <button 
-                                            type="button" 
-                                            className="toggle-password"
-                                            onClick={() => setShowConfirmPass(!showConfirmPass)}
-                                        >
-                                            {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
-                                        </button>
+                                    <div className="form-group-profile">
+                                        <label><FaLock /> Confirm New Password</label>
+                                        <div className="password-input-wrapper">
+                                            <input 
+                                                type={showConfirmPass ? 'text' : 'password'}
+                                                value={passData.confirmPassword}
+                                                onChange={e => setPassData({...passData, confirmPassword: e.target.value})}
+                                                placeholder="Re-enter new password"
+                                                required
+                                                minLength={6}
+                                            />
+                                            <button 
+                                                type="button" 
+                                                className="toggle-password"
+                                                onClick={() => setShowConfirmPass(!showConfirmPass)}
+                                            >
+                                                {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <button type="submit" className="btn-save">
-                                    <FaLock /> Change Password
-                                </button>
-                            </form>
+                                    <div className="password-requirements">
+                                        <p>Password Requirements:</p>
+                                        <ul>
+                                            <li>At least 6 characters long</li>
+                                            <li>Use a mix of letters and numbers</li>
+                                            <li>Avoid using common passwords</li>
+                                        </ul>
+                                    </div>
+
+                                    <button type="submit" className="btn-save">
+                                        <FaLock /> Change Password
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     )}
                 </div>

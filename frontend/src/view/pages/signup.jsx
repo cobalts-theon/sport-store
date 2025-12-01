@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { data, Link, useNavigate } from "react-router-dom";
 import api from "../../lib/api";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 import toast from "react-hot-toast";
 import { FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa';
 import logo from '/src/assets/image/white-logo.png';
@@ -43,6 +45,46 @@ function Signup() {
             [name]: value
         }));
     };
+
+    //Đăng ký = google OAuth
+    const signupWithGoogle = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            try {
+                // Lấy thông tin người dùng từ Google
+                const userInfo = await axios.get(
+                    'https://www.googleapis.com/oauth2/v3/userinfo',
+                    { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
+                );
+
+                // Gửi thông tin người dùng đến backend để đăng ký hoặc đăng nhập
+                const res = await api.post('/users/google-login', {
+                    email: userInfo.data.email,
+                    name: userInfo.data.name,
+                    googleId: userInfo.data.sub
+                });
+
+                //Đăng nhập luôn sau khi đăng ký thành công :3
+                if(res.data.token) {
+                    localStorage.setItem('token', res.data.token);
+                    localStorage.setItem('user', JSON.stringify(res.data.user));
+
+                    toast.success("Signup successful! Welcome to Prime Souls.");
+                    if (res.data.user.role === 'admin') {
+                        navigate('/admin');
+                    } else {
+                        navigate('/');
+                    }
+                }
+            } catch (error) {
+                console.error("Google Signup Error:", error);
+                const message = error.response?.data?.message || "Google Signup failed. Please try again.";
+                toast.error(message);
+            }
+        },
+        onError: () => {
+            toast.error("Google Signup Failed");
+        }
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -183,7 +225,7 @@ function Signup() {
                         <div className="social-login">
                             <button 
                                 className="social-btn google"
-                                onClick={() => handleSocialSignup('Google')}
+                                onClick={() => signupWithGoogle()}
                                 type="button"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">

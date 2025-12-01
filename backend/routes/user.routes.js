@@ -1,6 +1,6 @@
 import express from 'express';
 import upload from '../middleware/upload.middleware.js';
-import { getAllUsers, deleteUser, getProfile, register, login, sendVerificationCode, verifyCode, resetPassword, updateProfile, changePassword } from '../controllers/user.controller.js';
+import { getAllUsers, deleteUser, getProfile, register, login, sendVerificationCode, verifyCode, resetPassword, updateProfile, changePassword, googleLogin } from '../controllers/user.controller.js';
 import { verifyToken, isAdmin } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -8,6 +8,9 @@ const router = express.Router();
 //routes login và register được đặt trong user.controller.js public
 router.post('/register', register);
 router.post('/login', login);
+
+// Route đăng nhập bằng Google OAuth
+router.post('/google-login', googleLogin);
 
 // Gửi mã xác thực đến email người dùng
 router.post('/forgot-password', sendVerificationCode);

@@ -318,6 +318,50 @@
   color: #666;
 }
 
+/* Product Card Animation Wrapper */
+.product-card-wrapper {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.product-card-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.product-card-wrapper:not(.visible)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(208, 254, 29, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+/* Hover effect enhancement sau khi load */
+.product-card-wrapper.visible:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
 /* Responsive Design */
 @media (max-width: 1400px) {
   .products-grid {

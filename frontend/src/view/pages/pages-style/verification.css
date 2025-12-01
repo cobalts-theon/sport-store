@@ -177,6 +177,81 @@
     text-decoration: underline;
 }
 
+/* Reset Password Form - Style giống Login */
+.reset-password-form {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.verification-page .form-group-authen {
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.verification-page .form-group-authen input {
+    font-family: 'JetBrains Mono', monospace;
+    width: 85%;
+    padding: 13px 16px;
+    padding-right: 45px;
+    background: rgba(101, 76, 76, 0);
+    border: none;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.verification-page .form-group-authen input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.verification-page .form-group-authen input:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom-color: #D0FE1D;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.3s ease;
+}
+
+.password-toggle-icon:hover {
+    color: #D0FE1D;
+}
+
+.verification-submit-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: #D0FE1D;
+    color: #000000;
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+
+.verification-submit-btn:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(208, 254, 29, 0.3);
+}
+
+.verification-submit-btn:active {
+    transform: translateY(0);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .verification-container {
