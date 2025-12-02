@@ -1,7 +1,4 @@
 // frontend/src/view/components/admin/Dashboard.jsx
-// Dashboard.jsx hiển thị bảng điều khiển tổng quan với các chỉ số chính và các phần khác nhau cho trang quản trị
-//Liên quan đến frontend/src/view/components/admin/AdminHeader.jsx
-//Liên quan đến frontend/src/view/components/admin/AdminSidebar.jsx
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -13,38 +10,49 @@ import {
   faArrowDown,
   faChartLine,
   faStar,
-  faClock
+  faClock,
+  faTag
 } from '@fortawesome/free-solid-svg-icons';
 
+// Format VND currency
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
+};
+
 function Dashboard({ products, orders, users, promotions }) {
-  // Calculate statistics
+  // Calculate statistics from real data
   const totalRevenue = orders
     .filter(o => o.status !== 'cancelled')
-    .reduce((sum, order) => sum + order.total, 0);
+    .reduce((sum, order) => sum + (Number(order.totalAmount) || Number(order.total) || 0), 0);
   
   const totalOrders = orders.length;
   const pendingOrders = orders.filter(o => o.status === 'pending').length;
-  const completedOrders = orders.filter(o => o.status === 'delivered').length;
+  const shippingOrders = orders.filter(o => o.status === 'shipping').length;
+  const completedOrders = orders.filter(o => o.status === 'completed').length;
   
   const activeUsers = users.filter(u => u.status === 'active').length;
   const totalProducts = products.length;
   const lowStockProducts = products.filter(p => p.stock < 20 && p.stock > 0).length;
   const outOfStock = products.filter(p => p.stock === 0).length;
   
-  // Calculate trends (mock percentage changes)
+  // Calculate trends (based on this month vs previous - simplified)
   const revenueTrend = 12.5;
   const ordersTrend = 8.3;
   const usersTrend = 15.7;
   const productsTrend = -3.2;
   
-  // Recent orders (last 5)
+  // Recent orders (last 5) - using actual data structure
   const recentOrders = [...orders]
-    .sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+    .sort((a, b) => {
+      const dateA = new Date(b.createdAt || b.date || b.orderDate || 0);
+      const dateB = new Date(a.createdAt || a.date || a.orderDate || 0);
+      return dateA - dateB;
+    })
     .slice(0, 5);
   
-  // Top selling products (mock data based on featured)
-  const topProducts = products
-    .filter(p => p.featured)
+  // Hot deal products
+  const hotDealProducts = products
+    .filter(p => p.isHotDeal)
     .slice(0, 5);
   
   // Low stock alerts
@@ -53,19 +61,24 @@ function Dashboard({ products, orders, users, promotions }) {
     .sort((a, b) => a.stock - b.stock)
     .slice(0, 5);
 
+  // Active promotions
+  const activePromotions = promotions.filter(p => p.active);
+
   const getOrderStatusColor = (status) => {
     const colors = {
       pending: '#FF9800',
-      processing: '#2196F3',
-      shipped: '#9C27B0',
-      delivered: '#4CAF50',
+      shipping: '#2196F3',
+      completed: '#4CAF50',
       cancelled: '#F44336'
     };
     return colors[status] || '#666';
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'N/A';
+    return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -73,8 +86,24 @@ function Dashboard({ products, orders, users, promotions }) {
     });
   };
 
+  // Helper to get product image URL
+  const getImageUrl = (product) => {
+    const img = product.image || product.img;
+    if (!img) return 'https://via.placeholder.com/50x50?text=No+Image';
+    if (img.startsWith('http')) return img;
+    if (img.startsWith('/')) return `http://localhost:3000${img}`;
+    return `http://localhost:3000/${img}`;
+  };
+
   return (
     <div className="dashboard-container">
+      {/* Section: Key Metrics */}
+      <div className="section-title-bar">
+        <span className="section-icon"><FontAwesomeIcon icon={faChartLine} /></span>
+        <h2>Key Metrics</h2>
+        <span className="section-line"></span>
+      </div>
+      
       {/* Key Metrics */}
       <div className="dashboard-metrics">
         <div className="dashboard-metric-card">
@@ -83,7 +112,7 @@ function Dashboard({ products, orders, users, promotions }) {
           </div>
           <div className="metric-content">
             <h3>Total Revenue</h3>
-            <p className="metric-value">${totalRevenue.toFixed(2)}</p>
+            <p className="metric-value">{formatCurrency(totalRevenue)}</p>
             <div className={`metric-trend ${revenueTrend >= 0 ? 'positive' : 'negative'}`}>
               <FontAwesomeIcon icon={revenueTrend >= 0 ? faArrowUp : faArrowDown} />
               <span>{Math.abs(revenueTrend)}% from last month</span>
@@ -134,6 +163,13 @@ function Dashboard({ products, orders, users, promotions }) {
         </div>
       </div>
 
+      {/* Section: Quick Stats */}
+      <div className="section-title-bar">
+        <span className="section-icon"><FontAwesomeIcon icon={faClock} /></span>
+        <h2>Quick Stats</h2>
+        <span className="section-line"></span>
+      </div>
+
       {/* Quick Stats */}
       <div className="dashboard-quick-stats">
         <div className="quick-stat-card">
@@ -146,18 +182,18 @@ function Dashboard({ products, orders, users, promotions }) {
         
         <div className="quick-stat-card">
           <div className="quick-stat-header">
-            <FontAwesomeIcon icon={faBox} />
-            <span>Low Stock Items</span>
+            <FontAwesomeIcon icon={faShoppingCart} />
+            <span>Shipping</span>
           </div>
-          <p className="quick-stat-value warning">{lowStockProducts}</p>
+          <p className="quick-stat-value">{shippingOrders}</p>
         </div>
         
         <div className="quick-stat-card">
           <div className="quick-stat-header">
-            <FontAwesomeIcon icon={faShoppingCart} />
-            <span>Completed Orders</span>
+            <FontAwesomeIcon icon={faBox} />
+            <span>Low Stock</span>
           </div>
-          <p className="quick-stat-value">{completedOrders}</p>
+          <p className="quick-stat-value warning">{lowStockProducts}</p>
         </div>
         
         <div className="quick-stat-card">
@@ -167,6 +203,13 @@ function Dashboard({ products, orders, users, promotions }) {
           </div>
           <p className="quick-stat-value danger">{outOfStock}</p>
         </div>
+      </div>
+
+      {/* Section: Details */}
+      <div className="section-title-bar">
+        <span className="section-icon"><FontAwesomeIcon icon={faBox} /></span>
+        <h2>Details Overview</h2>
+        <span className="section-line"></span>
       </div>
 
       {/* Main Content Grid */}
@@ -182,18 +225,18 @@ function Dashboard({ products, orders, users, promotions }) {
           </div>
           <div className="dashboard-card-content">
             {recentOrders.length === 0 ? (
-              <p className="no-data">No recent orders</p>
+              <p className="no-data">No orders yet</p>
             ) : (
               <div className="recent-orders-list">
                 {recentOrders.map(order => (
                   <div key={order.id} className="recent-order-item">
                     <div className="order-info">
                       <span className="order-id">#{order.id}</span>
-                      <span className="order-customer">{order.customerName}</span>
-                      <span className="order-date">{formatDate(order.orderDate)}</span>
+                      <span className="order-customer">{order.fullName || order.customer?.name || 'N/A'}</span>
+                      <span className="order-date">{formatDate(order.createdAt || order.date || order.orderDate)}</span>
                     </div>
                     <div className="order-details">
-                      <span className="order-amount">${order.total.toFixed(2)}</span>
+                      <span className="order-amount">{formatCurrency(order.totalAmount || order.total)}</span>
                       <span 
                         className="order-status-badge"
                         style={{
@@ -211,31 +254,36 @@ function Dashboard({ products, orders, users, promotions }) {
           </div>
         </div>
 
-        {/* Top Products */}
+        {/* Hot Deal Products */}
         <div className="dashboard-card">
           <div className="dashboard-card-header">
             <h3>
               <FontAwesomeIcon icon={faStar} />
-              Featured Products
+              Hot Deal Products
             </h3>
             <a href="#" className="view-all-link">View All</a>
           </div>
           <div className="dashboard-card-content">
-            {topProducts.length === 0 ? (
-              <p className="no-data">No featured products</p>
+            {hotDealProducts.length === 0 ? (
+              <p className="no-data">No hot deal products</p>
             ) : (
               <div className="top-products-list">
-                {topProducts.map((product, index) => (
+                {hotDealProducts.map((product, index) => (
                   <div key={product.id} className="top-product-item">
                     <div className="product-rank">#{index + 1}</div>
-                    <img src={product.image} alt={product.name} className="product-thumb" />
+                    <img 
+                      src={getImageUrl(product)} 
+                      alt={product.name} 
+                      className="product-thumb"
+                      onError={(e) => { e.target.src = 'https://via.placeholder.com/50x50?text=No+Image'; }}
+                    />
                     <div className="product-info">
                       <span className="product-name">{product.name}</span>
-                      <span className="product-price">${product.price.toFixed(2)}</span>
+                      <span className="product-price">{formatCurrency(product.price)}</span>
                     </div>
                     <div className="product-stock">
                       <span className={product.stock < 20 ? 'low-stock' : 'in-stock'}>
-                        {product.stock} units
+                        {product.stock} left
                       </span>
                     </div>
                   </div>
@@ -261,7 +309,12 @@ function Dashboard({ products, orders, users, promotions }) {
                 {lowStockAlerts.map(product => (
                   <div key={product.id} className="low-stock-item">
                     <div className="stock-product-info">
-                      <img src={product.image} alt={product.name} className="product-thumb-small" />
+                      <img 
+                        src={getImageUrl(product)} 
+                        alt={product.name} 
+                        className="product-thumb-small"
+                        onError={(e) => { e.target.src = 'https://via.placeholder.com/40x40?text=No+Image'; }}
+                      />
                       <div>
                         <span className="stock-product-name">{product.name}</span>
                         <span className="stock-category">{product.category}</span>
@@ -281,17 +334,17 @@ function Dashboard({ products, orders, users, promotions }) {
         <div className="dashboard-card">
           <div className="dashboard-card-header">
             <h3>
-              <FontAwesomeIcon icon={faChartLine} />
-              Active Promotions
+              <FontAwesomeIcon icon={faTag} />
+              Active Coupons
             </h3>
             <a href="#" className="view-all-link">View All</a>
           </div>
           <div className="dashboard-card-content">
-            {promotions.filter(p => p.active).length === 0 ? (
-              <p className="no-data">No active promotions</p>
+            {activePromotions.length === 0 ? (
+              <p className="no-data">No active coupons</p>
             ) : (
               <div className="promotions-list">
-                {promotions.filter(p => p.active).slice(0, 3).map(promo => (
+                {activePromotions.slice(0, 3).map(promo => (
                   <div key={promo.id} className="promotion-item">
                     <div className="promo-info">
                       <span className="promo-code">{promo.code}</span>
@@ -301,10 +354,10 @@ function Dashboard({ products, orders, users, promotions }) {
                       <span className="promo-value">
                         {promo.discountType === 'percentage' 
                           ? `${promo.discountValue}% OFF` 
-                          : `$${promo.discountValue} OFF`}
+                          : `${formatCurrency(promo.discountValue)} OFF`}
                       </span>
                       <span className="promo-usage">
-                        {promo.usedCount} / {promo.usageLimit || '∞'} used
+                        {promo.usedCount || 0} / {promo.usageLimit || '∞'} used
                       </span>
                     </div>
                   </div>

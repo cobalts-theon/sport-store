@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -10,7 +10,15 @@ import {
   faPhone,
   faLock,
   faChevronRight,
-    faChevronLeft
+  faChevronLeft,
+  faTag,
+  faTimes,
+  faCheck,
+  faSpinner,
+  faGift,
+  faPercent,
+  faChevronDown,
+  faChevronUp
 } from '@fortawesome/free-solid-svg-icons';
 import './pages-style/checkout.css';
 import { useCart } from '../context/CartContext';
@@ -23,6 +31,15 @@ function Checkout() {
   const [step, setStep] = useState(1); // 1: Shipping, 2: Payment, 3: Review
   const { cartItems, getCartTotal, clearCart } = useCart();
   const [placing, setPlacing] = useState(false);
+  
+  // Coupon state
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState('');
+  const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [showCoupons, setShowCoupons] = useState(false);
+  const [loadingCoupons, setLoadingCoupons] = useState(false);
   
   const [shippingInfo, setShippingInfo] = useState({
     fullName: '',
@@ -45,10 +62,100 @@ function Checkout() {
   const subtotal = getCartTotal();
   const shipping = 30000;
   const tax = 0;
-  const total = subtotal + shipping + tax;
+  const discount = appliedCoupon ? appliedCoupon.discountAmount : 0;
+  const total = subtotal + shipping + tax - discount;
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+  };
+
+  // Apply coupon handler
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError('Please enter a coupon code');
+      return;
+    }
+    
+    setCouponLoading(true);
+    setCouponError('');
+    
+    try {
+      const res = await api.post('/coupons/apply', {
+        code: couponCode.toUpperCase(),
+        orderTotal: subtotal
+      });
+      
+      setAppliedCoupon({
+        code: res.data.code,
+        discountAmount: res.data.discountAmount,
+        newTotal: res.data.newTotal
+      });
+      setCouponCode('');
+      toast.success(`Coupon applied! You saved ${formatCurrency(res.data.discountAmount)}`);
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Failed to apply coupon';
+      setCouponError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  // Remove coupon handler
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError('');
+    toast.success('Coupon removed');
+  };
+
+  // Fetch available coupons
+  useEffect(() => {
+    const fetchAvailableCoupons = async () => {
+      setLoadingCoupons(true);
+      try {
+        const res = await api.get('/coupons/available');
+        setAvailableCoupons(res.data);
+      } catch (error) {
+        console.error('Error fetching coupons:', error);
+      } finally {
+        setLoadingCoupons(false);
+      }
+    };
+    fetchAvailableCoupons();
+  }, []);
+
+  // Quick apply coupon from list
+  const handleQuickApplyCoupon = async (coupon) => {
+    if (subtotal < coupon.minOrderAmount) {
+      toast.error(`Minimum order ${formatCurrency(coupon.minOrderAmount)} required for this coupon`);
+      return;
+    }
+    
+    setCouponCode(coupon.code);
+    setCouponLoading(true);
+    setCouponError('');
+    
+    try {
+      const res = await api.post('/coupons/apply', {
+        code: coupon.code,
+        orderTotal: subtotal
+      });
+      
+      setAppliedCoupon({
+        code: res.data.code,
+        discountAmount: res.data.discountAmount,
+        newTotal: res.data.newTotal
+      });
+      setCouponCode('');
+      setShowCoupons(false);
+      toast.success(`Coupon applied! You saved ${formatCurrency(res.data.discountAmount)}`);
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Failed to apply coupon';
+      setCouponError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setCouponLoading(false);
+    }
   };
 
   const handleShippingSubmit = (e) => {
@@ -76,7 +183,12 @@ function Checkout() {
           phone: shippingInfo.phone,
           address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state}, ${shippingInfo.zipCode}, ${shippingInfo.country}`,
           cartItems: cartItems.map(ci => ({ id: ci.id, quantity: ci.quantity })),
-          userId: null
+          userId: null,
+          subtotal: subtotal,
+          shippingFee: shipping,
+          discount: discount,
+          couponCode: appliedCoupon ? appliedCoupon.code : null,
+          totalAmount: total
         };
 
         // attach userId if present in localStorage
@@ -402,6 +514,120 @@ function Checkout() {
 
             <div className="summary-divider"></div>
 
+            {/* Coupon Section */}
+            <div className="coupon-section">
+              <h4><FontAwesomeIcon icon={faTag} /> Discount Code</h4>
+              {appliedCoupon ? (
+                <div className="applied-coupon">
+                  <div className="coupon-info">
+                    <FontAwesomeIcon icon={faCheck} className="coupon-success-icon" />
+                    <span className="coupon-code-applied">{appliedCoupon.code}</span>
+                    <span className="coupon-discount">-{formatCurrency(appliedCoupon.discountAmount)}</span>
+                  </div>
+                  <button className="remove-coupon-btn" onClick={handleRemoveCoupon}>
+                    <FontAwesomeIcon icon={faTimes} />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="coupon-input-group">
+                    <input
+                      type="text"
+                      placeholder="Enter coupon code"
+                      value={couponCode}
+                      onChange={(e) => {
+                        setCouponCode(e.target.value.toUpperCase());
+                        setCouponError('');
+                      }}
+                      onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                      className={couponError ? 'error' : ''}
+                    />
+                    <button 
+                      className="apply-coupon-btn" 
+                      onClick={handleApplyCoupon}
+                      disabled={couponLoading}
+                    >
+                      {couponLoading ? (
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                      ) : (
+                        'Apply'
+                      )}
+                    </button>
+                  </div>
+                  
+                  {/* Available Coupons Toggle */}
+                  {availableCoupons.length > 0 && (
+                    <div className="available-coupons-section">
+                      <button 
+                        className="show-coupons-btn"
+                        onClick={() => setShowCoupons(!showCoupons)}
+                      >
+                        <FontAwesomeIcon icon={faGift} />
+                        <span>View available coupons ({availableCoupons.length})</span>
+                        <FontAwesomeIcon icon={showCoupons ? faChevronUp : faChevronDown} />
+                      </button>
+                      
+                      {showCoupons && (
+                        <div className="coupons-list">
+                          {loadingCoupons ? (
+                            <div className="coupons-loading">
+                              <FontAwesomeIcon icon={faSpinner} spin /> Loading...
+                            </div>
+                          ) : (
+                            availableCoupons.map(coupon => {
+                              const isEligible = subtotal >= coupon.minOrderAmount;
+                              const discountText = coupon.discountType === 'percent' 
+                                ? `${coupon.discountValue}% OFF`
+                                : `${formatCurrency(coupon.discountValue)} OFF`;
+                              
+                              return (
+                                <div 
+                                  key={coupon.id} 
+                                  className={`coupon-card ${!isEligible ? 'disabled' : ''}`}
+                                  onClick={() => isEligible && handleQuickApplyCoupon(coupon)}
+                                >
+                                  <div className="coupon-card-left">
+                                    <div className="coupon-card-icon">
+                                      <FontAwesomeIcon icon={faPercent} />
+                                    </div>
+                                  </div>
+                                  <div className="coupon-card-content">
+                                    <div className="coupon-card-code">{coupon.code}</div>
+                                    <div className="coupon-card-discount">{discountText}</div>
+                                    <div className="coupon-card-condition">
+                                      {coupon.minOrderAmount > 0 
+                                        ? `Min order: ${formatCurrency(coupon.minOrderAmount)}`
+                                        : 'No minimum order'
+                                      }
+                                    </div>
+                                    {!isEligible && (
+                                      <div className="coupon-card-warning">
+                                        Add {formatCurrency(coupon.minOrderAmount - subtotal)} more to use
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="coupon-card-action">
+                                    {isEligible ? (
+                                      <span className="use-btn">Use</span>
+                                    ) : (
+                                      <FontAwesomeIcon icon={faLock} className="locked-icon" />
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+              {couponError && <p className="coupon-error">{couponError}</p>}
+            </div>
+
+            <div className="summary-divider"></div>
+
             <div className="summary-totals">
               <div className="summary-row">
                 <span>Subtotal</span>
@@ -415,6 +641,12 @@ function Checkout() {
                 <span>Tax</span>
                 <span>{formatCurrency(tax)}</span>
               </div>
+              {appliedCoupon && (
+                <div className="summary-row discount">
+                  <span>Discount ({appliedCoupon.code})</span>
+                  <span className="discount-amount">-{formatCurrency(discount)}</span>
+                </div>
+              )}
               <div className="summary-divider"></div>
               <div className="summary-row total">
                 <span>Total</span>

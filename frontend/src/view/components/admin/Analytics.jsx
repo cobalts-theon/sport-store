@@ -1,4 +1,4 @@
-// Analytics.jsx hiển thị bảng điều khiển phân tích với các chỉ số hiệu suất chính và biểu đồ cho trang quản trị
+// Analytics.jsx - Admin analytics dashboard with key performance indicators and charts
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -18,13 +18,22 @@ import {
   faPercent
 } from '@fortawesome/free-solid-svg-icons';
 
+// Format VND currency
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
+};
+
+// Month names for the chart
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 function Analytics({ products, orders, users }) {
   const [timeRange, setTimeRange] = useState('30days');
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   
-  // Calculate analytics data
+  // Calculate analytics data from real data
   const totalRevenue = orders
     .filter(o => o.status !== 'cancelled')
-    .reduce((sum, order) => sum + order.total, 0);
+    .reduce((sum, order) => sum + (Number(order.totalAmount) || Number(order.total) || 0), 0);
   
   const avgOrderValue = orders.length > 0 ? totalRevenue / orders.length : 0;
   
@@ -32,54 +41,81 @@ function Analytics({ products, orders, users }) {
     ? ((orders.length / users.length) * 100).toFixed(1)
     : 0;
   
-  // Revenue by status
+  // Revenue by status - using actual status values
   const revenueByStatus = {
-    completed: orders.filter(o => o.status === 'delivered').reduce((s, o) => s + o.total, 0),
-    pending: orders.filter(o => o.status === 'pending').reduce((s, o) => s + o.total, 0),
-    processing: orders.filter(o => o.status === 'processing').reduce((s, o) => s + o.total, 0),
-    shipped: orders.filter(o => o.status === 'shipped').reduce((s, o) => s + o.total, 0)
+    completed: orders.filter(o => o.status === 'completed').reduce((s, o) => s + (Number(o.totalAmount) || Number(o.total) || 0), 0),
+    pending: orders.filter(o => o.status === 'pending').reduce((s, o) => s + (Number(o.totalAmount) || Number(o.total) || 0), 0),
+    shipping: orders.filter(o => o.status === 'shipping').reduce((s, o) => s + (Number(o.totalAmount) || Number(o.total) || 0), 0),
+    cancelled: orders.filter(o => o.status === 'cancelled').reduce((s, o) => s + (Number(o.totalAmount) || Number(o.total) || 0), 0)
   };
   
-  // Category analysis
+  // Category analysis from real products
   const categoryStats = products.reduce((acc, product) => {
-    if (!acc[product.category]) {
-      acc[product.category] = { count: 0, value: 0 };
+    const cat = product.category || 'Other';
+    if (!acc[cat]) {
+      acc[cat] = { count: 0, value: 0 };
     }
-    acc[product.category].count++;
-    acc[product.category].value += product.price * product.stock;
+    acc[cat].count++;
+    acc[cat].value += (product.price || 0) * (product.stock || 0);
     return acc;
   }, {});
   
-  // Customer segments
-  const customerSegments = {
-    vip: users.filter(u => u.totalSpent > 3000).length,
-    regular: users.filter(u => u.totalSpent >= 1000 && u.totalSpent <= 3000).length,
-    new: users.filter(u => u.totalSpent < 1000).length
+  // User segments based on role
+  const userSegments = {
+    admin: users.filter(u => u.role === 'admin').length,
+    active: users.filter(u => u.status === 'active' && u.role !== 'admin').length,
+    pending: users.filter(u => u.status === 'pending').length,
+    suspended: users.filter(u => u.status === 'suspended').length
   };
   
-  // Top customers
+  // Top customers (users with orders)
   const topCustomers = [...users]
-    .filter(u => u.totalSpent > 0)
-    .sort((a, b) => b.totalSpent - a.totalSpent)
+    .filter(u => u.role !== 'admin')
     .slice(0, 5);
   
-  // Sales by month (mock data)
-  const salesData = [
-    { month: 'Jan', sales: 12500, orders: 45 },
-    { month: 'Feb', sales: 15800, orders: 52 },
-    { month: 'Mar', sales: 18200, orders: 61 },
-    { month: 'Apr', sales: 16900, orders: 58 },
-    { month: 'May', sales: 21500, orders: 73 },
-    { month: 'Jun', sales: 24300, orders: 82 },
-    { month: 'Jul', sales: 22100, orders: 76 },
-    { month: 'Aug', sales: 25600, orders: 87 },
-    { month: 'Sep', sales: 23800, orders: 81 },
-    { month: 'Oct', sales: 27400, orders: 94 },
-    { month: 'Nov', sales: 29200, orders: 98 },
-    { month: 'Dec', sales: 0, orders: 0 }
-  ].filter(d => d.sales > 0);
+  // Get available years from orders
+  const availableYears = [...new Set(orders.map(order => {
+    const date = new Date(order.createdAt || order.date || order.orderDate);
+    return isNaN(date.getTime()) ? null : date.getFullYear();
+  }).filter(y => y !== null))].sort((a, b) => b - a);
   
-  const maxSales = Math.max(...salesData.map(d => d.sales));
+  // If no years available, use current year
+  if (availableYears.length === 0) {
+    availableYears.push(new Date().getFullYear());
+  }
+  
+  // Monthly sales data - show all 12 months for selected year
+  const salesData = monthNames.map((monthName, index) => {
+    const monthOrders = orders.filter(order => {
+      const date = new Date(order.createdAt || order.date || order.orderDate);
+      if (isNaN(date.getTime())) return false;
+      return date.getMonth() === index && date.getFullYear() === selectedYear;
+    });
+    
+    const sales = monthOrders.reduce((sum, o) => sum + (Number(o.totalAmount) || Number(o.total) || 0), 0);
+    const orderCount = monthOrders.length;
+    
+    return {
+      month: monthName,
+      monthIndex: index,
+      sales,
+      orders: orderCount
+    };
+  });
+  
+  const maxSales = Math.max(...salesData.map(d => d.sales), 1);
+  
+  // Calculate year total
+  const yearTotal = salesData.reduce((sum, d) => sum + d.sales, 0);
+
+  // Bar colors based on performance
+  const getBarColor = (sales, maxSales) => {
+    const percentage = (sales / maxSales) * 100;
+    if (percentage >= 80) return '#4CAF50'; // Green for high
+    if (percentage >= 50) return '#D0FE1D'; // Yellow-green for medium
+    if (percentage >= 25) return '#FF9800'; // Orange for low
+    return '#F44336'; // Red for very low
+  };
 
   return (
     <div className="analytics-container">
@@ -124,13 +160,18 @@ function Analytics({ products, orders, users }) {
       </div>
 
       {/* Key Performance Indicators */}
+      <div className="section-title-bar">
+        <span className="section-icon"><FontAwesomeIcon icon={faChartLine} /></span>
+        <h2>Key Performance Indicators</h2>
+        <span className="section-line"></span>
+      </div>
       <div className="analytics-kpi-grid">
         <div className="analytics-kpi-card">
           <div className="kpi-header">
             <span>Total Revenue</span>
             <FontAwesomeIcon icon={faDollarSign} />
           </div>
-          <p className="kpi-value">${totalRevenue.toFixed(2)}</p>
+          <p className="kpi-value">{formatCurrency(totalRevenue)}</p>
           <div className="kpi-trend positive">
             <FontAwesomeIcon icon={faArrowUp} />
             <span>+18.5% vs last period</span>
@@ -142,7 +183,7 @@ function Analytics({ products, orders, users }) {
             <span>Avg Order Value</span>
             <FontAwesomeIcon icon={faShoppingCart} />
           </div>
-          <p className="kpi-value">${avgOrderValue.toFixed(2)}</p>
+          <p className="kpi-value">{formatCurrency(avgOrderValue)}</p>
           <div className="kpi-trend positive">
             <FontAwesomeIcon icon={faArrowUp} />
             <span>+7.2% vs last period</span>
@@ -175,35 +216,81 @@ function Analytics({ products, orders, users }) {
       </div>
 
       {/* Charts Grid */}
+      <div className="section-title-bar">
+        <span className="section-icon"><FontAwesomeIcon icon={faChartBar} /></span>
+        <h2>Charts & Analysis</h2>
+        <span className="section-line"></span>
+      </div>
       <div className="analytics-charts-grid">
         {/* Sales Chart */}
         <div className="analytics-chart-card large">
           <div className="chart-header">
             <h3>
               <FontAwesomeIcon icon={faChartLine} />
-              Sales Overview
+              Sales Overview - {selectedYear}
             </h3>
-            <div className="chart-legend">
-              <span className="legend-item">
-                <span className="legend-color" style={{background: '#D0FE1D'}}></span>
-                Revenue
-              </span>
+            <div className="chart-controls">
+              <select 
+                className="year-selector"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
+              >
+                {availableYears.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+              <div className="chart-legend">
+                <span className="legend-item">
+                  <span className="legend-color" style={{background: '#D0FE1D'}}></span>
+                  Revenue
+                </span>
+              </div>
             </div>
           </div>
           <div className="chart-content">
-            <div className="bar-chart">
-              {salesData.map((data, index) => (
-                <div key={index} className="bar-group">
-                  <div className="bar-wrapper">
-                    <div 
-                      className="bar"
-                      style={{height: `${(data.sales / maxSales) * 100}%`}}
-                      title={`$${data.sales.toLocaleString()}`}
-                    ></div>
+            <div className="year-total">
+              <span className="year-total-label">Total {selectedYear}:</span>
+              <span className="year-total-value">{formatCurrency(yearTotal)}</span>
+            </div>
+            <div className={`bar-chart monthly-chart ${yearTotal > 0 ? 'has-data' : ''}`}>
+              {salesData.map((data, index) => {
+                // Calculate bar height - minimum 15% for bars with data, scale up rest
+                const baseHeight = maxSales > 0 ? (data.sales / maxSales) * 100 : 0;
+                const boostedHeight = data.sales > 0 ? Math.max(15, baseHeight * 1.2) : 0;
+                
+                return (
+                  <div key={index} className="bar-group">
+                    <div className="bar-value">
+                      {data.sales > 0 ? (
+                        data.sales >= 1000000 
+                          ? `${(data.sales / 1000000).toFixed(1)}M` 
+                          : `${(data.sales / 1000).toFixed(0)}K`
+                      ) : ''}
+                    </div>
+                    <div className="bar-wrapper">
+                      <div 
+                        className="bar"
+                        style={{
+                          height: `${Math.min(boostedHeight, 100)}%`,
+                          background: data.sales > 0 ? getBarColor(data.sales, maxSales) : 'rgba(255,255,255,0.1)',
+                          minHeight: data.sales > 0 ? '40px' : '2px'
+                        }}
+                        title={`${data.month} ${selectedYear}: ${formatCurrency(data.sales)} (${data.orders} orders)`}
+                      ></div>
+                    </div>
+                    <span className="bar-label">{data.month}</span>
+                    <span className="bar-orders">{data.orders > 0 ? `${data.orders}` : '-'}</span>
                   </div>
-                  <span className="bar-label">{data.month}</span>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+            <div className="chart-footer">
+              <div className="color-legend">
+                <span className="color-item"><span style={{background: '#4CAF50'}}></span> High</span>
+                <span className="color-item"><span style={{background: '#D0FE1D'}}></span> Medium</span>
+                <span className="color-item"><span style={{background: '#FF9800'}}></span> Low</span>
+                <span className="color-item"><span style={{background: '#F44336'}}></span> Very Low</span>
+              </div>
             </div>
           </div>
         </div>
@@ -223,8 +310,8 @@ function Analytics({ products, orders, users }) {
                   const colors = {
                     completed: '#4CAF50',
                     pending: '#FF9800',
-                    processing: '#2196F3',
-                    shipped: '#9C27B0'
+                    shipping: '#2196F3',
+                    cancelled: '#F44336'
                   };
                   let currentAngle = 0;
                   const radius = 80;
@@ -267,7 +354,7 @@ function Analytics({ products, orders, users }) {
                           opacity="0.9"
                           className="pie-path"
                         />
-                        <title>{`${status}: $${amount.toFixed(2)} (${percentage.toFixed(1)}%)`}</title>
+                        <title>{`${status}: ${formatCurrency(amount)} (${percentage.toFixed(1)}%)`}</title>
                       </g>
                     );
                   });
@@ -298,11 +385,13 @@ function Analytics({ products, orders, users }) {
                   y="110"
                   textAnchor="middle"
                   fill="#fff"
-                  fontSize="12"
+                  fontSize="10"
                   fontWeight="600"
                   fontFamily="JetBrains Mono, monospace"
                 >
-                  ${(totalRevenue / 1000).toFixed(1)}K
+                  {totalRevenue >= 1000000 
+                    ? `${(totalRevenue / 1000000).toFixed(1)}M` 
+                    : `${(totalRevenue / 1000).toFixed(0)}K`}
                 </text>
               </svg>
               
@@ -312,8 +401,14 @@ function Analytics({ products, orders, users }) {
                   const colors = {
                     completed: '#4CAF50',
                     pending: '#FF9800',
-                    processing: '#2196F3',
-                    shipped: '#9C27B0'
+                    shipping: '#2196F3',
+                    cancelled: '#F44336'
+                  };
+                  const statusLabels = {
+                    completed: 'Completed',
+                    pending: 'Pending',
+                    shipping: 'Shipping',
+                    cancelled: 'Cancelled'
                   };
                   return (
                     <div key={status} className="pie-legend-item">
@@ -322,8 +417,8 @@ function Analytics({ products, orders, users }) {
                         style={{ background: colors[status] }}
                       ></div>
                       <div className="pie-legend-info">
-                        <span className="pie-legend-status">{status}</span>
-                        <span className="pie-legend-value">${amount.toFixed(0)} ({percentage}%)</span>
+                        <span className="pie-legend-status">{statusLabels[status]}</span>
+                        <span className="pie-legend-value">{formatCurrency(amount)} ({percentage}%)</span>
                       </div>
                     </div>
                   );
@@ -343,27 +438,31 @@ function Analytics({ products, orders, users }) {
           </div>
           <div className="chart-content">
             <div className="category-stats">
-              {Object.entries(categoryStats).map(([category, stats]) => (
-                <div key={category} className="category-stat-item">
-                  <div className="category-info">
-                    <span className="category-name">{category}</span>
-                    <span className="category-count">{stats.count} products</span>
+              {Object.keys(categoryStats).length === 0 ? (
+                <p className="no-data">No category data available</p>
+              ) : (
+                Object.entries(categoryStats).map(([category, stats]) => (
+                  <div key={category} className="category-stat-item">
+                    <div className="category-info">
+                      <span className="category-name">{category}</span>
+                      <span className="category-count">{stats.count} products</span>
+                    </div>
+                    <div className="category-value">
+                      <span>{formatCurrency(stats.value)}</span>
+                    </div>
                   </div>
-                  <div className="category-value">
-                    <span>${stats.value.toFixed(0)}</span>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
 
-        {/* Customer Segments */}
+        {/* User Segments */}
         <div className="analytics-chart-card">
           <div className="chart-header">
             <h3>
               <FontAwesomeIcon icon={faUsers} />
-              Customer Segments
+              User Segments
             </h3>
           </div>
           <div className="chart-content">
@@ -373,30 +472,40 @@ function Analytics({ products, orders, users }) {
                   <FontAwesomeIcon icon={faStar} />
                 </div>
                 <div className="segment-info">
-                  <span className="segment-label">VIP Customers</span>
-                  <span className="segment-desc">$3000+ spent</span>
+                  <span className="segment-label">Administrators</span>
+                  <span className="segment-desc">Admin</span>
                 </div>
-                <span className="segment-count">{customerSegments.vip}</span>
+                <span className="segment-count">{userSegments.admin}</span>
               </div>
               <div className="segment-item">
                 <div className="segment-icon regular">
                   <FontAwesomeIcon icon={faUsers} />
                 </div>
                 <div className="segment-info">
-                  <span className="segment-label">Regular Customers</span>
-                  <span className="segment-desc">$1000-$3000 spent</span>
+                  <span className="segment-label">Active Users</span>
+                  <span className="segment-desc">Active</span>
                 </div>
-                <span className="segment-count">{customerSegments.regular}</span>
+                <span className="segment-count">{userSegments.active}</span>
               </div>
               <div className="segment-item">
                 <div className="segment-icon new">
                   <FontAwesomeIcon icon={faUsers} />
                 </div>
                 <div className="segment-info">
-                  <span className="segment-label">New Customers</span>
-                  <span className="segment-desc">Under $1000 spent</span>
+                  <span className="segment-label">Pending Verification</span>
+                  <span className="segment-desc">Pending</span>
                 </div>
-                <span className="segment-count">{customerSegments.new}</span>
+                <span className="segment-count">{userSegments.pending}</span>
+              </div>
+              <div className="segment-item">
+                <div className="segment-icon" style={{background: 'rgba(244, 67, 54, 0.1)'}}>
+                  <FontAwesomeIcon icon={faUsers} style={{color: '#F44336'}} />
+                </div>
+                <div className="segment-info">
+                  <span className="segment-label">Suspended</span>
+                  <span className="segment-desc">Suspended</span>
+                </div>
+                <span className="segment-count">{userSegments.suspended}</span>
               </div>
             </div>
           </div>
@@ -407,25 +516,36 @@ function Analytics({ products, orders, users }) {
           <div className="chart-header">
             <h3>
               <FontAwesomeIcon icon={faStar} />
-              Top Customers
+              Customer List
             </h3>
           </div>
           <div className="chart-content">
-            <div className="top-customers-list">
-              {topCustomers.map((customer, index) => (
-                <div key={customer.id} className="top-customer-item">
-                  <div className="customer-rank">#{index + 1}</div>
-                  <div className="customer-details">
-                    <span className="customer-name">{customer.name}</span>
-                    <span className="customer-email">{customer.email}</span>
+            {topCustomers.length === 0 ? (
+              <p className="no-data">No customers yet</p>
+            ) : (
+              <div className="top-customers-list">
+                {topCustomers.map((customer, index) => (
+                  <div key={customer.id} className="top-customer-item">
+                    <div className="customer-rank">#{index + 1}</div>
+                    <div className="customer-details">
+                      <span className="customer-name">{customer.name}</span>
+                      <span className="customer-email">{customer.email}</span>
+                    </div>
+                    <div className="customer-stats">
+                      <span className="customer-orders">{customer.phone || 'N/A'}</span>
+                      <span 
+                        className="customer-spent"
+                        style={{
+                          color: customer.status === 'active' ? '#4CAF50' : '#FF9800'
+                        }}
+                      >
+                        {customer.status === 'active' ? 'Active' : 'Pending'}
+                      </span>
+                    </div>
                   </div>
-                  <div className="customer-stats">
-                    <span className="customer-orders">{customer.totalOrders} orders</span>
-                    <span className="customer-spent">${customer.totalSpent.toFixed(2)}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

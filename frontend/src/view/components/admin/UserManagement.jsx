@@ -445,7 +445,7 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
                           )}
                         </div>
                         <div className="admin-order-section">
-                          <h4><FontAwesomeIcon icon={faShoppingCart} /> Lịch sử mua hàng</h4>
+                          <h4><FontAwesomeIcon icon={faShoppingCart} /> Shoping History</h4>
                           <p className="admin-user-expanded-info">
                             Total Orders: {user.totalOrders || 0} | Total Spent: {formatCurrency(user.totalSpent)}
                           </p>

@@ -36,6 +36,26 @@ const Order = sequelize.define('Order', {
     allowNull: false,
     field: 'total_amount'
   },
+  subtotal: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: true,
+    field: 'subtotal'
+  },
+  shippingFee: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0,
+    field: 'shipping_fee'
+  },
+  discount: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0,
+    field: 'discount'
+  },
+  couponCode: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'coupon_code'
+  },
   status: {
     type: DataTypes.ENUM('pending', 'shipping', 'completed', 'cancelled'),
     defaultValue: 'pending'

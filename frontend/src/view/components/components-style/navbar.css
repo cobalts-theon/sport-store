@@ -272,8 +272,8 @@
     position: absolute;
     top: -8px;
     right: 10%;
-    background: #D0FE1D;
-    color: #000;
+    background: #fe1d1dff;
+    color: #ffffffff;
     font-size: 11px;
     font-weight: bold;
     min-width: 18px;
@@ -290,7 +290,7 @@
 
 /* Change badge color when hovering the order/icon link */
 .order-icon:hover .cart-badge,
-.order-icon:focus .cart-badge {
+.order-icon:focus .cart-badge{
     background: #000000ff; /* white background on hover */
     color: #D0FE1D; /* black text */
     border: 1px solid #D0FE1D;

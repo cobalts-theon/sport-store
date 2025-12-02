@@ -1693,6 +1693,9 @@
 .admin-promotion-progress {
   margin-top: 1rem;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 .admin-progress-bar {
@@ -1709,6 +1712,13 @@
   background: linear-gradient(90deg, #D0FE1D, #A8D116);
   transition: width 0.3s ease;
   box-shadow: 0 0 10px rgba(208, 254, 29, 0.5);
+  min-width: 2px;
+}
+
+.admin-progress-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: right;
 }
 
 .admin-checkbox-label {
@@ -2764,7 +2774,7 @@
 }
 
 .metric-value {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 900;
   color: #fff;
   margin: 0 0 0.5rem 0;
@@ -3210,11 +3220,13 @@
 .time-btn:hover {
   color: #fff;
   background: rgba(255, 255, 255, 0.05);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .time-btn.active {
   background: #D0FE1D;
   color: #000;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .analytics-actions {
@@ -3242,6 +3254,7 @@
 .analytics-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(208, 254, 29, 0.3);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .analytics-btn.primary {
@@ -3296,7 +3309,7 @@
 }
 
 .kpi-value {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: #fff;
   margin: 0.5rem 0;
@@ -3385,8 +3398,18 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  height: 250px;
+  height: 150px;
   gap: 0.5rem;
+}
+
+.bar-chart.monthly-chart {
+  height: 120px;
+  padding-top: 50%;
+  transition: height 0.3s ease;
+}
+
+.bar-chart.monthly-chart.has-data {
+  height: 60px;
 }
 
 .bar-group {
@@ -3394,7 +3417,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
+}
+
+.bar-value {
+  font-size: 0.6rem;
+  color: #D0FE1D;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  height: 16px;
+  display: flex;
+  align-items: flex-end;
 }
 
 .bar-wrapper {
@@ -3407,7 +3440,7 @@
 .bar {
   width: 100%;
   background: linear-gradient(180deg, #D0FE1D, #A8D116);
-  border-radius: 4px 4px 0 0;
+  border-radius: 3px 3px 0 0;
   transition: all 0.3s ease;
   cursor: pointer;
   min-height: 10px;
@@ -3416,12 +3449,135 @@
 .bar:hover {
   background: linear-gradient(180deg, #fff, #D0FE1D);
   box-shadow: 0 0 15px rgba(208, 254, 29, 0.5);
+  transform: scaleY(1.02);
 }
 
 .bar-label {
   color: #888;
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+.bar-orders {
+  font-size: 0.65rem;
+  color: #666;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Year Selector */
+.chart-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.year-selector {
+  background: rgba(208, 254, 29, 0.1);
+  border: 1px solid rgba(208, 254, 29, 0.3);
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  color: #D0FE1D;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.year-selector:hover {
+  background: rgba(208, 254, 29, 0.2);
+  border-color: #D0FE1D;
+}
+
+.year-selector:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(208, 254, 29, 0.3);
+}
+
+.year-selector option {
+  background: #1a1a1b;
+  color: #fff;
+}
+
+/* Year Total */
+.year-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  background: rgba(208, 254, 29, 0.05);
+  border: 1px solid rgba(208, 254, 29, 0.2);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.year-total-label {
+  color: #888;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.year-total-value {
+  color: #D0FE1D;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Chart Footer - Color Legend */
+.chart-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.color-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.color-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: #888;
+}
+
+.color-item span {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* Section Title Bars */
+.section-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.section-title-bar .section-icon {
+  color: #D0FE1D;
+  font-size: 0.9rem;
+}
+
+.section-title-bar h2 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #888;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-title-bar .section-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .donut-chart {
@@ -3829,7 +3985,7 @@
 
   .metric-value,
   .kpi-value {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
   }
 
   .dashboard-metric-card {

@@ -1,5 +1,6 @@
 import { Order, OrderItem } from "../models/order.model.js";
 import Product from "../models/product.model.js";
+import Coupon from "../models/coupon.model.js";
 import sequelize from "../config/db.js";
 
 export const createOrder = async (req, res) => {
@@ -7,7 +8,7 @@ export const createOrder = async (req, res) => {
     const t = await sequelize.transaction();
 
     try {
-        const { fullName, email, phone, address, cartItems, userId } = req.body;
+        const { fullName, email, phone, address, cartItems, userId, subtotal, shippingFee, discount, couponCode, totalAmount } = req.body;
 
         // 1. Validate dữ liệu đầu vào
         if (!cartItems || cartItems.length === 0) {
@@ -45,6 +46,11 @@ export const createOrder = async (req, res) => {
             });
         }
 
+        // 3. Tính tổng tiền cuối cùng (áp dụng discount và shipping)
+        const shippingAmount = shippingFee || 30000; // Default shipping 30,000 VND
+        const discountAmount = discount || 0;
+        const finalTotal = totalAmount || (calculatedTotal + shippingAmount - discountAmount);
+
         // 3. Tạo Đơn hàng (Order)
         const newOrder = await Order.create({
             userId: userId || null,
@@ -52,8 +58,21 @@ export const createOrder = async (req, res) => {
             email,
             phone,
             address,
-            totalAmount: calculatedTotal
+            subtotal: calculatedTotal,
+            shippingFee: shippingAmount,
+            discount: discountAmount,
+            couponCode: couponCode || null,
+            totalAmount: finalTotal
         }, { transaction: t });
+
+        // 3.5 Cập nhật usesCount của coupon nếu có
+        if (couponCode) {
+            await Coupon.increment('usesCount', {
+                by: 1,
+                where: { code: couponCode.toUpperCase() },
+                transaction: t
+            });
+        }
 
         // 4. Tạo chi tiết đơn hàng (OrderItems)
         // Gán order_id vừa tạo vào danh sách items

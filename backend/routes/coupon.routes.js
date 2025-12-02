@@ -1,10 +1,14 @@
 import express from 'express';
-import { createCoupon, getAllCoupons, deleteCoupon, applyCoupon, updateCoupon } from '../controllers/coupon.controller.js';
+import { createCoupon, getAllCoupons, deleteCoupon, applyCoupon, updateCoupon, getAvailableCoupons } from '../controllers/coupon.controller.js';
 import { verifyToken, isAdmin } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-// --- Public Routes (User Logged In) ---
+// --- Public Routes ---
+// Lấy danh sách coupon khả dụng (không cần đăng nhập)
+router.get('/available', getAvailableCoupons);
+
+// --- User Routes (User Logged In) ---
 // Khách hàng áp dụng mã (cần đăng nhập)
 router.post('/apply', verifyToken, applyCoupon); 
 

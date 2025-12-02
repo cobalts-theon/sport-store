@@ -1937,7 +1937,7 @@ function Admin() {
               <FontAwesomeIcon icon={faPercent} className="admin-stat-icon" style={{color: '#FF9800'}} />
               <div className="admin-stat-content">
                 <h3>Total Usage</h3>
-                <p className="admin-stat-value">{promotions.reduce((sum, p) => sum + p.usedCount, 0)}</p>
+                <p className="admin-stat-value">{promotions.reduce((sum, p) => sum + (p.usedCount || 0), 0)}</p>
               </div>
             </div>
           </div>
@@ -1945,7 +1945,10 @@ function Admin() {
           <div className={`admin-products-list ${promotionViewMode === 'list' ? 'list-view' : 'grid-view'}`}>
             {promotions.map(promotion => {
               const status = getPromotionStatus(promotion);
-              const usagePercent = promotion.usageLimit ? (promotion.usedCount / promotion.usageLimit * 100).toFixed(1) : 0;
+              const usedCount = promotion.usedCount || 0;
+              const usagePercent = promotion.usageLimit > 0 
+                ? ((usedCount / promotion.usageLimit) * 100).toFixed(1) 
+                : 0;
               
               return (
                 <div key={promotion.id} className={`admin-product-card ${promotionViewMode}`}>
@@ -1987,21 +1990,21 @@ function Admin() {
                       <FontAwesomeIcon icon={faDollarSign} />
                       <span>Min Purchase: {formatCurrency(promotion.minPurchase)}</span>
                     </div>
-                    {promotion.usageLimit && (
+                    {promotion.usageLimit > 0 && (
                       <div className="admin-promo-detail-item">
                         <FontAwesomeIcon icon={faChartLine} />
-                        <span>Usage: {promotion.usedCount}/{promotion.usageLimit} ({usagePercent}%)</span>
+                        <span>Usage: {usedCount}/{promotion.usageLimit} ({usagePercent}%)</span>
                       </div>
                     )}
-                    {!promotion.usageLimit && (
+                    {(!promotion.usageLimit || promotion.usageLimit === 0) && (
                       <div className="admin-promo-detail-item">
                         <FontAwesomeIcon icon={faChartLine} />
-                        <span>Usage: {promotion.usedCount} (Unlimited)</span>
+                        <span>Usage: {usedCount} (Unlimited)</span>
                       </div>
                     )}
                   </div>
 
-                  {promotion.usageLimit && (
+                  {promotion.usageLimit > 0 && (
                     <div className="admin-promotion-progress">
                       <div className="admin-progress-bar">
                         <div 
@@ -2009,6 +2012,7 @@ function Admin() {
                           style={{width: `${Math.min(usagePercent, 100)}%`}}
                         ></div>
                       </div>
+                      <span className="admin-progress-text">{usagePercent}% used</span>
                     </div>
                   )}
 
@@ -2066,17 +2070,6 @@ function Admin() {
                   value={promotionFormData.code}
                   onChange={(e) => setPromotionFormData({...promotionFormData, code: e.target.value.toUpperCase()})}
                   placeholder="Enter code (e.g., SUMMER2025)"
-                  required
-                />
-              </div>
-
-              <div className="admin-form-group">
-                <label><FontAwesomeIcon icon={faBullhorn} /> Description</label>
-                <textarea
-                  value={promotionFormData.description}
-                  onChange={(e) => setPromotionFormData({...promotionFormData, description: e.target.value})}
-                  placeholder="Describe this promotion"
-                  rows="3"
                   required
                 />
               </div>

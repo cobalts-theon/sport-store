@@ -7,6 +7,7 @@ import ProductDropdown from "./product-dropdown";
 import CartDrawer from "./cart-drawer";
 import HelpDropdown from "./help-dropdown";
 import { useCart } from '../context/CartContext';
+import api from '../../lib/api';
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +26,7 @@ function Navbar({ cartOpen, setCartOpen }) {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Kiểm tra đăng nhập
   const [userAvatar, setUserAvatar] = useState(null); // Avatar của user
+  const [orderCount, setOrderCount] = useState(0); // Số đơn hàng của user
   const searchRef = useRef(null); // Dùng để phát hiện click ngoài search box
   const audioRef = useRef(new Audio(backgroundMusic));
   const location = useLocation(); // Get current path
@@ -71,6 +73,33 @@ function Navbar({ cartOpen, setCartOpen }) {
       window.removeEventListener('userUpdated', updateUserState);
     };
   }, [location]); // Cập nhật khi đổi route
+
+  // Fetch order count for logged in user
+  useEffect(() => {
+    const fetchOrderCount = async () => {
+      try {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          const user = JSON.parse(userData);
+          if (user && user.id) {
+            const res = await api.get(`/orders/user/${user.id}`);
+            setOrderCount(res.data?.length || 0);
+          }
+        } else {
+          setOrderCount(0);
+        }
+      } catch (error) {
+        console.error('Error fetching order count:', error);
+        setOrderCount(0);
+      }
+    };
+    
+    if (isLoggedIn) {
+      fetchOrderCount();
+    } else {
+      setOrderCount(0);
+    }
+  }, [isLoggedIn, location]);
 
   // Lấy query từ URL params và cập nhật giá trị searchQuery
   useEffect(() => {
@@ -207,6 +236,9 @@ function Navbar({ cartOpen, setCartOpen }) {
         <div className="nav-links" id="alter">
           <Link to="/order" className={`order-icon ${location.pathname === '/order' ? 'active' : ''}`}>
             <FontAwesomeIcon icon={faBox} className="nav-user-icon"/>
+            {orderCount > 0 && (
+              <span className="cart-badge">{orderCount}</span>
+            )}
           </Link>
           <Link 
             to="#" 

@@ -45,6 +45,41 @@ export const getAllCoupons = async (req, res) => {
     }
 };
 
+// --- PUBLIC: Get Available Coupons for Users ---
+export const getAvailableCoupons = async (req, res) => {
+    try {
+        const now = new Date();
+        
+        const coupons = await Coupon.findAll({
+            where: {
+                isActive: true,
+                [Op.or]: [
+                    { startDate: null },
+                    { startDate: { [Op.lte]: now } }
+                ],
+                [Op.or]: [
+                    { endDate: null },
+                    { endDate: { [Op.gte]: now } }
+                ]
+            },
+            attributes: ['id', 'code', 'discountType', 'discountValue', 'minOrderAmount', 'maxUses', 'usesCount', 'startDate', 'endDate']
+        });
+
+        // Lọc những coupon còn lượt sử dụng
+        const availableCoupons = coupons.filter(coupon => {
+            if (coupon.maxUses > 0 && coupon.usesCount >= coupon.maxUses) {
+                return false;
+            }
+            return true;
+        });
+
+        res.json(availableCoupons);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error fetching available coupons" });
+    }
+};
+
 // --- ADMIN: Delete Coupon ---
 export const deleteCoupon = async (req, res) => {
     try {
