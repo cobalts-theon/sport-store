@@ -222,6 +222,11 @@ function Admin() {
     fetchUsers();
   }, []);
 
+  // Format tiền VND
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -1111,7 +1116,7 @@ function Admin() {
           <div className="admin-stat-card">
             <FontAwesomeIcon icon={faDollarSign} />
             <div>
-              <p className="admin-stat-value">${products.reduce((sum, p) => sum + (p.price * p.stock), 0).toFixed(2)}</p>
+              <p className="admin-stat-value">{formatCurrency(products.reduce((sum, p) => sum + (p.price * p.stock), 0))}</p>
               <p className="admin-stat-label">Inventory Value</p>
             </div>
           </div>
@@ -1142,7 +1147,7 @@ function Admin() {
                       </div>
                     </div>
                     <div className="admin-product-meta">
-                      <div className="admin-product-price">${product.price.toFixed(2)}</div>
+                      <div className="admin-product-price">{formatCurrency(product.price)}</div>
                       <div 
                         className="admin-product-stock"
                         style={{ backgroundColor: stockStatus.color + '20', color: stockStatus.color }}

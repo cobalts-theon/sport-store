@@ -1,8 +1,10 @@
 import User from '../models/user.model.js';
+import { Order } from '../models/order.model.js';
 import sendEmail from '../utils/sendEmail.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Op } from 'sequelize';
+import sequelize from '../config/db.js';
 import { OAuth2Client } from 'google-auth-library';
 
 // Đăng ký người dùng mới
@@ -513,8 +515,30 @@ export const getAllUsers = async (req, res) => {
             attributes: { exclude: ['password', 'verificationCode', 'codeExpiredAt'] },
             order: [['created_at', 'DESC']]
         });
-        res.status(200).json(users);
-    } catch (error) {   
+
+        // Tính totalOrders và totalSpent cho mỗi user
+        const usersWithStats = await Promise.all(users.map(async (user) => {
+            const userData = user.toJSON();
+            
+            // Lấy thống kê đơn hàng của user
+            const orderStats = await Order.findAll({
+                where: { userId: user.id },
+                attributes: [
+                    [sequelize.fn('COUNT', sequelize.col('id')), 'totalOrders'],
+                    [sequelize.fn('SUM', sequelize.col('total_amount')), 'totalSpent']
+                ],
+                raw: true
+            });
+
+            userData.totalOrders = parseInt(orderStats[0]?.totalOrders) || 0;
+            userData.totalSpent = parseFloat(orderStats[0]?.totalSpent) || 0;
+            
+            return userData;
+        }));
+
+        res.status(200).json(usersWithStats);
+    } catch (error) {
+        console.error('Error fetching users:', error);
         res.status(500).json({ message: 'Error fetching users' });
     }
 }

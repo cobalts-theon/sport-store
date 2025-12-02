@@ -30,6 +30,11 @@ import {
 import api from '../../../lib/api';
 import toast from 'react-hot-toast';
 
+// Format tiền VND
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
+};
+
 function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRole, setSelectedRole] = useState('all');
@@ -54,6 +59,9 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
     const matchesStatus = selectedStatus === 'all' || user.status === selectedStatus;
     return matchesSearch && matchesRole && matchesStatus;
   });
+
+  //Handle order numbers
+
 
   const handleAddUser = () => {
     setFormData({
@@ -356,8 +364,17 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
                     {/* User Card Header */}
                     <div className="admin-product-card-header">
                       <div className="admin-product-main-info">
-                        <div className="admin-user-icon">
-                          <FontAwesomeIcon icon={roleIcon} />
+                        <div className="admin-user-avatar">
+                          {user.avatar ? (
+                            <img 
+                              src={user.avatar.startsWith('http') ? user.avatar : `http://localhost:3000/${user.avatar}`} 
+                              alt={user.name}
+                              onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                            />
+                          ) : null}
+                          <div className="admin-user-avatar-fallback" style={{ display: user.avatar ? 'none' : 'flex' }}>
+                            <FontAwesomeIcon icon={roleIcon} />
+                          </div>
                         </div>
                         <div className="admin-product-info">
                           <h3 className="admin-product-name">{user.name}</h3>
@@ -373,11 +390,11 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
                         <div className="admin-user-stats">
                           <div className="admin-user-stat-item">
                             <FontAwesomeIcon icon={faShoppingCart} />
-                            <span>{user.totalOrders} orders</span>
+                            <span>{user.totalOrders || 0} Order</span>
                           </div>
                           <div className="admin-user-stat-item">
                             <FontAwesomeIcon icon={faDollarSign} />
-                            <span>${user.totalSpent.toFixed(2)}</span>
+                            <span>{formatCurrency(user.totalSpent)}</span>
                           </div>
                         </div>
                         <div 
@@ -429,13 +446,13 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
                           )}
                         </div>
                         <div className="admin-order-section">
-                          <h4><FontAwesomeIcon icon={faShoppingCart} /> Purchase History</h4>
+                          <h4><FontAwesomeIcon icon={faShoppingCart} /> Lịch sử mua hàng</h4>
                           <p className="admin-user-expanded-info">
-                            Total Orders: {user.totalOrders} | Total Spent: ${user.totalSpent.toFixed(2)}
+                            Total Orders: {user.totalOrders || 0} | Total Spent: {formatCurrency(user.totalSpent)}
                           </p>
-                          {user.totalOrders > 0 && (
+                          {(user.totalOrders || 0) > 0 && (
                             <p className="admin-user-expanded-info">
-                              Average Order Value: ${(user.totalSpent / user.totalOrders).toFixed(2)}
+                              Average Order Value: {formatCurrency(user.totalSpent / user.totalOrders)}
                             </p>
                           )}
                         </div>
@@ -449,8 +466,8 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
                           className="admin-action-btn secondary"
                           onClick={() => toggleUserDetails(user.id)}
                         >
-                          {expandedUser === user.id ? 'Hide Details' : 'View Details'}
                           <FontAwesomeIcon icon={expandedUser === user.id ? faChevronUp : faChevronDown} />
+                          {expandedUser === user.id ? 'Hide' : 'Details'}
                         </button>
                         <button 
                           className="admin-action-btn primary"

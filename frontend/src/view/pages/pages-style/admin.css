@@ -642,9 +642,11 @@
   height: 6px;
 }
 
-/* User details in grid view */
-.admin-products-list.grid-view .admin-user-details,
-.admin-products-list.grid-view .admin-user-expanded,
+/* User details in grid view - hide preview but allow expanded */
+.admin-products-list.grid-view .admin-user-details {
+  display: none;
+}
+
 .admin-products-list.grid-view .admin-order-expanded {
   display: none;
 }
@@ -666,6 +668,17 @@
   grid-template-columns: 1fr auto auto;
   gap: 1rem;
   align-items: center;
+}
+
+/* Allow expanded content in list view */
+.admin-products-list.list-view .admin-product-card.list:has(.admin-user-expanded) {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-products-list.list-view .admin-product-card.list:has(.admin-user-expanded) .admin-product-card-header {
+  display: flex;
+  width: 100%;
 }
 
 .admin-products-list.list-view .admin-product-card-header {
@@ -733,8 +746,7 @@
 .admin-products-list.list-view .admin-promotion-details,
 .admin-products-list.list-view .admin-promotion-progress,
 .admin-products-list.list-view .admin-order-details,
-.admin-products-list.list-view .admin-user-details,
-.admin-products-list.list-view .admin-user-expanded {
+.admin-products-list.list-view .admin-user-details {
   display: none;
 }
 
@@ -1954,6 +1966,40 @@
   transition: all 0.3s ease;
 }
 
+/* User Avatar Styles */
+.admin-user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  border: 3px solid rgba(208, 254, 29, 0.3);
+  transition: all 0.3s ease;
+}
+
+.admin-user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-user-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(56, 142, 60, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: #4CAF50;
+}
+
+.admin-product-card:hover .admin-user-avatar {
+  border-color: rgba(208, 254, 29, 0.6);
+  transform: scale(1.05);
+}
+
 .admin-product-card:hover .admin-user-icon {
   background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(56, 142, 60, 0.2));
   border-color: rgba(76, 175, 80, 0.5);
@@ -2024,6 +2070,8 @@
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
+  grid-column: 1 / -1; /* Span full width in grid/list view */
+  width: 100%;
 }
 
 .admin-user-expanded-info {
