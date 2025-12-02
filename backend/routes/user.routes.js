@@ -1,6 +1,6 @@
 import express from 'express';
 import upload from '../middleware/upload.middleware.js';
-import { getAllUsers, deleteUser, getProfile, register, login, sendVerificationCode, verifyCode, resetPassword, updateProfile, changePassword, googleLogin } from '../controllers/user.controller.js';
+import { getAllUsers, deleteUser, updateUser, createUserByAdmin, getProfile, register, login, sendVerificationCode, verifyCode, resetPassword, updateProfile, changePassword, googleLogin } from '../controllers/user.controller.js';
 import { verifyToken, isAdmin } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -34,6 +34,8 @@ router.put('/profile/password', verifyToken, changePassword);
 router.get('/', verifyToken, isAdmin, getAllUsers);
 
 //Route cho admin (Thêm middleware isAdmin)
+router.post('/admin-create', verifyToken, isAdmin, createUserByAdmin);
+router.put('/:id', verifyToken, isAdmin, updateUser);
 router.delete('/:id', verifyToken, isAdmin, deleteUser);
 
 export default router;

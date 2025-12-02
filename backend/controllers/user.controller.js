@@ -48,6 +48,14 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: 'Email or Password is incorrect' });
     }
 
+    // Kiểm tra trạng thái tài khoản
+    if(user.status === 'suspended') {
+      return res.status(403).json({ message: 'Your account has been suspended. Please contact support.' });
+    }
+    if(user.status === 'pending') {
+      return res.status(403).json({ message: 'Your account is pending approval. Please wait for admin verification.' });
+    }
+
     // Kiểm tra mật khẩu
     const isMatch = await bcrypt.compare(password, user.password);
     if(!isMatch) {
@@ -81,6 +89,7 @@ export const login = async (req, res) => {
 };
 
 //Đăng nhâp bằng Google OAuth
+//Google OAuth có thể sử dụng như login hoặc đăng ký luôn (nếu email chưa có trong hệ thống)
 export const googleLogin = async (req, res) => {
     try {
         // Nhận trực tiếp thông tin từ Frontend gửi về
@@ -104,6 +113,14 @@ export const googleLogin = async (req, res) => {
                 role: 'customer',
                 status: 'active'
             });
+        } else {
+            // Kiểm tra trạng thái tài khoản nếu user đã tồn tại
+            if(user.status === 'suspended') {
+                return res.status(403).json({ message: 'Your account has been suspended. Please contact support.' });
+            }
+            if(user.status === 'pending') {
+                return res.status(403).json({ message: 'Your account is pending approval. Please wait for admin verification.' });
+            }
         }
 
         // 3. Tạo JWT Token của hệ thống
@@ -493,13 +510,87 @@ export const updateProfile = async (req, res) => {
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll({
-            attributes: { exclude: ['password'] } // Không trả về mật khẩu
+            attributes: { exclude: ['password', 'verificationCode', 'codeExpiredAt'] },
+            order: [['created_at', 'DESC']]
         });
         res.status(200).json(users);
     } catch (error) {   
         res.status(500).json({ message: 'Error fetching users' });
     }
 }
+
+// Cập nhật thông tin người dùng (Cho Admin)
+export const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, role, status, phone, address } = req.body;
+        
+        const user = await User.findByPk(id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Cập nhật thông tin
+        if (name) user.name = name;
+        if (email) user.email = email;
+        if (role) user.role = role;
+        if (status) user.status = status;
+        if (phone !== undefined) user.phone = phone;
+        if (address !== undefined) user.address = address;
+
+        await user.save();
+
+        // Trả về user không bao gồm password
+        const userResponse = user.toJSON();
+        delete userResponse.password;
+        delete userResponse.verificationCode;
+        delete userResponse.codeExpiredAt;
+
+        res.status(200).json(userResponse);
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: 'Error updating user' });
+    }
+};
+
+// Tạo người dùng mới (Cho Admin)
+export const createUserByAdmin = async (req, res) => {
+    try {
+        const { name, email, password, role, status, phone, address } = req.body;
+
+        // Kiểm tra nếu email đã tồn tại
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email already exists' });
+        }
+
+        // Băm mật khẩu
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Tạo người dùng mới
+        const newUser = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+            phone: phone || null,
+            address: address || null,
+            role: role || 'customer',
+            status: status || 'active'
+        });
+
+        // Trả về user không bao gồm password
+        const userResponse = newUser.toJSON();
+        delete userResponse.password;
+        delete userResponse.verificationCode;
+        delete userResponse.codeExpiredAt;
+
+        res.status(201).json(userResponse);
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ message: 'Error creating user' });
+    }
+};
 
 // Xóa người dùng (Cho Admin)
 export const deleteUser = async (req, res) => {

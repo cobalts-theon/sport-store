@@ -73,7 +73,13 @@ function SettingsSection() {
             className="admin-action-btn danger"
             onClick={() => {
               if (window.confirm('Are you sure you want to log out?')) {
-                window.location.href = '/';
+                // Dọn dữ liệu liên quan đến phiên đăng nhập
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                // Và clear cả toàn bộ sessionStorage nếu cần
+                sessionStorage.clear();
+                // Chuyển hướng về trang chủ hoặc trang đăng nhập
+                window.location.replace('/');
               }
             }}
           >

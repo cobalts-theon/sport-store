@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import api from '../../lib/api';
+import axios from 'axios';
 import productsData from '../data/products.json';
 import './pages-style/products-view.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faBolt, faStar, faTimes, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 function ProductsView({ openCart }) {
+    // Get product ID from URL params
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -26,15 +29,19 @@ function ProductsView({ openCart }) {
     ];
 
     // Size Chart Data
+    const clothingSizes = ['S', 'M', 'L', 'XL'];
+    const shoeSizes = ['39', '40', '41', '42', '43', '44'];
+
     const sizeChart = {
         clothing: {
-            headers: ['Size', 'Chest (cm)', 'Length-T-Shirt (cm)', 'Shoulder (cm)'],
+            headers: ['Size', 'Chest (cm)', 'Length (cm)', 'Shoulder (cm)'],
             rows: [
                 ['S', '90-94', '65', '40-42'],
                 ['M', '95-99', '67', '42-44'],
                 ['L', '100-104', '69', '44-46'],
                 ['XL', '105-110', '71', '46-48']
-            ]
+            ],
+            sizes: clothingSizes
         },
         shoes: {
             headers: ['Size VN', 'Length-Foot (cm)'],
@@ -45,23 +52,100 @@ function ProductsView({ openCart }) {
                 ['42', '26.5'],
                 ['43', '27.5'],
                 ['44', '28']
-            ]
+            ],
+            sizes: shoeSizes
         }
     };
 
-    useEffect(() => {
-        const foundProduct = productsData.find(p => p.id === parseInt(id));
-        setProduct(foundProduct);
-        if (foundProduct) {
-            const mainImg = foundProduct.img || foundProduct.image;
-            setSelectedImage(mainImg);
-            
-            const images = [mainImg];
-            if (foundProduct.hover && foundProduct.hover !== mainImg) {
-                images.push(foundProduct.hover);
-            }
-            setProductImages(images);
+    //Map các category để xác định loại size
+    const getCategoryType = (category) => {
+        if (!category) return null;
+        const cat = category.toLowerCase();
+        // Shoe categories
+        if (['shoes', 'sneakers', 'running', 'basketball', 'training', 'lifestyle'].includes(cat)) {
+            return 'shoes';
         }
+        // Clothing categories
+        if (['clothing', 'apparel', 't-shirt', 'shirt', 'jacket', 'hoodie', 'pants', 'shorts'].includes(cat)) {
+            return 'clothing';
+        }
+        return null; // Accessories, etc. - no size
+    };
+
+    const categoryType = product ? getCategoryType(product.category) : null;
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                // Fetch từ API
+                const response = await api.get(`/products/${id}`);
+                const productData = response.data;
+                
+                console.log('API Response:', productData); // Debug log
+                
+                // Map data từ API
+                const mappedProduct = {
+                    id: productData.id,
+                    name: productData.name,
+                    description: productData.description,
+                    price: productData.price,
+                    originalPrice: productData.original_price,
+                    img: productData.img_url ? (productData.img_url.startsWith('http') ? productData.img_url : `http://localhost:3000${productData.img_url}`) : '',
+                    hover: productData.hover ? (productData.hover.startsWith('http') ? productData.hover : `http://localhost:3000${productData.hover}`) : '',
+                    images: productData.images || [],
+                    tag: productData.tag,
+                    category: productData.category,
+                    material: productData.material,
+                    brand: productData.brand,
+                    isHotDeal: productData.isHotDeal,
+                    stock: productData.stock
+                };
+                
+                console.log('Mapped Product:', mappedProduct); // Debug log
+                
+                setProduct(mappedProduct);
+                
+                const mainImg = mappedProduct.img;
+                setSelectedImage(mainImg);
+                
+                // Build images array: main image + hover + additional images
+                const images = [];
+                if (mainImg) images.push(mainImg);
+                if (mappedProduct.hover && mappedProduct.hover !== mainImg) {
+                    images.push(mappedProduct.hover);
+                }
+                // Add additional images from API
+                if (mappedProduct.images && Array.isArray(mappedProduct.images)) {
+                    mappedProduct.images.forEach(img => {
+                        const imgUrl = img.startsWith('http') ? img : `http://localhost:3000${img}`;
+                        if (!images.includes(imgUrl)) {
+                            images.push(imgUrl);
+                        }
+                    });
+                }
+                
+                console.log('Product Images Array:', images); // Debug log
+                
+                setProductImages(images);
+            } catch (error) {
+                console.error('Error fetching product from API:', error);
+                // Fallback to JSON data
+                const foundProduct = productsData.find(p => p.id === parseInt(id));
+                setProduct(foundProduct);
+                if (foundProduct) {
+                    const mainImg = foundProduct.img || foundProduct.image;
+                    setSelectedImage(mainImg);
+                    
+                    const images = [mainImg];
+                    if (foundProduct.hover && foundProduct.hover !== mainImg) {
+                        images.push(foundProduct.hover);
+                    }
+                    setProductImages(images);
+                }
+            }
+        };
+        
+        fetchProduct();
     }, [id]);
 
     if (!product) {
@@ -114,15 +198,31 @@ function ProductsView({ openCart }) {
                     />
                 </div>
                 <div className="products-view-image-carsousel">
-                    {productImages.map((img, index) => (
-                        <div 
-                            key={index} 
-                            className={`carousel-thumbnail ${selectedImage === img ? 'active' : ''}`}
-                            onClick={() => setSelectedImage(img)}
-                        >
-                            <img src={img} alt={`View ${index + 1}`} />
+                    {productImages.length > 0 ? (
+                        productImages.map((img, index) => (
+                            <div 
+                                key={index} 
+                                className={`carousel-thumbnail ${selectedImage === img ? 'active' : ''}`}
+                                onClick={() => setSelectedImage(img)}
+                            >
+                                <img 
+                                    src={img} 
+                                    alt={`View ${index + 1}`}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = 'https://via.placeholder.com/80x80?text=No+Image';
+                                    }}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <div className="carousel-thumbnail active">
+                            <img 
+                                src={selectedImage || 'https://via.placeholder.com/80x80?text=No+Image'} 
+                                alt="Main"
+                            />
                         </div>
-                    ))}
+                    )}
                 </div>
 
                 {/* New Description and Detail Section */}
@@ -162,20 +262,20 @@ function ProductsView({ openCart }) {
                     </div>
 
                     {/* Size Guide Section */}
-                    {['Clothing', 'Shoes'].includes(product.category) && (
+                    {categoryType && sizeChart[categoryType] && (
                         <div className="details-section">
                             <h3>SIZE GUIDE</h3>
                             <div className="size-chart-container">
                                 <table className="size-chart-table">
                                     <thead>
                                         <tr>
-                                            {(product.category === 'Shoes' ? sizeChart.shoes.headers : sizeChart.clothing.headers).map((h, i) => (
+                                            {sizeChart[categoryType].headers.map((h, i) => (
                                                 <th key={i}>{h}</th>
                                             ))}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {(product.category === 'Shoes' ? sizeChart.shoes.rows : sizeChart.clothing.rows).map((row, i) => (
+                                        {sizeChart[categoryType].rows.map((row, i) => (
                                             <tr key={i}>
                                                 {row.map((cell, j) => (
                                                     <td key={j}>{cell}</td>
@@ -246,14 +346,11 @@ function ProductsView({ openCart }) {
                             </div>
                             
                             {/* Size Selector - Conditional Rendering */}
-                            {['Clothing', 'Shoes'].includes(product.category) && (
+                            {categoryType && sizeChart[categoryType] && (
                                 <div className="trait-item" style={{ gridColumn: 'span 2' }}>
                                     <span className="trait-label">SIZE</span>
                                     <div className="size-selector">
-                                        {(product.category === 'Shoes' 
-                                            ? ['39', '40', '41', '42', '43', '44'] 
-                                            : ['S', 'M', 'L', 'XL']
-                                        ).map((size) => (
+                                        {sizeChart[categoryType].sizes.map((size) => (
                                             <button
                                                 key={size}
                                                 className={`size-btn ${selectedSize === size ? 'active' : ''}`}

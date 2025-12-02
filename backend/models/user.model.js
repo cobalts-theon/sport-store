@@ -25,7 +25,7 @@ const User = sequelize.define('User', {
         defaultValue: 'customer'
     },
     status: {
-        type: DataTypes.ENUM('active', 'inactive', 'pending'), 
+        type: DataTypes.ENUM('active', 'suspended', 'pending'), 
         defaultValue: 'pending'
     },
     phone: {

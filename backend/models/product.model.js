@@ -23,7 +23,13 @@ const Product = sequelize.define('Product',{
         type: DataTypes.STRING, 
         allowNull: true, 
         field: 'img',
-        comment: 'Đường dẫn ảnh sản phẩm (Vì database không lưu ảnh nên chỉ lưu đường dẫn)'
+        comment: 'Đường dẫn ảnh chính sản phẩm'
+    },
+    images: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: [],
+        comment: 'Danh sách các ảnh phụ của sản phẩm (JSON array)'
     },
     hover: {
         type: DataTypes.STRING, 
@@ -63,7 +69,6 @@ const Product = sequelize.define('Product',{
     isHotDeal: {
         type: DataTypes.BOOLEAN, 
         defaultValue: false,
-        field: 'is_hot_deal'
     },
     stock: {
         type: DataTypes.INTEGER, 

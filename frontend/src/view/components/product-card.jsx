@@ -15,7 +15,8 @@ function ProductCard({ product, index }) {
     : 0;
 
   const hasDiscount = discountPercentage > 0;
-  const isHotDeal = product.isHotDeal || discountPercentage >= 20;
+  // Hot deal if explicitly marked OR has significant discount (>=20%)
+  const isHotDeal = product.isHotDeal === true || discountPercentage >= 20;
 
   // Format price with thousand separators
   const formatPrice = (price) => {
@@ -84,7 +85,7 @@ function ProductCard({ product, index }) {
       <div className="product-info">
         <span className="product-category-card">{product.category}</span>
         <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <h3 className="product-name">{product.name}</h3>
+        <h3 className="product-name" style={{ fontSize: '18px'}}>{product.name}</h3>
         </Link>
         
         {/* 5-Star Rating Display replacing Description */}

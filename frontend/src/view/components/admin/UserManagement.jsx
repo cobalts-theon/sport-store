@@ -27,6 +27,9 @@ import {
   faList
 } from '@fortawesome/free-solid-svg-icons';
 
+import api from '../../../lib/api';
+import toast from 'react-hot-toast';
+
 function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRole, setSelectedRole] = useState('all');
@@ -37,6 +40,7 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     role: 'customer',
     status: 'active',
     phone: '',
@@ -55,6 +59,7 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
     setFormData({
       name: '',
       email: '',
+      password: '',
       role: 'customer',
       status: 'active',
       phone: '',
@@ -77,43 +82,101 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
     setShowAddForm(true);
   };
 
-  const handleDeleteUser = (userId) => {
+  const handleDeleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
-      setUsers(users.filter(u => u.id !== userId));
+      try {
+        await api.delete(`/users/${userId}`);
+        setUsers(users.filter(u => u.id !== userId));
+        toast.success('User deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        toast.error('Failed to delete user');
+      }
     }
   };
 
-  const handleToggleStatus = (userId) => {
-    setUsers(users.map(u => 
-      u.id === userId 
-        ? { ...u, status: u.status === 'active' ? 'suspended' : 'active' }
-        : u
-    ));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleToggleStatus = async (userId) => {
+    const user = users.find(u => u.id === userId);
+    const newStatus = user.status === 'active' ? 'suspended' : 'active';
     
-    if (editingUser) {
+    try {
+      await api.put(`/users/${userId}`, { status: newStatus });
       setUsers(users.map(u => 
-        u.id === editingUser.id 
-          ? { ...u, ...formData }
+        u.id === userId 
+          ? { ...u, status: newStatus }
           : u
       ));
-    } else {
-      const newUser = {
-        id: Math.max(...users.map(u => u.id)) + 1,
-        ...formData,
-        totalOrders: 0,
-        totalSpent: 0,
-        joinedDate: new Date().toISOString(),
-        lastActive: new Date().toISOString()
-      };
-      setUsers([...users, newUser]);
+      toast.success(`User ${newStatus === 'active' ? 'activated' : 'suspended'} successfully!`);
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      toast.error('Failed to update user status');
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     
-    setShowAddForm(false);
-    setEditingUser(null);
+    try {
+      if (editingUser) {
+        // Update existing user
+        const res = await api.put(`/users/${editingUser.id}`, {
+          name: formData.name,
+          email: formData.email,
+          role: formData.role,
+          status: formData.status,
+          phone: formData.phone,
+          address: formData.address
+        });
+        
+        setUsers(users.map(u => 
+          u.id === editingUser.id 
+            ? { 
+                ...u, 
+                name: res.data.name,
+                email: res.data.email,
+                role: res.data.role,
+                status: res.data.status,
+                phone: res.data.phone,
+                address: res.data.address
+              }
+            : u
+        ));
+        toast.success('User updated successfully!');
+      } else {
+        // Add new user via admin-create API
+        const res = await api.post('/users/admin-create', {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password || 'TempPass123!',
+          role: formData.role,
+          status: formData.status,
+          phone: formData.phone,
+          address: formData.address
+        });
+        
+        const newUser = {
+          id: res.data.id,
+          name: res.data.name,
+          email: res.data.email,
+          role: res.data.role,
+          status: res.data.status,
+          phone: res.data.phone,
+          address: res.data.address,
+          totalOrders: 0,
+          totalSpent: 0,
+          joinedDate: res.data.created_at,
+          lastActive: res.data.updated_at
+        };
+        setUsers([newUser, ...users]);
+        toast.success('User added successfully!');
+      }
+      
+      setShowAddForm(false);
+      setEditingUser(null);
+    } catch (error) {
+      console.error('Error saving user:', error);
+      toast.error(error.response?.data?.message || 'Failed to save user');
+    }
   };
 
   const handleCancelForm = () => {
@@ -505,6 +568,8 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
                 <label><FontAwesomeIcon icon={faLock} /> Initial Password</label>
                 <input
                   type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
                   placeholder="Enter initial password"
                   required={!editingUser}
                 />

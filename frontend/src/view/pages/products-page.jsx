@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductCard from '../components/product-card';
-import productsData from '../data/products.json';
+import api from '../../lib/api';
 import './pages-style/products-page.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faFilter, faSort, faTimes, faChevronDown, faChevronUp, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faFilter, faSort, faTimes, faChevronDown, faChevronUp, faCheck, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -18,12 +18,13 @@ function ProductsPage() {
     price: true
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(true);
   const [visibleProducts, setVisibleProducts] = useState([]);
   
   const location = useLocation();
 
-  // Extract unique categories from data
-  const categories = [...new Set(productsData.map(p => p.category).filter(Boolean))];
+  // Extract unique categories from fetched products
+  const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
   
   // Status options
   const statusOptions = [
@@ -54,6 +55,40 @@ function ProductsPage() {
     { name: 'Purple', code: '#800080' }
   ];
 
+  // Fetch products từ API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsFetching(true);
+      try {
+        const res = await api.get('/products');
+        // Map API response to match frontend format
+        const mappedProducts = res.data.map(p => ({
+          id: p.id,
+          name: p.name,
+          description: p.description,
+          price: p.price,
+          originalPrice: p.original_price,
+          img: p.img_url ? (p.img_url.startsWith('http') ? p.img_url : `http://localhost:3000${p.img_url}`) : '/placeholder.jpg',
+          hover: p.hover ? (p.hover.startsWith('http') ? p.hover : `http://localhost:3000${p.hover}`) : null,
+          link: p.link || `/product/${p.id}`,
+          tag: p.tag,
+          category: p.category,
+          material: p.material,
+          brand: p.brand,
+          isHotDeal: p.isHotDeal,
+          stock: p.stock
+        }));
+        setProducts(mappedProducts);
+        setFilteredProducts(mappedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsFetching(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   // Prevent body scroll when sidebar is open on mobile
   useEffect(() => {
     if (isSidebarOpen && window.innerWidth <= 768) {
@@ -66,17 +101,14 @@ function ProductsPage() {
     };
   }, [isSidebarOpen]);
 
+  // Parse query params
   useEffect(() => {
-    setProducts(productsData);
-    setFilteredProducts(productsData);
-    
-    // Parse query params if any (e.g. from navbar dropdown)
     const params = new URLSearchParams(location.search);
     const categoryParam = params.get('category');
     const searchParam = params.get('search');
     
-    if (categoryParam) {
-      let filtered = productsData;
+    if (categoryParam && products.length > 0) {
+      let filtered = products;
       filtered = filtered.filter(p => p.category && p.category.toLowerCase().includes(categoryParam.toLowerCase()));
       setFilteredProducts(filtered);
       setActiveFilters(prev => ({ ...prev, category: filtered.length > 0 ? filtered[0].category : null }));
@@ -85,7 +117,7 @@ function ProductsPage() {
     if (searchParam) {
       setSearchQuery(searchParam);
     }
-  }, [location.search]);
+  }, [location.search, products]);
 
   useEffect(() => {
     let result = products;
@@ -101,7 +133,13 @@ function ProductsPage() {
     // Status filter
     if (activeFilters.status) {
       if (activeFilters.status === 'hot-deal') {
-        result = result.filter(p => p.isHotDeal);
+        // Match logic with product-card: isHotDeal OR discount >= 20%
+        result = result.filter(p => {
+          const discountPercentage = p.originalPrice && p.price 
+            ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+            : 0;
+          return p.isHotDeal === true || discountPercentage >= 20;
+        });
       } else {
         result = result.filter(p => p.tag === activeFilters.status);
       }
@@ -327,7 +365,12 @@ function ProductsPage() {
         </div>
 
         <div className="products-grid">
-          {filteredProducts.length > 0 ? (
+          {isFetching ? (
+            <div className="products-loading">
+              <FontAwesomeIcon icon={faSpinner} spin className="loading-icon" />
+              <p>Loading products...</p>
+            </div>
+          ) : filteredProducts.length > 0 ? (
             filteredProducts.map((product, index) => (
               <div 
                 key={product.id} 

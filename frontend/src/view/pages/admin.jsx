@@ -27,8 +27,11 @@ import {
   faTruck,
   faEye,
   faThLarge,
-  faList
+  faList,
+  faSpinner
 } from '@fortawesome/free-solid-svg-icons';
+import toast from 'react-hot-toast';
+import api from '../../lib/api';
 import { 
   AdminSidebar, 
   AdminHeader, 
@@ -37,7 +40,6 @@ import {
   UserManagement,
   Dashboard,
   Analytics,
-  mockProducts, 
   mockPromotions, 
   mockOrders,
   mockUsers,
@@ -90,19 +92,53 @@ function Admin() {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
+    originalPrice: '',
     category: '',
     stock: '',
     description: '',
-    image: '',
-    featured: false
+    image: null,
+    imagePreview: '',
+    images: [],           // Nhiều ảnh mới upload
+    imagePreviews: [],    // Preview cho nhiều ảnh
+    existingImages: [],   // Ảnh cũ khi edit
+    tag: '',
+    brand: '',
+    material: '',
+    isHotDeal: false
   });
 
-  // Mock data - replace with actual API call
+  // Fetch products từ API
   useEffect(() => {
-    setTimeout(() => {
-      setProducts(mockProducts);
-      setLoading(false);
-    }, 1000);
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get('/products');
+        // Map API response
+        const mappedProducts = res.data.map(p => ({
+          id: p.id,
+          name: p.name,
+          description: p.description,
+          price: p.price,
+          originalPrice: p.original_price,
+          image: p.img_url ? (p.img_url.startsWith('http') ? p.img_url : `http://localhost:3000${p.img_url}`) : '',
+          images: p.images || [],
+          hover: p.hover,
+          tag: p.tag,
+          category: p.category,
+          material: p.material,
+          brand: p.brand,
+          isHotDeal: p.isHotDeal,
+          stock: p.stock,
+          createdAt: p.createdAt
+        }));
+        setProducts(mappedProducts);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        toast.error('Failed to load products');
+        setLoading(false);
+      }
+    };
+    fetchProducts();
   }, []);
 
   // Load promotions data
@@ -115,9 +151,34 @@ function Admin() {
     setOrders(mockOrders);
   }, []);
 
-  // Load users data
+  // Fetch users từ API
   useEffect(() => {
-    setUsers(mockUsers);
+    const fetchUsers = async () => {
+      try {
+        const res = await api.get('/users');
+        // Map API response to match frontend format
+        const mappedUsers = res.data.map(u => ({
+          id: u.id,
+          name: u.name,
+          email: u.email,
+          role: u.role,
+          status: u.status || 'active',
+          phone: u.phone,
+          address: u.address,
+          avatar: u.avatar,
+          totalOrders: u.totalOrders || 0,
+          totalSpent: u.totalSpent || 0,
+          joinedDate: u.created_at || u.createdAt,
+          lastActive: u.updated_at || u.updatedAt
+        }));
+        setUsers(mappedUsers);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        // Fallback to mock data if API fails
+        setUsers(mockUsers);
+      }
+    };
+    fetchUsers();
   }, []);
 
   const filteredProducts = products.filter(product => {
@@ -130,58 +191,174 @@ function Admin() {
     setFormData({
       name: '',
       price: '',
+      originalPrice: '',
       category: '',
       stock: '',
       description: '',
-      image: '',
-      featured: false
+      image: null,
+      imagePreview: '',
+      images: [],
+      imagePreviews: [],
+      existingImages: [],
+      tag: '',
+      brand: '',
+      material: '',
+      isHotDeal: false
     });
     setEditingProduct(null);
     setShowAddForm(true);
   };
 
   const handleEditProduct = (product) => {
+    // Parse images từ product nếu có
+    let existingImages = [];
+    if (product.images) {
+      existingImages = Array.isArray(product.images) ? product.images : JSON.parse(product.images || '[]');
+    }
+    
     setFormData({
       name: product.name,
       price: product.price,
+      originalPrice: product.originalPrice || '',
       category: product.category,
       stock: product.stock,
-      description: product.description,
-      image: product.image,
-      featured: product.featured
+      description: product.description || '',
+      image: null,
+      imagePreview: product.image || '',
+      images: [],
+      imagePreviews: [],
+      existingImages: existingImages,
+      tag: product.tag || '',
+      brand: product.brand || '',
+      material: product.material || '',
+      isHotDeal: product.isHotDeal || false
     });
     setEditingProduct(product);
     setShowAddForm(true);
   };
 
-  const handleDeleteProduct = (productId) => {
+  const handleDeleteProduct = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      setProducts(products.filter(p => p.id !== productId));
+      try {
+        await api.delete(`/products/${productId}`);
+        setProducts(products.filter(p => p.id !== productId));
+        toast.success('Product deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        toast.error('Failed to delete product');
+      }
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        image: file,
+        imagePreview: URL.createObjectURL(file)
+      });
+    }
+  };
+
+  // Handler cho nhiều ảnh phụ
+  const handleMultipleImagesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      const previews = files.map(file => URL.createObjectURL(file));
+      setFormData({
+        ...formData,
+        images: [...formData.images, ...files],
+        imagePreviews: [...formData.imagePreviews, ...previews]
+      });
+    }
+  };
+
+  // Xóa ảnh phụ mới (chưa upload)
+  const handleRemoveNewImage = (index) => {
+    const newImages = [...formData.images];
+    const newPreviews = [...formData.imagePreviews];
+    URL.revokeObjectURL(newPreviews[index]);
+    newImages.splice(index, 1);
+    newPreviews.splice(index, 1);
+    setFormData({
+      ...formData,
+      images: newImages,
+      imagePreviews: newPreviews
+    });
+  };
+
+  // Xóa ảnh cũ (đã lưu trong DB)
+  const handleRemoveExistingImage = (index) => {
+    const newExisting = [...formData.existingImages];
+    newExisting.splice(index, 1);
+    setFormData({
+      ...formData,
+      existingImages: newExisting
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (editingProduct) {
-      // Update existing product
-      setProducts(products.map(p => 
-        p.id === editingProduct.id 
-          ? { ...p, ...formData }
-          : p
-      ));
-    } else {
-      // Add new product
-      const newProduct = {
-        id: Math.max(...products.map(p => p.id)) + 1,
-        ...formData,
-        createdAt: new Date().toISOString().split('T')[0]
-      };
-      setProducts([...products, newProduct]);
+    const submitData = new FormData();
+    submitData.append('name', formData.name);
+    submitData.append('price', formData.price);
+    submitData.append('category', formData.category);
+    submitData.append('stock', formData.stock);
+    submitData.append('description', formData.description);
+    submitData.append('tag', formData.tag);
+    submitData.append('brand', formData.brand);
+    submitData.append('material', formData.material);
+    submitData.append('isHotDeal', formData.isHotDeal);
+    if (formData.originalPrice) {
+      submitData.append('originalPrice', formData.originalPrice);
+    }
+    if (formData.image) {
+      submitData.append('image', formData.image);
     }
     
-    setShowAddForm(false);
-    setEditingProduct(null);
+    // Thêm nhiều ảnh phụ
+    formData.images.forEach(img => {
+      submitData.append('images', img);
+    });
+    
+    // Gửi danh sách ảnh cũ cần giữ lại
+    if (formData.existingImages.length > 0) {
+      submitData.append('existingImages', JSON.stringify(formData.existingImages));
+    }
+
+    try {
+      if (editingProduct) {
+        // Update existing product
+        const res = await api.put(`/products/${editingProduct.id}`, submitData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        const updatedProduct = {
+          ...res.data,
+          image: res.data.img_url ? (res.data.img_url.startsWith('http') ? res.data.img_url : `http://localhost:3000${res.data.img_url}`) : editingProduct.image
+        };
+        setProducts(products.map(p => p.id === editingProduct.id ? updatedProduct : p));
+        toast.success('Product updated successfully!');
+      } else {
+        // Add new product
+        const res = await api.post('/products', submitData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        const newProduct = {
+          ...res.data,
+          image: res.data.img_url ? (res.data.img_url.startsWith('http') ? res.data.img_url : `http://localhost:3000${res.data.img_url}`) : ''
+        };
+        setProducts([...products, newProduct]);
+        toast.success('Product added successfully!');
+      }
+      
+      setShowAddForm(false);
+      setEditingProduct(null);
+    } catch (error) {
+      console.error('Error saving product:', error);
+      toast.error(error.response?.data?.message || 'Failed to save product');
+    }
   };
 
   const handleCancelForm = () => {
@@ -190,11 +367,19 @@ function Admin() {
     setFormData({
       name: '',
       price: '',
+      originalPrice: '',
       category: '',
       stock: '',
       description: '',
-      image: '',
-      featured: false
+      image: null,
+      imagePreview: '',
+      images: [],
+      imagePreviews: [],
+      existingImages: [],
+      tag: '',
+      brand: '',
+      material: '',
+      isHotDeal: false
     });
   };
 
@@ -526,14 +711,27 @@ function Admin() {
                   <label><FontAwesomeIcon icon={faDollarSign} /> Price</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="1000"
                     value={formData.price}
                     onChange={(e) => setFormData({...formData, price: e.target.value})}
-                    placeholder="0.00"
+                    placeholder="0"
                     required
                   />
                 </div>
 
+                <div className="admin-form-group">
+                  <label><FontAwesomeIcon icon={faDollarSign} /> Original Price (optional)</label>
+                  <input
+                    type="number"
+                    step="1000"
+                    value={formData.originalPrice}
+                    onChange={(e) => setFormData({...formData, originalPrice: e.target.value})}
+                    placeholder="For sale items"
+                  />
+                </div>
+              </div>
+
+              <div className="admin-form-row">
                 <div className="admin-form-group">
                   <label><FontAwesomeIcon icon={faTag} /> Category</label>
                   <select
@@ -542,34 +740,133 @@ function Admin() {
                     required
                   >
                     <option value="">Select category</option>
-                    <option value="sneakers">Sneakers</option>
-                    <option value="accessories">Accessories</option>
-                    <option value="apparel">Apparel</option>
+                    <option value="Sneakers">Sneakers</option>
+                    <option value="Running">Running</option>
+                    <option value="Basketball">Basketball</option>
+                    <option value="Training">Training</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Apparel">Apparel</option>
+                    <option value="Accessories">Accessories</option>
+                  </select>
+                </div>
+
+                <div className="admin-form-group">
+                  <label><FontAwesomeIcon icon={faTag} /> Tag</label>
+                  <select
+                    value={formData.tag}
+                    onChange={(e) => setFormData({...formData, tag: e.target.value})}
+                  >
+                    <option value="">No tag</option>
+                    <option value="new">New Arrival</option>
+                    <option value="sale">Sale</option>
+                    <option value="featured">Featured</option>
                   </select>
                 </div>
               </div>
 
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label><FontAwesomeIcon icon={faBoxes} /> Stock Quantity</label>
+                  <input
+                    type="number"
+                    value={formData.stock}
+                    onChange={(e) => setFormData({...formData, stock: e.target.value})}
+                    placeholder="0"
+                    min="0"
+                    required
+                  />
+                </div>
+
+                <div className="admin-form-group">
+                  <label><FontAwesomeIcon icon={faTag} /> Brand</label>
+                  <input
+                    type="text"
+                    value={formData.brand}
+                    onChange={(e) => setFormData({...formData, brand: e.target.value})}
+                    placeholder="Nike, Adidas, etc."
+                  />
+                </div>
+              </div>
+
               <div className="admin-form-group">
-                <label><FontAwesomeIcon icon={faBoxes} /> Stock Quantity</label>
+                <label><FontAwesomeIcon icon={faTag} /> Material</label>
                 <input
-                  type="number"
-                  value={formData.stock}
-                  onChange={(e) => setFormData({...formData, stock: e.target.value})}
-                  placeholder="0"
-                  min="0"
-                  required
+                  type="text"
+                  value={formData.material}
+                  onChange={(e) => setFormData({...formData, material: e.target.value})}
+                  placeholder="Leather, Mesh, etc."
                 />
               </div>
 
               <div className="admin-form-group">
-                <label><FontAwesomeIcon icon={faImage} /> Image URL</label>
+                <label><FontAwesomeIcon icon={faImage} /> Main Image</label>
                 <input
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                  placeholder="Enter image URL"
-                  required
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="admin-file-input"
                 />
+                {formData.imagePreview && (
+                  <div className="admin-image-preview">
+                    <img src={formData.imagePreview} alt="Preview" />
+                  </div>
+                )}
+              </div>
+
+              <div className="admin-form-group">
+                <label><FontAwesomeIcon icon={faImage} /> Additional Images (Max 10)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleMultipleImagesChange}
+                  className="admin-file-input"
+                />
+                
+                {/* Hiển thị ảnh cũ (khi edit) */}
+                {formData.existingImages.length > 0 && (
+                  <div className="admin-multiple-images-preview">
+                    <p style={{fontSize: '0.85rem', color: '#888', marginBottom: '0.5rem'}}>Existing Images:</p>
+                    <div className="admin-images-grid">
+                      {formData.existingImages.map((img, index) => (
+                        <div key={`existing-${index}`} className="admin-image-item">
+                          <img 
+                            src={img.startsWith('http') ? img : `http://localhost:3000${img}`} 
+                            alt={`Existing ${index + 1}`} 
+                          />
+                          <button 
+                            type="button" 
+                            className="admin-remove-image-btn"
+                            onClick={() => handleRemoveExistingImage(index)}
+                          >
+                            <FontAwesomeIcon icon={faTimes} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Hiển thị ảnh mới upload */}
+                {formData.imagePreviews.length > 0 && (
+                  <div className="admin-multiple-images-preview">
+                    <p style={{fontSize: '0.85rem', color: '#888', marginBottom: '0.5rem'}}>New Images:</p>
+                    <div className="admin-images-grid">
+                      {formData.imagePreviews.map((preview, index) => (
+                        <div key={`new-${index}`} className="admin-image-item">
+                          <img src={preview} alt={`New ${index + 1}`} />
+                          <button 
+                            type="button" 
+                            className="admin-remove-image-btn"
+                            onClick={() => handleRemoveNewImage(index)}
+                          >
+                            <FontAwesomeIcon icon={faTimes} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="admin-form-group">
@@ -579,7 +876,6 @@ function Admin() {
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                   placeholder="Enter product description"
                   rows="4"
-                  required
                 />
               </div>
 
@@ -587,10 +883,10 @@ function Admin() {
                 <label className="admin-checkbox-label">
                   <input
                     type="checkbox"
-                    checked={formData.featured}
-                    onChange={(e) => setFormData({...formData, featured: e.target.checked})}
+                    checked={formData.isHotDeal}
+                    onChange={(e) => setFormData({...formData, isHotDeal: e.target.checked})}
                   />
-                  <span>Featured Product</span>
+                  <span>Hot Deal (Featured on homepage)</span>
                 </label>
               </div>
 

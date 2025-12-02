@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import sequelize from './config/db.js'
 
 //import models để sequelize nhận diện các model
 import './models/user.model.js'
@@ -54,6 +55,13 @@ app.use('/api/users', usersRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/products', productRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Sync database - thêm column mới nếu cần (alter: true)
+sequelize.sync({ alter: true }).then(() => {
+  console.log('Database synced');
+}).catch(err => {
+  console.error('Error syncing database:', err);
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
