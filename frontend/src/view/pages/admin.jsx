@@ -147,9 +147,34 @@ function Admin() {
     fetchProducts();
   }, []);
 
-  // Load promotions data
+  // Load promotions/coupons from API
   useEffect(() => {
-    setPromotions(mockPromotions);
+    const fetchPromotions = async () => {
+      try {
+        const res = await api.get('/coupons');
+        // Map API response to frontend format
+        const mappedPromotions = res.data.map(coupon => ({
+          id: coupon.id,
+          code: coupon.code,
+          description: `${coupon.discountType === 'percent' ? coupon.discountValue + '% off' : formatCurrency(coupon.discountValue) + ' off'} - Min order: ${formatCurrency(coupon.minOrderAmount)}`,
+          discountType: coupon.discountType === 'percent' ? 'percentage' : 'fixed',
+          discountValue: coupon.discountValue,
+          startDate: coupon.startDate ? coupon.startDate.split('T')[0] : '',
+          endDate: coupon.endDate ? coupon.endDate.split('T')[0] : '',
+          minPurchase: coupon.minOrderAmount || 0,
+          usageLimit: coupon.maxUses || null,
+          usedCount: coupon.usesCount || 0,
+          active: coupon.isActive,
+          createdAt: coupon.createdAt
+        }));
+        setPromotions(mappedPromotions);
+      } catch (error) {
+        console.error('Error fetching coupons:', error);
+        // Fallback to mock data if API fails
+        setPromotions(mockPromotions);
+      }
+    };
+    fetchPromotions();
   }, []);
 
   // Load orders data từ API
@@ -469,39 +494,92 @@ function Admin() {
     setShowAddPromotion(true);
   };
 
-  const handleDeletePromotion = (promotionId) => {
+  const handleDeletePromotion = async (promotionId) => {
     if (window.confirm('Are you sure you want to delete this promotion?')) {
-      setPromotions(promotions.filter(p => p.id !== promotionId));
+      try {
+        await api.delete(`/coupons/${promotionId}`);
+        setPromotions(promotions.filter(p => p.id !== promotionId));
+        toast.success('Coupon deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting coupon:', error);
+        toast.error('Failed to delete coupon');
+      }
     }
   };
 
-  const handleTogglePromotionStatus = (promotionId) => {
-    setPromotions(promotions.map(p => 
-      p.id === promotionId ? { ...p, active: !p.active } : p
-    ));
+  const handleTogglePromotionStatus = async (promotionId) => {
+    const promotion = promotions.find(p => p.id === promotionId);
+    if (!promotion) return;
+    
+    try {
+      // Toggle active status via API
+      await api.patch(`/coupons/${promotionId}`, { isActive: !promotion.active });
+      setPromotions(promotions.map(p => 
+        p.id === promotionId ? { ...p, active: !p.active } : p
+      ));
+      toast.success(`Coupon ${!promotion.active ? 'activated' : 'deactivated'} successfully!`);
+    } catch (error) {
+      console.error('Error toggling coupon status:', error);
+      toast.error('Failed to update coupon status');
+    }
   };
 
-  const handlePromotionSubmit = (e) => {
+  const handlePromotionSubmit = async (e) => {
     e.preventDefault();
     
-    if (editingPromotion) {
-      setPromotions(promotions.map(p => 
-        p.id === editingPromotion.id 
-          ? { ...p, ...promotionFormData }
-          : p
-      ));
-    } else {
-      const newPromotion = {
-        id: Math.max(...promotions.map(p => p.id)) + 1,
-        ...promotionFormData,
-        usedCount: 0,
-        createdAt: new Date().toISOString().split('T')[0]
-      };
-      setPromotions([...promotions, newPromotion]);
-    }
+    // Prepare data for API
+    const couponData = {
+      code: promotionFormData.code.toUpperCase(),
+      discountType: promotionFormData.discountType === 'percentage' ? 'percent' : 'fixed',
+      discountValue: Number(promotionFormData.discountValue),
+      minOrderAmount: Number(promotionFormData.minPurchase) || 0,
+      maxUses: promotionFormData.usageLimit ? Number(promotionFormData.usageLimit) : 100,
+      startDate: promotionFormData.startDate || null,
+      endDate: promotionFormData.endDate || null,
+      isActive: promotionFormData.active
+    };
     
-    setShowAddPromotion(false);
-    setEditingPromotion(null);
+    try {
+      if (editingPromotion) {
+        // Update existing coupon
+        await api.patch(`/coupons/${editingPromotion.id}`, couponData);
+        setPromotions(promotions.map(p => 
+          p.id === editingPromotion.id 
+            ? { 
+                ...p, 
+                ...promotionFormData,
+                description: `${promotionFormData.discountType === 'percentage' ? promotionFormData.discountValue + '% off' : formatCurrency(promotionFormData.discountValue) + ' off'} - Min order: ${formatCurrency(promotionFormData.minPurchase || 0)}`
+              }
+            : p
+        ));
+        toast.success('Coupon updated successfully!');
+      } else {
+        // Create new coupon
+        const res = await api.post('/coupons', couponData);
+        const newPromotion = {
+          id: res.data.id,
+          code: res.data.code,
+          description: `${promotionFormData.discountType === 'percentage' ? promotionFormData.discountValue + '% off' : formatCurrency(promotionFormData.discountValue) + ' off'} - Min order: ${formatCurrency(promotionFormData.minPurchase || 0)}`,
+          discountType: promotionFormData.discountType,
+          discountValue: Number(promotionFormData.discountValue),
+          startDate: promotionFormData.startDate,
+          endDate: promotionFormData.endDate,
+          minPurchase: Number(promotionFormData.minPurchase) || 0,
+          usageLimit: promotionFormData.usageLimit ? Number(promotionFormData.usageLimit) : null,
+          usedCount: 0,
+          active: promotionFormData.active,
+          createdAt: new Date().toISOString().split('T')[0]
+        };
+        setPromotions([...promotions, newPromotion]);
+        toast.success('Coupon created successfully!');
+      }
+      
+      setShowAddPromotion(false);
+      setEditingPromotion(null);
+    } catch (error) {
+      console.error('Error saving coupon:', error);
+      toast.error(error.response?.data?.message || 'Failed to save coupon');
+    }
   };
 
   const handleCancelPromotionForm = () => {
@@ -1888,7 +1966,7 @@ function Admin() {
                       <div className="admin-product-price">
                         {promotion.discountType === 'percentage' 
                           ? `${promotion.discountValue}% OFF` 
-                          : `$${promotion.discountValue} OFF`}
+                          : `${formatCurrency(promotion.discountValue)} OFF`}
                       </div>
                       <div 
                         className="admin-product-stock"
@@ -1903,11 +1981,11 @@ function Admin() {
                   <div className="admin-promotion-details">
                     <div className="admin-promo-detail-item">
                       <FontAwesomeIcon icon={faCalendarAlt} />
-                      <span>{new Date(promotion.startDate).toLocaleDateString()} - {new Date(promotion.endDate).toLocaleDateString()}</span>
+                      <span>{promotion.startDate ? new Date(promotion.startDate).toLocaleDateString('vi-VN') : 'N/A'} - {promotion.endDate ? new Date(promotion.endDate).toLocaleDateString('vi-VN') : 'N/A'}</span>
                     </div>
                     <div className="admin-promo-detail-item">
                       <FontAwesomeIcon icon={faDollarSign} />
-                      <span>Min Purchase: ${promotion.minPurchase}</span>
+                      <span>Min Purchase: {formatCurrency(promotion.minPurchase)}</span>
                     </div>
                     {promotion.usageLimit && (
                       <div className="admin-promo-detail-item">
@@ -2012,7 +2090,7 @@ function Admin() {
                     required
                   >
                     <option value="percentage">Percentage (%)</option>
-                    <option value="fixed">Fixed Amount ($)</option>
+                    <option value="fixed">Fixed Amount (VND)</option>
                   </select>
                 </div>
 
@@ -2053,7 +2131,7 @@ function Admin() {
 
               <div className="admin-form-row">
                 <div className="admin-form-group">
-                  <label><FontAwesomeIcon icon={faDollarSign} /> Minimum Purchase ($)</label>
+                  <label><FontAwesomeIcon icon={faDollarSign} /> Minimum Purchase (VND)</label>
                   <input
                     type="number"
                     value={promotionFormData.minPurchase}

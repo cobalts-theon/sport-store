@@ -19,6 +19,7 @@ import orderRoutes from './routes/order.routes.js'
 import productRoutes from './routes/product.routes.js'
 import statsRoutes from './routes/stats.routes.js'
 import usersRoutes from './routes/user.routes.js'
+import couponRoutes from './routes/coupon.routes.js'
 
 //nạp .env
 dotenv.config()
@@ -55,6 +56,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/products', productRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/coupons', couponRoutes);
 
 // Sync database - thêm column mới nếu cần (alter: true)
 // Tắt alter: true để tránh lỗi foreign key constraint
