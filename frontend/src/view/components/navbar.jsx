@@ -6,6 +6,7 @@ import "./components-style/navbar.css";
 import ProductDropdown from "./product-dropdown";
 import CartDrawer from "./cart-drawer";
 import HelpDropdown from "./help-dropdown";
+import { useCart } from '../context/CartContext';
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSearch, faTimes, faPlay, faPause, faBox, faCartShopping } from '@fortawesome/free-solid-svg-icons';
@@ -28,6 +29,7 @@ function Navbar({ cartOpen, setCartOpen }) {
   const audioRef = useRef(new Audio(backgroundMusic));
   const location = useLocation(); // Get current path
   const navigate = useNavigate();
+  const { getCartCount } = useCart(); // Lấy số lượng sản phẩm trong giỏ hàng
 
   // Kiểm tra trạng thái đăng nhập và lấy avatar
   useEffect(() => {
@@ -215,6 +217,9 @@ function Navbar({ cartOpen, setCartOpen }) {
             }}
           >
             <FontAwesomeIcon icon={faCartShopping} className="nav-user-icon"/>
+            {getCartCount() > 0 && (
+              <span className="cart-badge">{getCartCount()}</span>
+            )}
           </Link>
           <Link to={isLoggedIn ? "/profile" : "/login"} className={`nav-user-link ${location.pathname === '/login' || location.pathname === '/profile' ? 'active' : ''}`}> 
             {isLoggedIn ? (

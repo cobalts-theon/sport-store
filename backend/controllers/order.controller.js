@@ -91,10 +91,88 @@ export const getOrdersByUser = async (req, res) => {
                     include: [Product],
                 },
             ],
+            order: [['createdAt', 'DESC']]
         });
         res.json(orders);
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');
+    }
+};
+
+// Admin: Lấy tất cả đơn hàng
+export const getAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.findAll({
+            include: [
+                {
+                    model: OrderItem,
+                    include: [Product],
+                },
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+        res.json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Lỗi lấy danh sách đơn hàng' });
+    }
+};
+
+// Admin: Cập nhật trạng thái đơn hàng
+export const updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const { status } = req.body;
+
+        // Validate status
+        const validStatuses = ['pending', 'shipping', 'completed', 'cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
+        }
+
+        const order = await Order.findByPk(orderId);
+        if (!order) {
+            return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+        }
+
+        order.status = status;
+        await order.save();
+
+        res.json({ message: 'Cập nhật trạng thái thành công', order });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Lỗi cập nhật trạng thái đơn hàng' });
+    }
+};
+
+// Admin: Xóa đơn hàng
+export const deleteOrder = async (req, res) => {
+    const t = await sequelize.transaction();
+    
+    try {
+        const { orderId } = req.params;
+
+        const order = await Order.findByPk(orderId, { transaction: t });
+        if (!order) {
+            await t.rollback();
+            return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+        }
+
+        // Xóa các OrderItems trước
+        await OrderItem.destroy({ 
+            where: { orderId: orderId },
+            transaction: t 
+        });
+
+        // Xóa Order
+        await order.destroy({ transaction: t });
+
+        await t.commit();
+        res.json({ message: 'Xóa đơn hàng thành công' });
+    } catch (error) {
+        await t.rollback();
+        console.error(error);
+        res.status(500).json({ message: 'Lỗi xóa đơn hàng' });
     }
 };

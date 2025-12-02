@@ -28,7 +28,8 @@ import {
   faEye,
   faThLarge,
   faList,
-  faSpinner
+  faSpinner,
+  faPrint
 } from '@fortawesome/free-solid-svg-icons';
 import toast from 'react-hot-toast';
 import api from '../../lib/api';
@@ -85,6 +86,9 @@ function Admin() {
   const [orders, setOrders] = useState([]);
   const [selectedOrderStatus, setSelectedOrderStatus] = useState('all');
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showOrderModal, setShowOrderModal] = useState(false);
 
   // Users state
   const [users, setUsers] = useState([]);
@@ -146,9 +150,46 @@ function Admin() {
     setPromotions(mockPromotions);
   }, []);
 
-  // Load orders data
+  // Load orders data từ API
   useEffect(() => {
-    setOrders(mockOrders);
+    const fetchOrders = async () => {
+      try {
+        const res = await api.get('/orders');
+        // Map API response to frontend format
+        const mappedOrders = (res.data || []).map(order => ({
+          id: order.id,
+          date: order.createdAt,
+          status: order.status || 'pending',
+          total: Number(order.totalAmount) || 0,
+          customer: {
+            name: order.fullName,
+            email: order.email,
+            phone: order.phone
+          },
+          items: (order.OrderItems || []).map(item => ({
+            id: item.id,
+            name: item.Product?.name || 'Unknown Product',
+            quantity: item.quantity,
+            price: Number(item.price) || 0,
+            image: item.Product?.img_url 
+              ? (item.Product.img_url.startsWith('http') 
+                  ? item.Product.img_url 
+                  : `http://localhost:3000${item.Product.img_url}`)
+              : ''
+          })),
+          shipping: {
+            address: order.address || 'N/A',
+            method: 'Standard Delivery'
+          }
+        }));
+        setOrders(mappedOrders);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        // Fallback to mock data if API fails
+        setOrders(mockOrders);
+      }
+    };
+    fetchOrders();
   }, []);
 
   // Fetch users từ API
@@ -466,15 +507,498 @@ function Admin() {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
 
-  const handleUpdateOrderStatus = (orderId, newStatus) => {
-    setOrders(orders.map(order => 
-      order.id === orderId ? { ...order, status: newStatus } : order
-    ));
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    try {
+      await api.patch(`/orders/${orderId}/status`, { status: newStatus });
+      setOrders(orders.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      ));
+      toast.success('Order status updated successfully!');
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      toast.error('Failed to update order status');
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    if (window.confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+      try {
+        await api.delete(`/orders/${orderId}`);
+        setOrders(orders.filter(order => order.id !== orderId));
+        toast.success('Order deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting order:', error);
+        toast.error('Failed to delete order');
+      }
+    }
+  };
+
+  const handleViewOrderDetails = (order) => {
+    setSelectedOrder(order);
+    setShowOrderModal(true);
+  };
+
+  //Chức năng in đơn hàng sử dụng window.print()
+  const handlePrintOrder = (order) => {
+    const printWindow = window.open('', '_blank');
+    const formatCurrency = (amount) => {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    };
+
+    const getStatusColor = (status) => {
+      switch(status) {
+        case 'completed': return '#22c55e';
+        case 'shipping': return '#3b82f6';
+        case 'pending': return '#f59e0b';
+        case 'cancelled': return '#ef4444';
+        default: return '#6b7280';
+      }
+    };
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Order #${order.id} - Invoice</title>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+          
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          
+          body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            color: #1f2937;
+            line-height: 1.6;
+          }
+          
+          .invoice-container {
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            overflow: hidden;
+          }
+          
+          .header {
+            background: linear-gradient(135deg, #0f0f10 0%, #1a1a1c 50%, #0f0f10 100%);
+            color: #fff;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          
+          .header-left h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+          }
+          
+          .header-left h1 span {
+            color: #D0FE1D;
+          }
+          
+          .header-left p {
+            font-size: 12px;
+            color: #9ca3af;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+          }
+          
+          .header-right {
+            text-align: right;
+          }
+          
+          .invoice-badge {
+            background: #D0FE1D;           
+            color: black;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            margin-bottom: 8px;
+            display: inline-block;
+          }
+          
+          .invoice-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+          }
+          
+          .content {
+            padding: 30px 40px;
+          }
+          
+          .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px dashed #e5e7eb;
+          }
+          
+          .info-section {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+          }
+          
+          .info-section h3 {
+            font-size: 10px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            font-weight: 600;
+          }
+          
+          .info-section p {
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #374151;
+          }
+          
+          .info-section p strong {
+            color: #111827;
+            font-weight: 600;
+          }
+          
+          .info-section .highlight {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+          }
+          
+          .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+            background: ${getStatusColor(order.status)}15;
+            color: ${getStatusColor(order.status)};
+            border: 1px solid ${getStatusColor(order.status)}40;
+          }
+          
+          .status-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: ${getStatusColor(order.status)};
+          }
+          
+          .items-section h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          
+          .items-section h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #D0FE1D;
+            border-radius: 2px;
+          }
+          
+          table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 20px;
+          }
+          
+          thead tr {
+            background: #111827;
+          }
+          
+          th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          }
+          
+          th:first-child {
+            border-radius: 8px 0 0 8px;
+          }
+          
+          th:last-child {
+            border-radius: 0 8px 8px 0;
+            text-align: right;
+          }
+          
+          td {
+            padding: 16px;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+          }
+          
+          td:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: #111827;
+          }
+          
+          tbody tr:hover {
+            background: #f9fafb;
+          }
+          
+          tbody tr:last-child td {
+            border-bottom: none;
+          }
+          
+          .product-name {
+            font-weight: 600;
+            color: #111827;
+          }
+          
+          .quantity-badge {
+            background: #e5e7eb;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+          }
+          
+          .totals-section {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+          }
+          
+          .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 14px;
+            color: #6b7280;
+          }
+          
+          .total-row.subtotal {
+            border-bottom: 1px dashed #d1d5db;
+            padding-bottom: 16px;
+            margin-bottom: 8px;
+          }
+          
+          .total-row.grand-total {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111827;
+            padding-top: 16px;
+            border-top: 2px solid #111827;
+            margin-top: 8px;
+          }
+          
+          .total-row.grand-total span:last-child {
+            color: #059669;
+          }
+          
+          .footer {
+            background: #f9fafb;
+            padding: 24px 40px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          
+          .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+          
+          .thank-you {
+            background: linear-gradient(135deg, #D0FE1D 0%, #a3e635 100%);
+            color: #0f0f10;
+            padding: 10px 20px;
+            border-radius: 8px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            font-weight: 700;
+            font-size: 13px;
+          }
+          
+          .footer-info {
+            font-size: 11px;
+            color: #6b7280;
+          }
+          
+          .footer-right {
+            text-align: right;
+            font-size: 11px;
+            color: #9ca3af;
+          }
+          
+          .footer-right p {
+            margin-bottom: 2px;
+          }
+          
+          .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 10px;
+            color: #d1d5db;
+            letter-spacing: 1px;
+          }
+          
+          @media print {
+            body { 
+              padding: 0;
+              print-color-adjust: exact;
+              -webkit-print-color-adjust: exact;
+            }
+            .invoice-container {
+              border: none;
+            }
+            .watermark {
+              display: none;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="invoice-container">
+          <div class="header">
+            <div class="header-left">
+              <h1>PRIME <span>SOULS</span></h1>
+              <p>Premium Footwear & Lifestyle</p>
+            </div>
+            <div class="header-right">
+              <div class="invoice-badge">Invoice</div>
+              <div class="invoice-number">#${String(order.id).padStart(6, '0')}</div>
+            </div>
+          </div>
+          
+          <div class="content">
+            <div class="info-grid">
+              <div class="info-section">
+                <h3>Order Details</h3>
+                <p class="highlight">#${String(order.id).padStart(6, '0')}</p>
+                <p><strong>Date:</strong> ${new Date(order.date).toLocaleDateString('vi-VN', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</p>
+              </div>
+              
+              <div class="info-section">
+                <h3>Customer</h3>
+                <p class="highlight">${order.customer?.name || 'Guest'}</p>
+                <p><strong>Email:</strong> ${order.customer?.email || 'N/A'}</p>
+                <p><strong>Phone:</strong> ${order.customer?.phone || 'N/A'}</p>
+              </div>
+              
+              <div class="info-section">
+                <h3>Shipping Address</h3>
+                <p>${order.shipping?.address || 'N/A'}</p>
+                <p><strong>Method:</strong> Standard Delivery</p>
+              </div>
+            </div>
+            
+            <div class="items-section">
+              <h3>Order Items</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${(order.items || []).map(item => `
+                    <tr>
+                      <td><span class="product-name">${item.name}</span></td>
+                      <td><span class="quantity-badge">× ${item.quantity}</span></td>
+                      <td>${formatCurrency(item.price)}</td>
+                      <td>${formatCurrency(item.price * item.quantity)}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+              
+              <div class="totals-section">
+                <div class="total-row subtotal">
+                  <span>Subtotal (${order.items?.length || 0} items)</span>
+                  <span>${formatCurrency(order.total)}</span>
+                </div>
+                <div class="total-row">
+                  <span>Shipping</span>
+                  <span>Free</span>
+                </div>
+                <div class="total-row">
+                  <span>Tax (included)</span>
+                  <span>-</span>
+                </div>
+                <div class="total-row grand-total">
+                  <span>Total Amount</span>
+                  <span>${formatCurrency(order.total)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="footer">
+            <div class="footer-left">
+              <div class="thank-you">✓ Thank You!</div>
+              <div class="footer-info">
+                <p>For any questions, contact us at support@primesouls.vn</p>
+              </div>
+            </div>
+            <div class="footer-right">
+              <p>Printed on: ${new Date().toLocaleString('vi-VN')}</p>
+              <p>Prime Souls © ${new Date().getFullYear()}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="watermark">PRIME SOULS - AUTHENTIC INVOICE</div>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
   };
 
   const filteredOrders = orders.filter(order => {
-    if (selectedOrderStatus === 'all') return true;
-    return order.status === selectedOrderStatus;
+    const matchesStatus = selectedOrderStatus === 'all' || order.status === selectedOrderStatus;
+    const matchesSearch = orderSearchQuery === '' || 
+      order.id.toString().includes(orderSearchQuery) ||
+      (order.customer?.name || '').toLowerCase().includes(orderSearchQuery.toLowerCase()) ||
+      (order.customer?.email || '').toLowerCase().includes(orderSearchQuery.toLowerCase()) ||
+      (order.customer?.phone || '').includes(orderSearchQuery);
+    return matchesStatus && matchesSearch;
   });
 
   if (loading) {
@@ -934,21 +1458,39 @@ function Admin() {
               <div className="admin-stat-card">
                 <FontAwesomeIcon icon={faTruck} className="admin-stat-icon" style={{color: '#2196F3'}} />
                 <div className="admin-stat-content">
-                  <h3>Shipped</h3>
-                  <p className="admin-stat-value">{orders.filter(o => o.status === 'shipped').length}</p>
+                  <h3>Shipping</h3>
+                  <p className="admin-stat-value">{orders.filter(o => o.status === 'shipping').length}</p>
                 </div>
               </div>
               <div className="admin-stat-card">
                 <FontAwesomeIcon icon={faCheck} className="admin-stat-icon" style={{color: '#4CAF50'}} />
                 <div className="admin-stat-content">
-                  <h3>Delivered</h3>
-                  <p className="admin-stat-value">{orders.filter(o => o.status === 'delivered').length}</p>
+                  <h3>Completed</h3>
+                  <p className="admin-stat-value">{orders.filter(o => o.status === 'completed').length}</p>
                 </div>
               </div>
             </div>
 
-            {/* Order Filters and View Toggle */}
+            {/* Order Search and Filters */}
             <div className="admin-controls">
+              {/* Search Box */}
+              <div className="search-box-admin">
+                <FontAwesomeIcon icon={faSearch} className="search-icon-admin" />
+                <input
+                  type="text"
+                  placeholder="Search by Order ID, Customer Name, Email, Phone..."
+                  value={orderSearchQuery}
+                  onChange={(e) => setOrderSearchQuery(e.target.value)}
+                />
+                {orderSearchQuery && (
+                  <FontAwesomeIcon 
+                    icon={faTimes} 
+                    className="clear-icon-admin"
+                    onClick={() => setOrderSearchQuery('')}
+                  />
+                )}
+              </div>
+
               {/* View Mode Toggle */}
               <div className="view-mode-toggle">
                 <button 
@@ -983,22 +1525,16 @@ function Admin() {
                 <FontAwesomeIcon icon={faClock} /> Pending
               </button>
               <button 
-                className={`filter-btn-admin ${selectedOrderStatus === 'processing' ? 'active' : ''}`}
-                onClick={() => setSelectedOrderStatus('processing')}
+                className={`filter-btn-admin ${selectedOrderStatus === 'shipping' ? 'active' : ''}`}
+                onClick={() => setSelectedOrderStatus('shipping')}
               >
-                <FontAwesomeIcon icon={faBox} /> Processing
+                <FontAwesomeIcon icon={faTruck} /> Shipping
               </button>
               <button 
-                className={`filter-btn-admin ${selectedOrderStatus === 'shipped' ? 'active' : ''}`}
-                onClick={() => setSelectedOrderStatus('shipped')}
+                className={`filter-btn-admin ${selectedOrderStatus === 'completed' ? 'active' : ''}`}
+                onClick={() => setSelectedOrderStatus('completed')}
               >
-                <FontAwesomeIcon icon={faTruck} /> Shipped
-              </button>
-              <button 
-                className={`filter-btn-admin ${selectedOrderStatus === 'delivered' ? 'active' : ''}`}
-                onClick={() => setSelectedOrderStatus('delivered')}
-              >
-                <FontAwesomeIcon icon={faCheck} /> Delivered
+                <FontAwesomeIcon icon={faCheck} /> Completed
               </button>
               <button 
                 className={`filter-btn-admin ${selectedOrderStatus === 'cancelled' ? 'active' : ''}`}
@@ -1020,7 +1556,12 @@ function Admin() {
               ) : (
                 filteredOrders.map(order => {
                   const status = getOrderStatus(order.status);
-                  const orderDate = new Date(order.orderDate);
+                  const orderDate = new Date(order.date);
+                  
+                  // Format tiền VND
+                  const formatCurrency = (amount) => {
+                    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+                  };
                   
                   return (
                     <div key={order.id} className={`admin-product-card ${orderViewMode}`}>
@@ -1033,15 +1574,15 @@ function Admin() {
                           <div className="admin-product-info">
                             <h3 className="admin-product-name">Order #{order.id}</h3>
                             <p className="admin-product-category">
-                              <FontAwesomeIcon icon={faUsers} /> {order.customerName}
+                              <FontAwesomeIcon icon={faUsers} /> {order.customer?.name || 'Guest'}
                             </p>
                             <p className="admin-order-email">
-                              <FontAwesomeIcon icon={faEnvelope} /> {order.customerEmail}
+                              <FontAwesomeIcon icon={faEnvelope} /> {order.customer?.email || 'N/A'}
                             </p>
                           </div>
                         </div>
                         <div className="admin-product-meta">
-                          <div className="admin-product-price">${order.total.toFixed(2)}</div>
+                          <div className="admin-product-price">{formatCurrency(order.total)}</div>
                           <div 
                             className="admin-product-stock"
                             style={{ backgroundColor: status.color + '20', color: status.color }}
@@ -1055,7 +1596,7 @@ function Admin() {
                       <div className="admin-order-details">
                         <div className="admin-order-detail-item">
                           <FontAwesomeIcon icon={faCalendarAlt} />
-                          <span>{orderDate.toLocaleDateString('en-US', { 
+                          <span>{orderDate.toLocaleDateString('vi-VN', { 
                             year: 'numeric', 
                             month: 'short', 
                             day: 'numeric',
@@ -1065,7 +1606,7 @@ function Admin() {
                         </div>
                         <div className="admin-order-detail-item">
                           <FontAwesomeIcon icon={faBox} />
-                          <span>{order.items.length} item{order.items.length > 1 ? 's' : ''}</span>
+                          <span>{order.items?.length || 0} item{(order.items?.length || 0) > 1 ? 's' : ''}</span>
                         </div>
                       </div>
 
@@ -1075,24 +1616,32 @@ function Admin() {
                           <div className="admin-order-section">
                             <h4><FontAwesomeIcon icon={faBox} /> Order Items</h4>
                             <div className="admin-order-items-list">
-                              {order.items.map((item, index) => (
+                              {(order.items || []).map((item, index) => (
                                 <div key={index} className="admin-order-item">
                                   <div className="admin-order-item-info">
                                     <span className="admin-order-item-name">{item.name}</span>
                                     <span className="admin-order-item-qty">Qty: {item.quantity}</span>
                                   </div>
-                                  <span className="admin-order-item-price">${(item.price * item.quantity).toFixed(2)}</span>
+                                  <span className="admin-order-item-price">{formatCurrency(item.price * item.quantity)}</span>
                                 </div>
                               ))}
                               <div className="admin-order-total">
                                 <span>Total:</span>
-                                <span>${order.total.toFixed(2)}</span>
+                                <span>{formatCurrency(order.total)}</span>
                               </div>
                             </div>
                           </div>
                           <div className="admin-order-section">
+                            <h4><FontAwesomeIcon icon={faUsers} /> Customer Info</h4>
+                            <p className="admin-order-address">
+                              <strong>Name:</strong> {order.customer?.name || 'Guest'}<br/>
+                              <strong>Email:</strong> {order.customer?.email || 'N/A'}<br/>
+                              <strong>Phone:</strong> {order.customer?.phone || 'N/A'}
+                            </p>
+                          </div>
+                          <div className="admin-order-section">
                             <h4><FontAwesomeIcon icon={faTruck} /> Shipping Address</h4>
-                            <p className="admin-order-address">{order.shippingAddress}</p>
+                            <p className="admin-order-address">{order.shipping?.address || 'N/A'}</p>
                           </div>
                           <div className="admin-order-section">
                             <h4><FontAwesomeIcon icon={faEdit} /> Update Status</h4>
@@ -1105,25 +1654,18 @@ function Admin() {
                                 <FontAwesomeIcon icon={faClock} /> Pending
                               </button>
                               <button 
-                                className={`admin-status-btn ${order.status === 'processing' ? 'active' : ''}`}
-                                onClick={() => handleUpdateOrderStatus(order.id, 'processing')}
-                                disabled={order.status === 'processing'}
+                                className={`admin-status-btn ${order.status === 'shipping' ? 'active' : ''}`}
+                                onClick={() => handleUpdateOrderStatus(order.id, 'shipping')}
+                                disabled={order.status === 'shipping'}
                               >
-                                <FontAwesomeIcon icon={faBox} /> Processing
+                                <FontAwesomeIcon icon={faTruck} /> Shipping
                               </button>
                               <button 
-                                className={`admin-status-btn ${order.status === 'shipped' ? 'active' : ''}`}
-                                onClick={() => handleUpdateOrderStatus(order.id, 'shipped')}
-                                disabled={order.status === 'shipped'}
+                                className={`admin-status-btn ${order.status === 'completed' ? 'active' : ''}`}
+                                onClick={() => handleUpdateOrderStatus(order.id, 'completed')}
+                                disabled={order.status === 'completed'}
                               >
-                                <FontAwesomeIcon icon={faTruck} /> Shipped
-                              </button>
-                              <button 
-                                className={`admin-status-btn ${order.status === 'delivered' ? 'active' : ''}`}
-                                onClick={() => handleUpdateOrderStatus(order.id, 'delivered')}
-                                disabled={order.status === 'delivered'}
-                              >
-                                <FontAwesomeIcon icon={faCheck} /> Delivered
+                                <FontAwesomeIcon icon={faCheck} /> Completed
                               </button>
                               <button 
                                 className={`admin-status-btn danger ${order.status === 'cancelled' ? 'active' : ''}`}
@@ -1151,12 +1693,50 @@ function Admin() {
                             {expandedOrder === order.id ? 'Hide Details' : 'View Details'}
                             <FontAwesomeIcon icon={expandedOrder === order.id ? faChevronUp : faChevronDown} />
                           </button>
+                          
+                          {/* Quick Status Change Buttons */}
+                          <div className="admin-quick-status-actions">
+                            <button 
+                              className={`admin-action-btn status-btn pending ${order.status === 'pending' ? 'active' : ''}`}
+                              onClick={() => handleUpdateOrderStatus(order.id, 'pending')}
+                              disabled={order.status === 'pending'}
+                              title="Set Pending"
+                            >
+                              <FontAwesomeIcon icon={faClock} />
+                            </button>
+                            <button 
+                              className={`admin-action-btn status-btn shipping ${order.status === 'shipping' ? 'active' : ''}`}
+                              onClick={() => handleUpdateOrderStatus(order.id, 'shipping')}
+                              disabled={order.status === 'shipping'}
+                              title="Set Shipping"
+                            >
+                              <FontAwesomeIcon icon={faTruck} />
+                            </button>
+                            <button 
+                              className={`admin-action-btn status-btn completed ${order.status === 'completed' ? 'active' : ''}`}
+                              onClick={() => handleUpdateOrderStatus(order.id, 'completed')}
+                              disabled={order.status === 'completed'}
+                              title="Set Completed"
+                            >
+                              <FontAwesomeIcon icon={faCheck} />
+                            </button>
+                          </div>
+
                           <button 
-                            className="admin-action-btn primary"
-                            onClick={() => toggleOrderDetails(order.id)}
+                            className="admin-action-btn info"
+                            onClick={() => handlePrintOrder(order)}
+                            title="Print Invoice"
                           >
-                            <FontAwesomeIcon icon={faEye} />
-                            View Full Order
+                            <FontAwesomeIcon icon={faPrint} />
+                            Print
+                          </button>
+                          <button 
+                            className="admin-action-btn danger"
+                            onClick={() => handleDeleteOrder(order.id)}
+                            title="Delete Order"
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                            Delete
                           </button>
                         </div>
                       </div>

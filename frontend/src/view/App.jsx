@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom"
 import { Toaster } from 'react-hot-toast'
+//Context
+import { CartProvider } from './context/CartContext'
 //Components
 import Header from './components/navbar'
 import Infbar from './components/infbar'
@@ -114,7 +116,9 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <CartProvider>
+        <AppContent />
+      </CartProvider>
     </BrowserRouter>
   )
 }

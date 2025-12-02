@@ -58,7 +58,7 @@ function AdminSidebar({ activeSection, setActiveSection }) {
   return (
     <aside className="admin-sidebar-nav">
       <div className="admin-sidebar-header">
-        <h2>Admin Panel</h2>
+        <h2>PRIME SOULS</h2>
       </div>
       
       <nav className="admin-nav-menu">

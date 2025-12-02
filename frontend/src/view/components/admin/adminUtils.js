@@ -22,9 +22,8 @@ export const getPromotionStatus = (promotion) => {
 export const getOrderStatus = (status) => {
   const statusMap = {
     pending: { text: 'Pending', color: '#FF9800' },
-    processing: { text: 'Processing', color: '#2196F3' },
-    shipped: { text: 'Shipped', color: '#9C27B0' },
-    delivered: { text: 'Delivered', color: '#4CAF50' },
+    shipping: { text: 'Shipping', color: '#2196F3' },
+    completed: { text: 'Completed', color: '#4CAF50' },
     cancelled: { text: 'Cancelled', color: '#F44336' }
   };
   return statusMap[status] || { text: status, color: '#666' };

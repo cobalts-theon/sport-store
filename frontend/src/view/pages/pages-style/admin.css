@@ -922,6 +922,12 @@
   color: #F44336;
 }
 
+.admin-action-btn.info {
+  background: rgba(33, 150, 243, 0.1);
+  border-color: rgba(33, 150, 243, 0.4);
+  color: #2196F3;
+}
+
 .admin-action-btn.primary:hover {
   background: #fff;
   border-color: #fff;
@@ -940,6 +946,89 @@
   border-color: #F44336;
   color: #000;
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.admin-action-btn.info:hover {
+  background: #2196F3;
+  border-color: #2196F3;
+  color: #fff;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+/* Quick Status Action Buttons */
+.admin-quick-status-actions {
+  display: flex;
+  gap: 0.3rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.3rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-action-btn.status-btn {
+  padding: 8px 12px;
+  min-width: auto;
+  border-radius: 4px;
+}
+
+.admin-action-btn.status-btn.pending {
+  background: rgba(255, 152, 0, 0.1);
+  border-color: rgba(255, 152, 0, 0.4);
+  color: #FF9800;
+}
+
+.admin-action-btn.status-btn.pending:hover:not(:disabled) {
+  background: #FF9800;
+  border-color: #FF9800;
+  color: #000;
+}
+
+.admin-action-btn.status-btn.pending.active {
+  background: #FF9800;
+  border-color: #FF9800;
+  color: #000;
+}
+
+.admin-action-btn.status-btn.shipping {
+  background: rgba(33, 150, 243, 0.1);
+  border-color: rgba(33, 150, 243, 0.4);
+  color: #2196F3;
+}
+
+.admin-action-btn.status-btn.shipping:hover:not(:disabled) {
+  background: #2196F3;
+  border-color: #2196F3;
+  color: #fff;
+}
+
+.admin-action-btn.status-btn.shipping.active {
+  background: #2196F3;
+  border-color: #2196F3;
+  color: #fff;
+}
+
+.admin-action-btn.status-btn.completed {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: rgba(76, 175, 80, 0.4);
+  color: #4CAF50;
+}
+
+.admin-action-btn.status-btn.completed:hover:not(:disabled) {
+  background: #4CAF50;
+  border-color: #4CAF50;
+  color: #fff;
+}
+
+.admin-action-btn.status-btn.completed.active {
+  background: #4CAF50;
+  border-color: #4CAF50;
+  color: #fff;
+}
+
+.admin-action-btn.status-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
 /* Expanded Details */

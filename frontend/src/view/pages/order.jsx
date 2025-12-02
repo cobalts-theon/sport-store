@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faBox, 
@@ -12,87 +12,83 @@ import {
   faChevronUp
 } from '@fortawesome/free-solid-svg-icons';
 import './pages-style/order.css';
+import api from '../../lib/api';
+import toast from 'react-hot-toast';
 
 function Order() {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Mock data - replace with actual API call
+  // Fetch orders từ API
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setOrders([
-        {
-          id: 'ORD-2025-001',
-          date: '2025-11-20',
-          status: 'delivered',
-          total: 299.99,
-          items: [
-            { name: 'Air Max 97 Silver Bullet', quantity: 1, price: 299.99, image: '/src/assets/image/1.png' }
-          ],
-          shipping: {
-            address: '123 Street Name, City, State 12345',
-            method: 'Express Delivery',
-            tracking: 'TRK123456789'
-          }
-        },
-        {
-          id: 'ORD-2025-002',
-          date: '2025-11-22',
-          status: 'shipping',
-          total: 449.98,
-          items: [
-            { name: 'Jordan 1 Retro High', quantity: 1, price: 249.99, image: '/src/assets/image/2.png' },
-            { name: 'Nike Dunk Low', quantity: 1, price: 199.99, image: '/src/assets/image/3.jpg' }
-          ],
-          shipping: {
-            address: '456 Avenue Road, Town, State 67890',
-            method: 'Standard Delivery',
-            tracking: 'TRK987654321'
-          }
-        },
-        {
-          id: 'ORD-2025-003',
-          date: '2025-11-24',
-          status: 'processing',
-          total: 349.99,
-          items: [
-            { name: 'Yeezy Boost 350', quantity: 1, price: 349.99, image: '/src/assets/image/4.jpg' }
-          ],
-          shipping: {
-            address: '789 Boulevard Street, City, State 13579',
-            method: 'Express Delivery',
-            tracking: 'Pending'
-          }
-        },
-        {
-          id: 'ORD-2025-004',
-          date: '2025-11-15',
-          status: 'cancelled',
-          total: 199.99,
-          items: [
-            { name: 'Converse Chuck 70', quantity: 1, price: 199.99, image: '/src/assets/image/5.jpg' }
-          ],
-          shipping: {
-            address: '321 Park Lane, Village, State 24680',
-            method: 'Standard Delivery',
-            tracking: 'Cancelled'
-          }
+    const fetchOrders = async () => {
+      try {
+        // Lấy user từ localStorage
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        
+        if (!user || !user.id) {
+          // Nếu chưa đăng nhập, chuyển về login
+          toast.error('Please login to view your orders');
+          navigate('/login');
+          return;
         }
-      ]);
-      setLoading(false);
-    }, 1000);
-  }, []);
+
+        const res = await api.get(`/orders/user/${user.id}`);
+        
+        // Transform data từ API sang format phù hợp
+        const transformedOrders = (res.data || []).map(order => ({
+          id: `ORD-${order.id}`,
+          rawId: order.id,
+          date: order.createdAt,
+          status: order.status || 'processing',
+          total: Number(order.totalAmount) || 0,
+          items: (order.OrderItems || []).map(item => ({
+            name: item.Product?.name || 'Unknown Product',
+            quantity: item.quantity,
+            price: Number(item.price) || 0,
+            image: item.Product?.img_url 
+              ? (item.Product.img_url.startsWith('http') 
+                  ? item.Product.img_url 
+                  : `http://localhost:3000${item.Product.img_url}`)
+              : '/src/assets/image/placeholder.png'
+          })),
+          shipping: {
+            address: order.address || 'N/A',
+            fullName: order.fullName || '',
+            email: order.email || '',
+            phone: order.phone || '',
+            method: 'Standard Delivery',
+            tracking: order.trackingNumber || 'Pending'
+          }
+        }));
+
+        setOrders(transformedOrders);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        toast.error('Failed to load orders');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [navigate]);
+
+  // Format tiền VND
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+  };
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'delivered':
+      case 'completed':
         return faCheckCircle;
       case 'shipping':
         return faTruck;
-      case 'processing':
+      case 'pending':
         return faBox;
       case 'cancelled':
         return faTimesCircle;
@@ -103,11 +99,11 @@ function Order() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'delivered':
+      case 'completed':
         return '#4CAF50';
       case 'shipping':
         return '#2196F3';
-      case 'processing':
+      case 'pending':
         return '#FF9800';
       case 'cancelled':
         return '#F44336';
@@ -153,10 +149,10 @@ function Order() {
             All Orders
           </button>
           <button 
-            className={`filter-btn ${selectedStatus === 'processing' ? 'active' : ''}`}
-            onClick={() => setSelectedStatus('processing')}
+            className={`filter-btn ${selectedStatus === 'pending' ? 'active' : ''}`}
+            onClick={() => setSelectedStatus('pending')}
           >
-            Processing
+            Pending
           </button>
           <button 
             className={`filter-btn ${selectedStatus === 'shipping' ? 'active' : ''}`}
@@ -165,10 +161,10 @@ function Order() {
             Shipping
           </button>
           <button 
-            className={`filter-btn ${selectedStatus === 'delivered' ? 'active' : ''}`}
-            onClick={() => setSelectedStatus('delivered')}
+            className={`filter-btn ${selectedStatus === 'completed' ? 'active' : ''}`}
+            onClick={() => setSelectedStatus('completed')}
           >
-            Delivered
+            Completed
           </button>
           <button 
             className={`filter-btn ${selectedStatus === 'cancelled' ? 'active' : ''}`}
@@ -217,7 +213,7 @@ function Order() {
                         <p className="item-name">{item.name}</p>
                         <p className="item-quantity">Qty: {item.quantity}</p>
                       </div>
-                      <p className="item-price">${item.price.toFixed(2)}</p>
+                      <p className="item-price">{formatCurrency(item.price)}</p>
                     </div>
                   ))}
                   {order.items.length > 3 && (
@@ -229,7 +225,7 @@ function Order() {
                 <div className="order-card-footer">
                   <div className="order-total">
                     <span>Total:</span>
-                    <span className="total-amount">${order.total.toFixed(2)}</span>
+                    <span className="total-amount">{formatCurrency(order.total)}</span>
                   </div>
                   <button 
                     className="view-details-btn"
@@ -244,12 +240,17 @@ function Order() {
                 {expandedOrder === order.id && (
                   <div className="order-details-expanded">
                     <div className="details-section">
-                      <h4>Shipping Address</h4>
-                      <p>{order.shipping.address}</p>
+                      <h4>Customer</h4>
+                      <p>{order.shipping.fullName}</p>
                     </div>
                     <div className="details-section">
-                      <h4>Shipping Method</h4>
-                      <p>{order.shipping.method}</p>
+                      <h4>Contact</h4>
+                      <p>{order.shipping.email}</p>
+                      <p>{order.shipping.phone}</p>
+                    </div>
+                    <div className="details-section">
+                      <h4>Shipping Address</h4>
+                      <p>{order.shipping.address}</p>
                     </div>
                     <div className="details-section">
                       <h4>Tracking Number</h4>
@@ -260,7 +261,7 @@ function Order() {
                         <button className="action-btn primary">
                           TRACK ORDER
                         </button>
-                        <Link to={`/product/${order.items[0].name}`} className="action-btn secondary">
+                        <Link to="/products" className="action-btn secondary">
                           BUY AGAIN
                         </Link>
                       </div>

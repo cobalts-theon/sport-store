@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
-import { FaUser, FaBoxOpen, FaLock, FaSignOutAlt, FaCamera, FaSave, FaPhone, FaMapMarkerAlt, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaUser, FaBoxOpen, FaLock, FaSignOutAlt, FaCamera, FaSave, FaPhone, FaMapMarkerAlt, FaEnvelope, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
 import './pages-style/profile.css';
 import Silk from '/src/view/components/Silk';
 
@@ -28,6 +28,9 @@ const Profile = () => {
     const [showCurrentPass, setShowCurrentPass] = useState(false);
     const [showNewPass, setShowNewPass] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
+    
+    // State cho xem chi tiết đơn hàng
+    const [selectedOrder, setSelectedOrder] = useState(null);
     
     // Ref để tránh gọi API và toast nhiều lần
     const hasFetched = useRef(false);
@@ -153,6 +156,15 @@ const Profile = () => {
             style: 'currency',
             currency: 'VND'
         }).format(price);
+    };
+
+    // Xem chi tiết đơn hàng
+    const handleViewOrder = (order) => {
+        setSelectedOrder(order);
+    };
+
+    const closeOrderDetail = () => {
+        setSelectedOrder(null);
     };
 
     return (
@@ -320,12 +332,102 @@ const Profile = () => {
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <button className="btn-view">View</button>
+                                                    <button className="btn-view" onClick={() => handleViewOrder(order)}>View</button>
                                                 </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
+                            )}
+
+                            {/* Order Detail Modal */}
+                            {selectedOrder && (
+                                <div className="order-detail-overlay" onClick={closeOrderDetail}>
+                                    <div className="order-detail-modal" onClick={e => e.stopPropagation()}>
+                                        <button className="order-detail-close" onClick={closeOrderDetail}>
+                                            <FaTimes />
+                                        </button>
+                                        
+                                        <div className="order-detail-header">
+                                            <h3>Order #{selectedOrder.id}</h3>
+                                            <span className={`order-status status-${selectedOrder.status || 'pending'}`}>
+                                                {selectedOrder.status || 'pending'}
+                                            </span>
+                                        </div>
+
+                                        <div className="order-detail-info">
+                                            <div className="order-info-row">
+                                                <span>Order Date:</span>
+                                                <span>{new Date(selectedOrder.created_at || selectedOrder.createdAt).toLocaleDateString('en-US', { 
+                                                    year: 'numeric', 
+                                                    month: 'long', 
+                                                    day: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                })}</span>
+                                            </div>
+                                            <div className="order-info-row">
+                                                <span>Shipping Address:</span>
+                                                <span>{selectedOrder.shippingAddress || user.address || 'N/A'}</span>
+                                            </div>
+                                            <div className="order-info-row">
+                                                <span>Payment Method:</span>
+                                                <span>{selectedOrder.paymentMethod || 'COD'}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="order-detail-items">
+                                            <h4>Order Items</h4>
+                                            <div className="order-items-list">
+                                                {selectedOrder.OrderItems && selectedOrder.OrderItems.length > 0 ? (
+                                                    selectedOrder.OrderItems.map((item, index) => {
+                                                        const rawImg = item.Product?.img_url || item.Product?.img;
+                                                        let imgSrc = null;
+                                                        if (rawImg) {
+                                                            if (rawImg.startsWith('http')) {
+                                                                imgSrc = rawImg;
+                                                            } else if (rawImg.startsWith('/')) {
+                                                                imgSrc = `http://localhost:3000${rawImg}`;
+                                                            } else {
+                                                                imgSrc = `http://localhost:3000/${rawImg}`;
+                                                            }
+                                                        }
+                                                        console.log('Product img:', rawImg, '-> Final URL:', imgSrc);
+                                                        return (
+                                                        <div key={index} className="order-item">
+                                                            <div className="order-item-image">
+                                                                {imgSrc ? (
+                                                                    <img 
+                                                                        src={imgSrc} 
+                                                                        alt={item.Product?.name || 'Product'}
+                                                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                                                    />
+                                                                ) : (
+                                                                    <div className="order-item-placeholder"></div>
+                                                                )}
+                                                            </div>
+                                                            <div className="order-item-info">
+                                                                <p className="order-item-name">{item.Product?.name || 'Product'}</p>
+                                                                <p className="order-item-qty">x{item.quantity}</p>
+                                                            </div>
+                                                            <div className="order-item-price">
+                                                                {formatPrice(item.price * item.quantity)}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                    })
+                                                ) : (
+                                                    <p className="no-items">No items</p>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="order-detail-total">
+                                            <span>Total Amount</span>
+                                            <span>{formatPrice(selectedOrder.totalAmount)}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             )}
                         </div>
                     )}

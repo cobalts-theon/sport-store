@@ -6,10 +6,13 @@ import productsData from '../data/products.json';
 import './pages-style/products-view.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faBolt, faStar, faTimes, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { useCart } from '../context/CartContext';
+import toast from 'react-hot-toast';
 
 function ProductsView({ openCart }) {
     // Get product ID from URL params
     const { id } = useParams();
+    const { addToCart } = useCart();
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedSize, setSelectedSize] = useState(null);
@@ -81,7 +84,17 @@ function ProductsView({ openCart }) {
                 const response = await api.get(`/products/${id}`);
                 const productData = response.data;
                 
-                console.log('API Response:', productData); // Debug log
+                let prasedImages = [];
+                if(Array.isArray(productData.images)) {
+                    prasedImages = productData.images;  // Nếu đã là mảng thì dùng luôn
+                } else if (typeof productData.images === 'string') {
+                    try {
+                        prasedImages = JSON.parse(productData.images);  // Nếu lưu dưới dạng chuỗi JSON
+                    } catch (e) {
+                        console.error('Error parsing images:', e);
+                        prasedImages = [];
+                    }
+                }
                 
                 // Map data từ API
                 const mappedProduct = {
@@ -92,7 +105,7 @@ function ProductsView({ openCart }) {
                     originalPrice: productData.original_price,
                     img: productData.img_url ? (productData.img_url.startsWith('http') ? productData.img_url : `http://localhost:3000${productData.img_url}`) : '',
                     hover: productData.hover ? (productData.hover.startsWith('http') ? productData.hover : `http://localhost:3000${productData.hover}`) : '',
-                    images: productData.images || [],
+                    images: prasedImages,
                     tag: productData.tag,
                     category: productData.category,
                     material: productData.material,
@@ -117,7 +130,9 @@ function ProductsView({ openCart }) {
                 // Add additional images from API
                 if (mappedProduct.images && Array.isArray(mappedProduct.images)) {
                     mappedProduct.images.forEach(img => {
-                        const imgUrl = img.startsWith('http') ? img : `http://localhost:3000${img}`;
+                        //Làm sạch chuỗi đường dẫn (Đôi khi bị dư dấu ngoặc kếp hoặc ký tự lạ)
+                        let cleanPath = img.replace(/["\\]/g, '');
+                        const imgUrl = img.startsWith('http') ? cleanPath : `http://localhost:3000${cleanPath}`;
                         if (!images.includes(imgUrl)) {
                             images.push(imgUrl);
                         }
@@ -172,6 +187,15 @@ function ProductsView({ openCart }) {
     const handleQuantityChange = (amount) => {
         setQuantity(prev => {
             const newQuantity = prev + amount;
+            // If product exists, don't exceed stock
+            if (product && typeof product.stock === 'number') {
+                if (newQuantity < 1) return 1;
+                if (newQuantity > product.stock) {
+                    toast.error(`Only ${product.stock} in stock`);
+                    return product.stock;
+                }
+                return newQuantity;
+            }
             return newQuantity < 1 ? 1 : newQuantity;
         });
     };
@@ -410,6 +434,19 @@ function ProductsView({ openCart }) {
                                         )}
                                     </div>
                                 </div>
+                                {/* Stock info */}
+                                <div style={{ marginTop: '8px' }}>
+                                    <span className="trait-label" style={{ fontSize: '13px', display: 'block', marginBottom: '6px' }}>STOCK</span>
+                                    {typeof product.stock === 'number' ? (
+                                        product.stock > 0 ? (
+                                            <span className="stock-value" style={{ color: '#24a148', fontWeight: '700' }}>{product.stock} available</span>
+                                        ) : (
+                                            <span className="stock-value" style={{ color: '#ff4444', fontWeight: '700' }}>Out of stock</span>
+                                        )
+                                    ) : (
+                                        <span className="stock-value" style={{ color: '#999' }}>Stock unknown</span>
+                                    )}
+                                </div>
                             </div>
 
                         </div>
@@ -425,15 +462,28 @@ function ProductsView({ openCart }) {
                     </div>
                     <button 
                         className="view-opensea-btn add-cart-btn"
+                        disabled={typeof product.stock === 'number' && product.stock <= 0}
                         onClick={() => {
-                            // Logic to add to cart would go here
+                            // Kiểm tra nếu sản phẩm cần chọn size
+                            if (categoryType && !selectedSize) {
+                                toast.error('Please select a size');
+                                return;
+                            }
+                            // Kiểm tra tồn kho
+                            if (typeof product.stock === 'number' && product.stock < quantity) {
+                                toast.error(`Only ${product.stock} in stock`);
+                                return;
+                            }
+                            // Thêm vào giỏ hàng
+                            addToCart(product, quantity, selectedSize, selectedColor);
+                            // Mở cart drawer
                             if (openCart) openCart();
                         }}
                     >
                         <span className="opensea-icon"><FontAwesomeIcon icon={faCartShopping} /></span>
-                        ADD TO CART
+                        {typeof product.stock === 'number' && product.stock <= 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
                     </button>
-                    <button className="view-opensea-btn buy-now-btn">
+                    <button className="view-opensea-btn buy-now-btn" disabled={typeof product.stock === 'number' && product.stock <= 0}>
                         <span className="opensea-icon"><FontAwesomeIcon icon={faBolt} /></span>
                         BUY NOW
                     </button>

@@ -1,0 +1,145 @@
+.credit-card-container {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 350px;
+  height: 220px;
+  margin: 0 auto;
+}
+
+.credit-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  background: linear-gradient(-45deg, #1a1a1c, #4a4a4c, #2a2a2c, #1a1a1c);
+  background-size: 400% 400%;
+  position: relative;
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.credit-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Glassmorphism effect */
+.credit-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+.card-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.card-chip {
+  width: 50px;
+  height: 35px;
+  background: linear-gradient(135deg, #d9a7c7 0%, #fffcdc 100%);
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chip-line {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.chip-line:nth-child(1) { top: 0; bottom: 0; left: 33%; width: 1px; }
+.chip-line:nth-child(2) { top: 0; bottom: 0; left: 66%; width: 1px; }
+.chip-line:nth-child(3) { left: 0; right: 0; top: 33%; height: 1px; }
+.chip-line:nth-child(4) { left: 0; right: 0; top: 66%; height: 1px; }
+
+.card-logo {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.visa-logo {
+  font-weight: 900;
+  font-style: italic;
+  font-size: 24px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.mastercard-logo {
+  display: flex;
+}
+
+.mastercard-logo .circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.mastercard-logo .red { background-color: #eb001b; }
+.mastercard-logo .orange { background-color: #f79e1b; margin-left: -15px; }
+
+.card-number {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 22px;
+  letter-spacing: 2px;
+  margin-top: 20px;
+  text-shadow: 0 2px 1px rgba(0,0,0,0.3);
+}
+
+.card-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.card-holder, .card-expiry, .card-cvv {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+}
+
+.value {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Card Type Specific Styles */
+.credit-card.visa {
+  /* Calm navy -> teal -> soft violet for a modern, balanced look */
+  background: url("/src/assets/image/visa.jpg") no-repeat center center / cover;
+  background-size: 400% 400%;
+  box-shadow: 0 10px 25px rgba(30, 111, 103, 0.18);
+}
+
+.credit-card.mastercard {
+  /* Deep burgundy -> rose -> warm gold for an elegant contrast */
+  background: linear-gradient(-45deg, #4b0f1a, #b04a4f, #e5b56a);
+  background-size: 400% 400%;
+  box-shadow: 0 10px 25px rgba(176, 74, 79, 0.18);
+}

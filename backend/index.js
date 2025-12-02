@@ -57,7 +57,8 @@ app.use('/api/products', productRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Sync database - thêm column mới nếu cần (alter: true)
-sequelize.sync({ alter: true }).then(() => {
+// Tắt alter: true để tránh lỗi foreign key constraint
+sequelize.sync().then(() => {
   console.log('Database synced');
 }).catch(err => {
   console.error('Error syncing database:', err);

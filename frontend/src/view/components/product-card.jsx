@@ -3,11 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import './components-style/product-card.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faStarHalf, faFire } from '@fortawesome/free-solid-svg-icons';
+import { useCart } from '../context/CartContext';
 
 
 function ProductCard({ product, index }) {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   // Calculate discount percentage if there's an original price
   const discountPercentage = product.originalPrice && product.price 
@@ -32,8 +34,21 @@ function ProductCard({ product, index }) {
   };
 
   const handleAddToCart = (e) => {
-    e.preventDefault(); 
-    navigate(`/product/${product.id}`);
+    e.preventDefault();
+    e.stopPropagation();
+    // Thêm sản phẩm vào giỏ với số lượng 1, không có size/color được chọn
+    // Nếu sản phẩm cần chọn size, chuyển đến trang chi tiết sản phẩm
+    const needsSize = ['shoes', 'sneakers', 'running', 'basketball', 'training', 'lifestyle', 
+                       'clothing', 'apparel', 't-shirt', 'shirt', 'jacket', 'hoodie', 'pants', 'shorts']
+                      .includes(product.category?.toLowerCase());
+    
+    if (needsSize) {
+      // Nếu cần chọn size, chuyển đến trang chi tiết
+      navigate(`/product/${product.id}`);
+    } else {
+      // Nếu không cần size (phụ kiện...), thêm trực tiếp vào giỏ
+      addToCart(product, 1, null, null);
+    }
   };
 
   return (
