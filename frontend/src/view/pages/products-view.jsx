@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import axios from 'axios';
 import productsData from '../data/products.json';
@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 function ProductsView({ openCart }) {
     // Get product ID from URL params
     const { id } = useParams();
+    const navigate = useNavigate();
     const { addToCart } = useCart();
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -19,6 +20,12 @@ function ProductsView({ openCart }) {
     const [selectedColor, setSelectedColor] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Check if user is logged in
+    const isLoggedIn = () => {
+        const user = localStorage.getItem('user');
+        return user && user !== 'null';
+    };
 
     // Mock multiple images for the carousel
     const [productImages, setProductImages] = useState([]);
@@ -464,6 +471,12 @@ function ProductsView({ openCart }) {
                         className="view-opensea-btn add-cart-btn"
                         disabled={typeof product.stock === 'number' && product.stock <= 0}
                         onClick={() => {
+                            // Kiểm tra đăng nhập
+                            if (!isLoggedIn()) {
+                                toast.error('Please login to add items to cart');
+                                navigate('/login');
+                                return;
+                            }
                             // Kiểm tra nếu sản phẩm cần chọn size
                             if (categoryType && !selectedSize) {
                                 toast.error('Please select a size');
@@ -483,7 +496,31 @@ function ProductsView({ openCart }) {
                         <span className="opensea-icon"><FontAwesomeIcon icon={faCartShopping} /></span>
                         {typeof product.stock === 'number' && product.stock <= 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
                     </button>
-                    <button className="view-opensea-btn buy-now-btn" disabled={typeof product.stock === 'number' && product.stock <= 0}>
+                    <button 
+                        className="view-opensea-btn buy-now-btn" 
+                        disabled={typeof product.stock === 'number' && product.stock <= 0}
+                        onClick={() => {
+                            // Kiểm tra đăng nhập
+                            if (!isLoggedIn()) {
+                                toast.error('Please login to buy');
+                                navigate('/login');
+                                return;
+                            }
+                            // Kiểm tra nếu sản phẩm cần chọn size
+                            if (categoryType && !selectedSize) {
+                                toast.error('Please select a size');
+                                return;
+                            }
+                            // Kiểm tra tồn kho
+                            if (typeof product.stock === 'number' && product.stock < quantity) {
+                                toast.error(`Only ${product.stock} in stock`);
+                                return;
+                            }
+                            // Thêm vào giỏ hàng và chuyển đến checkout
+                            addToCart(product, quantity, selectedSize, selectedColor);
+                            navigate('/checkout');
+                        }}
+                    >
                         <span className="opensea-icon"><FontAwesomeIcon icon={faBolt} /></span>
                         BUY NOW
                     </button>

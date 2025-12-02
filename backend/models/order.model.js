@@ -40,6 +40,11 @@ const Order = sequelize.define('Order', {
     type: DataTypes.ENUM('pending', 'shipping', 'completed', 'cancelled'),
     defaultValue: 'pending'
   },
+  trackingNumber: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'tracking_number' // Map với cột tracking_number trong DB
+  }
 }, {
   tableName: 'orders',
   timestamps: true,

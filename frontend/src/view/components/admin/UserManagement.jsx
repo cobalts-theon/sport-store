@@ -403,10 +403,7 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
                         >
                           {user.status.toUpperCase()}
                         </div>
-                      </div>
-                    </div>
-
-                    {/* User Details Preview */}
+                        {/* User Details Preview */}
                     <div className="admin-user-details">
                       <div className="admin-user-detail-item">
                         <FontAwesomeIcon icon={faCalendarAlt} />
@@ -418,11 +415,13 @@ function UserManagement({ users, setUsers, viewMode = 'grid', setViewMode }) {
                       </div>
                       <div className="admin-user-detail-item">
                         <FontAwesomeIcon icon={faUserClock} />
-                        <span>Last Active: {lastActive.toLocaleDateString('en-US', { 
-                          year: 'numeric', 
-                          month: 'short', 
-                          day: 'numeric' 
-                        })}</span>
+                          <span>Last Active: {lastActive.toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })}</span>
+                        </div>
+                      </div>
                       </div>
                     </div>
 

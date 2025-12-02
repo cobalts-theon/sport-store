@@ -253,14 +253,30 @@ function Order() {
                       <p>{order.shipping.address}</p>
                     </div>
                     <div className="details-section">
-                      <h4>Tracking Number</h4>
-                      <p className="tracking-number">{order.shipping.tracking}</p>
+                      <h4><FontAwesomeIcon icon={faTruck} style={{ marginRight: '8px' }} />Tracking Number</h4>
+                      {order.shipping.tracking && order.shipping.tracking !== 'Pending' ? (
+                        <div className="tracking-info">
+                          <p className="tracking-number has-tracking">{order.shipping.tracking}</p>
+                          <p className="tracking-hint">Use this code to track your package with the carrier</p>
+                        </div>
+                      ) : (
+                        <p className="tracking-number no-tracking">Awaiting shipment - tracking will be available soon</p>
+                      )}
                     </div>
                     {order.status !== 'cancelled' && (
                       <div className="order-actions">
-                        <button className="action-btn primary">
-                          TRACK ORDER
-                        </button>
+                        {order.shipping.tracking && order.shipping.tracking !== 'Pending' && (
+                          <button 
+                            className="action-btn primary"
+                            onClick={() => {
+                              // Copy tracking number to clipboard
+                              navigator.clipboard.writeText(order.shipping.tracking);
+                              toast.success('Tracking number copied to clipboard!');
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTruck} /> COPY TRACKING
+                          </button>
+                        )}
                         <Link to="/products" className="action-btn secondary">
                           BUY AGAIN
                         </Link>

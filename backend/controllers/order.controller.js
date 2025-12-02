@@ -176,3 +176,74 @@ export const deleteOrder = async (req, res) => {
         res.status(500).json({ message: 'Lỗi xóa đơn hàng' });
     }
 };
+
+// Admin: Cập nhật mã vận đơn (Tracking Number)
+export const updateTrackingNumber = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const { trackingNumber } = req.body;
+
+        const order = await Order.findByPk(orderId);
+        if (!order) {
+            return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+        }
+
+        order.trackingNumber = trackingNumber;
+        
+        // Tự động chuyển status sang shipping nếu có tracking number và đang pending
+        if (trackingNumber && order.status === 'pending') {
+            order.status = 'shipping';
+        }
+        
+        await order.save();
+
+        res.json({ 
+            message: 'Cập nhật mã vận đơn thành công', 
+            order: {
+                id: order.id,
+                trackingNumber: order.trackingNumber,
+                status: order.status
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Lỗi cập nhật mã vận đơn' });
+    }
+};
+
+// Tra cứu đơn hàng theo mã vận đơn (Public)
+export const getOrderByTracking = async (req, res) => {
+    try {
+        const { trackingNumber } = req.params;
+
+        const order = await Order.findOne({
+            where: { trackingNumber },
+            include: [
+                {
+                    model: OrderItem,
+                    include: [Product],
+                },
+            ],
+        });
+
+        if (!order) {
+            return res.status(404).json({ message: 'Không tìm thấy đơn hàng với mã vận đơn này' });
+        }
+
+        // Trả về thông tin cơ bản (không bao gồm thông tin nhạy cảm)
+        res.json({
+            orderId: order.id,
+            status: order.status,
+            trackingNumber: order.trackingNumber,
+            createdAt: order.createdAt,
+            updatedAt: order.updatedAt,
+            items: (order.OrderItems || []).map(item => ({
+                name: item.Product?.name || 'Unknown',
+                quantity: item.quantity
+            }))
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Lỗi tra cứu đơn hàng' });
+    }
+};

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faBox,
@@ -89,6 +89,8 @@ function Admin() {
   const [orderSearchQuery, setOrderSearchQuery] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  const [editingTracking, setEditingTracking] = useState(null); // Order ID đang edit tracking
+  const [trackingInput, setTrackingInput] = useState(''); // Input tracking number
 
   // Users state
   const [users, setUsers] = useState([]);
@@ -161,6 +163,7 @@ function Admin() {
           date: order.createdAt,
           status: order.status || 'pending',
           total: Number(order.totalAmount) || 0,
+          trackingNumber: order.trackingNumber || '', // Add tracking number
           customer: {
             name: order.fullName,
             email: order.email,
@@ -536,6 +539,45 @@ function Admin() {
         toast.error('Failed to delete order');
       }
     }
+  };
+
+  // Handle update tracking number
+  const handleUpdateTracking = async (orderId) => {
+    try {
+      const res = await api.patch(`/orders/${orderId}/tracking`, { 
+        trackingNumber: trackingInput 
+      });
+      
+      // Update orders state
+      setOrders(orders.map(order => 
+        order.id === orderId 
+          ? { 
+              ...order, 
+              trackingNumber: trackingInput,
+              status: res.data.order?.status || order.status
+            } 
+          : order
+      ));
+      
+      setEditingTracking(null);
+      setTrackingInput('');
+      toast.success('Tracking number updated successfully!');
+    } catch (error) {
+      console.error('Error updating tracking:', error);
+      toast.error('Failed to update tracking number');
+    }
+  };
+
+  // Start editing tracking
+  const startEditTracking = (order) => {
+    setEditingTracking(order.id);
+    setTrackingInput(order.trackingNumber || '');
+  };
+
+  // Cancel editing tracking
+  const cancelEditTracking = () => {
+    setEditingTracking(null);
+    setTrackingInput('');
   };
 
   const handleViewOrderDetails = (order) => {
@@ -1134,7 +1176,7 @@ function Admin() {
             filteredProducts.map(product => {
               const stockStatus = getStockStatus(product.stock);
               return (
-                <div key={product.id} className={`admin-product-card ${productViewMode}`}>
+                <div key={product.id} className={`admin-product-card product-card-type ${productViewMode}`}>
                   {/* Product Header */}
                   <div className="admin-product-card-header">
                     <div className="admin-product-main-info">
@@ -1569,7 +1611,7 @@ function Admin() {
                   };
                   
                   return (
-                    <div key={order.id} className={`admin-product-card ${orderViewMode}`}>
+                    <div key={order.id} className={`admin-product-card order-card-type ${orderViewMode}`}>
                       {/* Order Card Header */}
                       <div className="admin-product-card-header">
                         <div className="admin-product-main-info">
@@ -1613,92 +1655,62 @@ function Admin() {
                           <FontAwesomeIcon icon={faBox} />
                           <span>{order.items?.length || 0} item{(order.items?.length || 0) > 1 ? 's' : ''}</span>
                         </div>
-                      </div>
-
-                      {/* Expanded Order Details */}
-                      {expandedOrder === order.id && (
-                        <div className="admin-order-expanded">
-                          <div className="admin-order-section">
-                            <h4><FontAwesomeIcon icon={faBox} /> Order Items</h4>
-                            <div className="admin-order-items-list">
-                              {(order.items || []).map((item, index) => (
-                                <div key={index} className="admin-order-item">
-                                  <div className="admin-order-item-info">
-                                    <span className="admin-order-item-name">{item.name}</span>
-                                    <span className="admin-order-item-qty">Qty: {item.quantity}</span>
-                                  </div>
-                                  <span className="admin-order-item-price">{formatCurrency(item.price * item.quantity)}</span>
-                                </div>
-                              ))}
-                              <div className="admin-order-total">
-                                <span>Total:</span>
-                                <span>{formatCurrency(order.total)}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="admin-order-section">
-                            <h4><FontAwesomeIcon icon={faUsers} /> Customer Info</h4>
-                            <p className="admin-order-address">
-                              <strong>Name:</strong> {order.customer?.name || 'Guest'}<br/>
-                              <strong>Email:</strong> {order.customer?.email || 'N/A'}<br/>
-                              <strong>Phone:</strong> {order.customer?.phone || 'N/A'}
-                            </p>
-                          </div>
-                          <div className="admin-order-section">
-                            <h4><FontAwesomeIcon icon={faTruck} /> Shipping Address</h4>
-                            <p className="admin-order-address">{order.shipping?.address || 'N/A'}</p>
-                          </div>
-                          <div className="admin-order-section">
-                            <h4><FontAwesomeIcon icon={faEdit} /> Update Status</h4>
-                            <div className="admin-order-status-buttons">
+                        {/* Tracking Number - Inline Edit */}
+                        <div className="admin-order-detail-item tracking-item">
+                          <FontAwesomeIcon icon={faTruck} />
+                          {editingTracking === order.id ? (
+                            <div className="admin-tracking-inline-edit">
+                              <input
+                                type="text"
+                                value={trackingInput}
+                                onChange={(e) => setTrackingInput(e.target.value.toUpperCase())}
+                                placeholder="Enter tracking"
+                                className="admin-tracking-input-inline"
+                                autoFocus
+                              />
                               <button 
-                                className={`admin-status-btn ${order.status === 'pending' ? 'active' : ''}`}
-                                onClick={() => handleUpdateOrderStatus(order.id, 'pending')}
-                                disabled={order.status === 'pending'}
+                                className="admin-btn-inline save"
+                                onClick={() => handleUpdateTracking(order.id)}
+                                title="Save"
                               >
-                                <FontAwesomeIcon icon={faClock} /> Pending
+                                <FontAwesomeIcon icon={faSave} />
                               </button>
                               <button 
-                                className={`admin-status-btn ${order.status === 'shipping' ? 'active' : ''}`}
-                                onClick={() => handleUpdateOrderStatus(order.id, 'shipping')}
-                                disabled={order.status === 'shipping'}
+                                className="admin-btn-inline cancel"
+                                onClick={cancelEditTracking}
+                                title="Cancel"
                               >
-                                <FontAwesomeIcon icon={faTruck} /> Shipping
-                              </button>
-                              <button 
-                                className={`admin-status-btn ${order.status === 'completed' ? 'active' : ''}`}
-                                onClick={() => handleUpdateOrderStatus(order.id, 'completed')}
-                                disabled={order.status === 'completed'}
-                              >
-                                <FontAwesomeIcon icon={faCheck} /> Completed
-                              </button>
-                              <button 
-                                className={`admin-status-btn danger ${order.status === 'cancelled' ? 'active' : ''}`}
-                                onClick={() => {
-                                  if (window.confirm('Are you sure you want to cancel this order?')) {
-                                    handleUpdateOrderStatus(order.id, 'cancelled');
-                                  }
-                                }}
-                                disabled={order.status === 'cancelled'}
-                              >
-                                <FontAwesomeIcon icon={faTimes} /> Cancelled
+                                <FontAwesomeIcon icon={faTimes} />
                               </button>
                             </div>
-                          </div>
+                          ) : (
+                            <div className="admin-tracking-inline-display">
+                              <span className={order.trackingNumber ? 'has-tracking' : 'no-tracking'}>
+                                {order.trackingNumber || 'No tracking'}
+                              </span>
+                              <button 
+                                className="admin-btn-inline edit"
+                                onClick={() => startEditTracking(order)}
+                                title={order.trackingNumber ? 'Edit tracking' : 'Add tracking'}
+                              >
+                                <FontAwesomeIcon icon={faEdit} />
+                              </button>
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
 
                       {/* Order Card Footer */}
                       <div className="admin-product-card-footer">
                         <div className="admin-product-actions">
                           <button 
-                            className="admin-action-btn secondary"
+                            className={`admin-action-btn secondary ${expandedOrder === order.id ? 'active' : ''}`}
                             onClick={() => toggleOrderDetails(order.id)}
                           >
-                            {expandedOrder === order.id ? 'Hide Details' : 'View Details'}
                             <FontAwesomeIcon icon={expandedOrder === order.id ? faChevronUp : faChevronDown} />
+                            {expandedOrder === order.id ? 'Hide Details' : 'View Details'}
                           </button>
-                          
+
                           {/* Quick Status Change Buttons */}
                           <div className="admin-quick-status-actions">
                             <button 
@@ -1745,6 +1757,32 @@ function Admin() {
                           </button>
                         </div>
                       </div>
+
+                      {/* Expanded Details - Like user order page */}
+                      {expandedOrder === order.id && (
+                        <div className="admin-order-details-expanded">
+                          <div className="admin-details-section">
+                            <h4>Items</h4>
+                            <div className="admin-details-items">
+                              {(order.items || []).map((item, idx) => (
+                                <div key={idx} className="admin-details-item-row">
+                                  <span>{item.name} x{item.quantity}</span>
+                                  <span>{formatCurrency(item.price * item.quantity)}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="admin-details-section">
+                            <h4>Customer</h4>
+                            <p>{order.customer?.name || 'Guest'}</p>
+                            <p>{order.customer?.phone || 'N/A'}</p>
+                          </div>
+                          <div className="admin-details-section">
+                            <h4>Shipping Address</h4>
+                            <p>{order.shipping?.address || 'N/A'}</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })
