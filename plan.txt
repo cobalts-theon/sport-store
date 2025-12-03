@@ -2,7 +2,7 @@
     -login
     -logout
     -register (username, gmail, password, comfirm password) || (with google)
-    -forgot password (PIN email)
+    -forgot password (OTP email)
 
 #MAIN PAGES
     -Home Page (NEWS): hiển thị tin tức, sản phẩm mới

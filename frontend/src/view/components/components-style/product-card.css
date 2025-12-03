@@ -145,7 +145,7 @@
 }
 
 /* Product Info */
-.product-info {
+.product-info-card {
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -153,15 +153,15 @@
   background: #1a1a1a;
 }
 
-.product-category-card {
+.product-category-card-item {
   font-family: 'BBH Sans Bartle', sans-serif;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.5);
   display: flex;
-  padding: 10px;
   align-items: center;
   justify-content: center;
+  padding: 4px 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 4px;
@@ -173,7 +173,11 @@
   color: #ffffff;
   margin: 0 0 6px 0;
   line-height: 1.2;
+  width: 180px;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Rating Section - Replacing Description */

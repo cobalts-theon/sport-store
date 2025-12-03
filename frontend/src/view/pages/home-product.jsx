@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './pages-style/home-product.css';
 import ProductCard from '../components/product-card';
-import productsData from '../data/products.json';
 import Silk from '../components/Silk';
+import api from '@/lib/api';
 
 /**
  * Home Product Page - Hiển thị các sản phẩm trong grid layout
@@ -11,13 +11,49 @@ import Silk from '../components/Silk';
  */
 function HomeProduct() {
   const [filter, setFilter] = useState('all'); // all, featured, new, sale
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Filter products starting from ID 8 for the grid section
-  const gridProducts = productsData.filter(p => p.id >= 10);
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await api.get('/products');
+        // Map API data to match ProductCard expected format
+        // API returns: img_url (not img), original_price (not old_price)
+        const mappedProducts = response.data.map(p => ({
+          id: p.id,
+          name: p.name,
+          img: p.img_url || p.img, // API returns img_url
+          image: p.img_url || p.img,
+          price: p.price,
+          originalPrice: p.original_price || p.old_price,
+          description: p.description,
+          category: p.category,
+          tag: p.tag || 'new',
+          color: p.color,
+          material: p.material,
+          brand: p.brand,
+          stock: p.stock,
+          isHotDeal: p.isHotDeal
+        }));
+        setProducts(mappedProducts);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Get all products (no ID filter since we want to show all from API)
+  const gridProducts = products;
 
   // Lọc sản phẩm theo tag
   const filteredProducts = filter === 'all' 
-    ? gridProducts.slice(0, 10) // Show only first 10 products for 2 rows of 4
+    ? gridProducts.slice(0, 10) // Show only first 10 products
     : gridProducts.filter(product => product.tag === filter).slice(0, 10);
 
   return (

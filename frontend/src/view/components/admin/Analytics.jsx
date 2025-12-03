@@ -512,7 +512,7 @@ function Analytics({ products, orders, users }) {
         </div>
 
         {/* Top Customers */}
-        <div className="analytics-chart-card large">
+        <div className="analytics-chart-card">
           <div className="chart-header">
             <h3>
               <FontAwesomeIcon icon={faStar} />

@@ -2,15 +2,9 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faHeadset, 
-  faEnvelope, 
   faBoxOpen, 
   faUsers, 
-  faNewspaper, 
-  faBriefcase, 
-  faScaleBalanced, 
-  faShieldHalved,
-  faHandshake
+  faQuestionCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 function HelpDropdown({ setMobileOpen }) {
@@ -34,30 +28,16 @@ function HelpDropdown({ setMobileOpen }) {
         <span className="nav-link-label">Help</span>
       </Link>
       
-      {/* Help Panel - Simple Order Style */}
+      {/* Help Panel - Simple Style */}
       {isOpen && (
         <div className="help-panel" onMouseDown={(e) => e.stopPropagation()}>
         
         {/* Grid chứa các link (Content) */}
         <div className="help-panel-grid">
           
-          {/* Cột 1: Hỗ trợ khách hàng */}
+          {/* Cột đơn giản */}
           <div className="help-category">
-            <h3>Assistance</h3>
-            <Link 
-              to="/services" 
-              className="help-link" 
-              onClick={handleLinkClick}
-            >
-              <FontAwesomeIcon icon={faHeadset}/> Help Center
-            </Link>
-            <Link 
-              to="/contact" 
-              className="help-link" 
-              onClick={handleLinkClick}
-            >
-              <FontAwesomeIcon icon={faEnvelope}/> Contact Support
-            </Link>
+            <h3>Support</h3>
             <Link 
               to="/order" 
               className="help-link" 
@@ -65,11 +45,6 @@ function HelpDropdown({ setMobileOpen }) {
             >
               <FontAwesomeIcon icon={faBoxOpen}/> Track Order
             </Link>
-          </div>
-          
-          {/* Cột 2: Về thương hiệu */}
-          <div className="help-category">
-            <h3>The Brand</h3>
             <Link 
               to="/about" 
               className="help-link" 
@@ -78,44 +53,11 @@ function HelpDropdown({ setMobileOpen }) {
               <FontAwesomeIcon icon={faUsers}/> About Us
             </Link>
             <Link 
-              to="/blog" 
+              to="/faq" 
               className="help-link" 
               onClick={handleLinkClick}
             >
-              <FontAwesomeIcon icon={faNewspaper}/> Blog & News
-            </Link>
-             <Link 
-              to="/careers" 
-              className="help-link" 
-              onClick={handleLinkClick}
-            >
-              <FontAwesomeIcon icon={faBriefcase}/> Careers
-            </Link>
-          </div>
-
-          {/* Cột 3: Pháp lý & Đối tác */}
-          <div className="help-category">
-            <h3>Legal & B2B</h3>
-            <Link 
-              to="/terms" 
-              className="help-link" 
-              onClick={handleLinkClick}
-            >
-              <FontAwesomeIcon icon={faScaleBalanced}/> Terms of Service
-            </Link>
-            <Link 
-              to="/privacy" 
-              className="help-link" 
-              onClick={handleLinkClick}
-            >
-              <FontAwesomeIcon icon={faShieldHalved}/> Privacy Policy
-            </Link>
-             <Link 
-              to="/partnerships" 
-              className="help-link" 
-              onClick={handleLinkClick}
-            >
-              <FontAwesomeIcon icon={faHandshake}/> Partnerships
+              <FontAwesomeIcon icon={faQuestionCircle}/> FAQ
             </Link>
           </div>
 

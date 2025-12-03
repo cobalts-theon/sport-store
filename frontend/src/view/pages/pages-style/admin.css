@@ -2932,13 +2932,13 @@
   padding: 1rem;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .recent-order-item:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(208, 254, 29, 0.3);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .order-info {
@@ -2992,13 +2992,17 @@
   padding: 1rem;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .top-product-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: #D0FE1D;
   border-color: rgba(208, 254, 29, 0.3);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.top-product-item:hover .product-info {
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .product-rank {
@@ -3015,12 +3019,20 @@
   flex-shrink: 0;
 }
 
+.top-product-item:hover .product-rank {
+  background: black;
+  color: #D0FE1D;
+}
+
 .product-thumb {
   width: 50px;
   height: 50px;
   object-fit: cover;
-  border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.top-product-item:hover .product-thumb {
+  border-color: #000;
 }
 
 .product-thumb-small {
@@ -3036,6 +3048,16 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  width: calc(100% - 130px);
+}
+
+.top-product-item:hover .product-info {
+  clip-path: none;
+}
+
+.top-product-item:hover .product-name,
+.top-product-item:hover .product-price {
+  color: black;
 }
 
 .product-name {
@@ -3051,6 +3073,7 @@
 }
 
 .product-stock {
+  transform: translateX(-20px);
   font-size: 0.8rem;
 }
 
@@ -3071,20 +3094,34 @@
   padding: 1rem;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .low-stock-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 152, 0, 0.3);
+  background: rgba(255, 0, 0, 1);
+  border-color: rgba(0, 0, 0, 1);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
+.low-stock-item:hover .stock-indicator {
+  background: black;
+  color: red;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
 .stock-product-info {
   display: flex;
   align-items: center;
   gap: 1rem;
   flex: 1;
+}
+
+.low-stock-item:hover .product-thumb-small {
+  border-color: black;
+}
+
+.low-stock-item:hover .stock-product-name,
+.low-stock-item:hover .stock-category {
+  color: black;
 }
 
 .stock-product-info div {
@@ -3133,7 +3170,6 @@
   padding: 1rem;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
@@ -3472,21 +3508,20 @@
 }
 
 .year-selector {
-  background: rgba(208, 254, 29, 0.1);
+  background: #D0FE1D;
   border: 1px solid rgba(208, 254, 29, 0.3);
-  border-radius: 8px;
   padding: 0.4rem 0.8rem;
-  color: #D0FE1D;
+  color: black;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .year-selector:hover {
-  background: rgba(208, 254, 29, 0.2);
-  border-color: #D0FE1D;
+  background: #fff;
 }
 
 .year-selector:focus {
@@ -3505,20 +3540,19 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.8rem 1rem;
-  background: rgba(208, 254, 29, 0.05);
-  border: 1px solid rgba(208, 254, 29, 0.2);
-  border-radius: 8px;
+  background: #D0FE1D;
   margin-bottom: 1rem;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .year-total-label {
-  color: #888;
+  color: black;
   font-size: 0.85rem;
   font-weight: 500;
 }
 
 .year-total-value {
-  color: #D0FE1D;
+  color: black;
   font-size: 1.1rem;
   font-weight: 700;
   font-family: 'JetBrains Mono', monospace;
@@ -3885,13 +3919,12 @@
 .customer-stats {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 0.3rem;
 }
 
 .customer-orders {
   color: #888;
   font-size: 0.75rem;
+  transform: translateX(-20%);
 }
 
 .customer-spent {

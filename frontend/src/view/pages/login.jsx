@@ -10,7 +10,7 @@ import Silk from '../components/Silk';
 import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); //Chuyển hướng trang
     const [formData, setFormData] = useState({
         email: '',
         password: '',

@@ -14,7 +14,7 @@ function ProductFlex() {
     const scrollLeft = () => {
         if (containerRef.current) {
             const scrollAmount = containerRef.current.clientWidth / 4;
-            containerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); // scroll left
+            containerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
         }
     };
 

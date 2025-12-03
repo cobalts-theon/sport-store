@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
-import axios from 'axios';
 import productsData from '../data/products.json';
 import './pages-style/products-view.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +19,7 @@ function ProductsView({ openCart }) {
     const [selectedColor, setSelectedColor] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [suggestedProducts, setSuggestedProducts] = useState([]);
 
     // Check if user is logged in
     const isLoggedIn = () => {
@@ -170,10 +170,54 @@ function ProductsView({ openCart }) {
         fetchProduct();
     }, [id]);
 
+    // Fetch suggested products (cùng category hoặc random)
+    useEffect(() => {
+        const fetchSuggestedProducts = async () => {
+            try {
+                const response = await api.get('/products');
+                const allProducts = response.data;
+                
+                // Lọc bỏ sản phẩm hiện tại
+                const otherProducts = allProducts.filter(p => p.id !== parseInt(id));
+                
+                // Ưu tiên sản phẩm cùng category
+                let suggested = [];
+                if (product && product.category) {
+                    suggested = otherProducts.filter(p => p.category === product.category);
+                }
+                
+                // Nếu không đủ 5, thêm random từ các sản phẩm khác
+                if (suggested.length < 5) {
+                    const remaining = otherProducts.filter(p => !suggested.includes(p));
+                    const shuffled = remaining.sort(() => 0.5 - Math.random());
+                    suggested = [...suggested, ...shuffled].slice(0, 5);
+                } else {
+                    suggested = suggested.slice(0, 5);
+                }
+                
+                // Map data
+                const mappedSuggested = suggested.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    price: p.price,
+                    img: p.img_url ? (p.img_url.startsWith('http') ? p.img_url : `http://localhost:3000${p.img_url}`) : ''
+                }));
+                
+                setSuggestedProducts(mappedSuggested);
+            } catch (error) {
+                console.error('Error fetching suggested products:', error);
+            }
+        };
+        
+        if (product) {
+            fetchSuggestedProducts();
+        }
+    }, [id, product]);
+
     if (!product) {
         return (
             <div className="products-view-container">
-                <div className="products-view-right" style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <div className="products-view-right" style={{ alignItems: 'center', justifyContent: 'center'}}>
                     <FontAwesomeIcon icon={faTriangleExclamation} style={{ color: '#333', fontSize: '40px' }} />
                     <h2 style={{ color: '#333' }}>Product not found</h2>
                 </div>
@@ -212,6 +256,7 @@ function ProductsView({ openCart }) {
     };
 
     return (
+        <div className="products-view-page">
         <div className="products-view-container">
             {/* Left Panel: Image & Details */}
             <div className="products-view-left">
@@ -414,19 +459,19 @@ function ProductsView({ openCart }) {
                             <div className="trait-item" style={{ gridColumn: 'span 2' }}>
                                 <span className="trait-label">PRICE</span>
                                 <div className="price-container-view">
-                                    {product.originalPrice && (
-                                        <span className="original-price" style={{ 
-                                            textDecoration: 'line-through', 
-                                            color: '#999', 
-                                            fontSize: '16px'
-                                        }}>
-                                            {formatPrice(product.originalPrice)}
-                                        </span>
-                                    )}
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                         <span className="trait-value" style={{ fontSize: '34px', color: '#BF1A1A'}}>
                                             {formatPrice(product.price)}
                                         </span>
+                                        {product.originalPrice && (
+                                            <span className="original-price" style={{ 
+                                                textDecoration: 'line-through', 
+                                                color: '#999', 
+                                                fontSize: '18px'
+                                            }}>
+                                                {formatPrice(product.originalPrice)}
+                                            </span>
+                                        )}
                                         {product.originalPrice && discountPercentage > 0 && (
                                             <span className="discount-tag-view" style={{
                                                 backgroundColor: '#BF1A1A',
@@ -434,7 +479,8 @@ function ProductsView({ openCart }) {
                                                 padding: '4px 8px',
                                                 fontSize: '12px',
                                                 fontWeight: 'bold',
-                                                borderRadius: '2px'
+                                                borderRadius: '2px',
+                                                clipPath: 'polygon(0% 0%, 9% 19%, 1% 33%, 11% 50%, 0% 65%, 7% 82%, 0% 100%, 99% 100%, 91% 84%, 100% 68%, 90% 51%, 100% 34%, 87% 22%, 100% 0%)'
                                             }}>
                                                 -{discountPercentage}%
                                             </span>
@@ -542,7 +588,38 @@ function ProductsView({ openCart }) {
                 </div>
             )}
 
+        </div>
+
             {/* You might also like section */}
+            {suggestedProducts.length > 0 && (
+                <div className="suggested-products-section">
+                    <h3 className="suggested-title">YOU MIGHT ALSO LIKE</h3>
+                    <div className="suggested-products-grid">
+                        {suggestedProducts.map((item) => (
+                            <div 
+                                key={item.id} 
+                                className="suggested-product-card"
+                                onClick={() => navigate(`/product/${item.id}`)}
+                            >
+                                <div className="suggested-product-image">
+                                    <img 
+                                        src={item.img || 'https://via.placeholder.com/200x200?text=No+Image'} 
+                                        alt={item.name}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = 'https://via.placeholder.com/200x200?text=No+Image';
+                                        }}
+                                    />
+                                </div>
+                                <div className="suggested-product-info">
+                                    <span className="suggested-product-name">{item.name}</span>
+                                    <span className="suggested-product-price">{item.price?.toLocaleString('vi-VN')}đ</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

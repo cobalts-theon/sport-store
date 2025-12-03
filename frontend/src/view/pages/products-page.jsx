@@ -106,12 +106,29 @@ function ProductsPage() {
     const params = new URLSearchParams(location.search);
     const categoryParam = params.get('category');
     const searchParam = params.get('search');
+    const statusParam = params.get('status');
+    const priceParam = params.get('price');
     
     if (categoryParam && products.length > 0) {
       let filtered = products;
       filtered = filtered.filter(p => p.category && p.category.toLowerCase().includes(categoryParam.toLowerCase()));
       setFilteredProducts(filtered);
       setActiveFilters(prev => ({ ...prev, category: filtered.length > 0 ? filtered[0].category : null }));
+    }
+
+    if (statusParam && products.length > 0) {
+      setActiveFilters(prev => ({ ...prev, status: statusParam }));
+    }
+
+    if (priceParam && products.length > 0) {
+      const priceMap = {
+        'under500k': 'Under 500k',
+        '500k-1m': '500k - 1M',
+        'over1m': 'Over 1M'
+      };
+      if (priceMap[priceParam]) {
+        setActiveFilters(prev => ({ ...prev, priceRange: priceMap[priceParam] }));
+      }
     }
 
     if (searchParam) {

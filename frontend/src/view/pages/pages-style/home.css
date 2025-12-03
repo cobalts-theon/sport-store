@@ -217,7 +217,7 @@
     align-items: center;
     justify-content: center;
 }
-.image-Carousel .carousel-btn:hover { background: rgba(0,0,0,0.75); }
+.image-Carousel .carousel-btn:hover { background: rgba(0,0,0,0.75); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
 .image-Carousel .carousel-btn.prev { left: 5px; background: #d1fe1dc6; color: black;}
 .image-Carousel .carousel-btn.next { right: 5px; }
 
@@ -467,6 +467,37 @@
     font-weight: normal;
     clip-path: inset(100% 0 0 0); /* ẩn toàn bộ từ trên bằng inset */
     transition: all 700ms cubic-bezier(.2,.9,.2,1) 1.9s;
+}
+
+/* Product price display */
+.product-price-display {
+    position: absolute;
+    left: 73%;
+    top: 55%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 6;
+    clip-path: inset(100% 0 0 0);
+    transition: all 700ms cubic-bezier(.2,.9,.2,1) 2s;
+}
+
+.home-rectangle.expand .product-price-display {
+    clip-path: inset(0% -100% 0 -100%);
+}
+
+.product-price-display .current-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0b0b0b;
+}
+
+.product-price-display .old-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: #666;
+    text-decoration: line-through;
 }
 
 /* container for actions so we can layout multiple elements */

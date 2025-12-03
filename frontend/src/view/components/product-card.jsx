@@ -5,11 +5,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faStarHalf, faFire } from '@fortawesome/free-solid-svg-icons';
 import { useCart } from '../context/CartContext';
 
+const API_BASE = 'http://localhost:3000';
 
 function ProductCard({ product, index }) {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   const { addToCart } = useCart();
+
+  // Get image URL - handle both API paths and static paths
+  const getImageUrl = (imgPath) => {
+    if (!imgPath) return '';
+    if (imgPath.startsWith('http')) return imgPath;
+    if (imgPath.startsWith('/uploads')) return `${API_BASE}${imgPath}`;
+    return imgPath;
+  };
+
+  const imageUrl = getImageUrl(product.img || product.image);
+  
+  // Debug log
+  console.log('Product:', product.name, 'Image path:', product.img, 'Final URL:', imageUrl);
 
   // Calculate discount percentage if there's an original price
   const discountPercentage = product.originalPrice && product.price 
@@ -81,7 +95,7 @@ function ProductCard({ product, index }) {
       <div className="product-image-container">
         <Link to={`/product/${product.id}`} className="product-image-link">
         <img 
-          src={product.img || product.image} 
+          src={imageUrl} 
           alt={product.name}
           className="product-image"
         />
@@ -97,21 +111,11 @@ function ProductCard({ product, index }) {
       </div>
 
       {/* Product Info */}
-      <div className="product-info">
-        <span className="product-category-card">{product.category}</span>
+      <div className="product-info-card">
+        <span className="product-category-card-item">{product.category}</span>
         <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <h3 className="product-name" style={{ fontSize: '18px'}}>{product.name}</h3>
+        <h3 className="product-name" style={{ fontSize: '20px'}}>{product.name}</h3>
         </Link>
-        
-        {/* 5-Star Rating Display replacing Description */}
-        <div className="product-rating">
-            <div className="stars">
-                {[...Array(5)].map((_, i) => (
-                    <FontAwesomeIcon key={i} icon={faStar} className="star-icon" />
-                ))}
-            </div>
-            <span className="rating-count">(5.0)</span>
-        </div>
 
         <div className="product-bottom">
           <div className="price-container">

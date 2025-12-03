@@ -23,6 +23,9 @@ function Navbar({ cartOpen, setCartOpen }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);  
   const [searchQuery, setSearchQuery] = useState(''); //Khai báo biến searchQuery để lưu giá trị tìm kiếm và setState để cập nhật giá trị 
+  const [searchResults, setSearchResults] = useState([]); // Kết quả tìm kiếm
+  const [isSearching, setIsSearching] = useState(false); // Đang tìm kiếm
+  const [allProducts, setAllProducts] = useState([]); // Tất cả sản phẩm
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Kiểm tra đăng nhập
   const [userAvatar, setUserAvatar] = useState(null); // Avatar của user
@@ -101,20 +104,54 @@ function Navbar({ cartOpen, setCartOpen }) {
     }
   }, [isLoggedIn, location]);
 
-  // Lấy query từ URL params và cập nhật giá trị searchQuery
+  // Fetch all products khi component mount
   useEffect(() => {
-    const params = new URLSearchParams(location.search); //Lấy URL params
-    const query = params.get('search') || ''; //Lấy query từ URL params
-    setSearchQuery(query); //Cập nhật giá trị searchQuery
-    if (query) setSearchOpen(true); //Nếu có query thì mở search box
-  }, [location.search, location.pathname]); //Khi URL params thay đổi thì cập nhật giá trị searchQuery
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get('/products');
+        setAllProducts(res.data || []);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // Lấy query từ URL params - không mở search box tự động
+  useEffect(() => {
+    // Chỉ reset khi chuyển trang (không phải khi search)
+    if (!location.search.includes('search=')) {
+      setSearchQuery('');
+      setSearchResults([]);
+      setSearchOpen(false);
+    }
+  }, [location.pathname]); //Khi pathname thay đổi thì reset
+
+  // Tìm kiếm sản phẩm khi người dùng nhập
+  useEffect(() => {
+    if (searchQuery.trim().length > 0) {
+      setIsSearching(true);
+      const filtered = allProducts.filter(p => 
+        p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.category?.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 6); // Giới hạn 6 kết quả
+      setSearchResults(filtered);
+      setIsSearching(false);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery, allProducts]);
 
   //Chức năng tìm kiếm
   const handleSearch = () => {
     if (searchQuery.trim()) { //Nếu có query thì chuyển hướng đến trang products và truyền query tìm kiếm
-      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`); //Chuyển hướng đến trang products và truyền query tìm kiếm
+      const query = searchQuery.trim();
       setSearchOpen(false); //Đóng search box
-      setMobileOpen(false); //Đóng mobile menu  
+      setSearchQuery(''); //Reset search query
+      setSearchResults([]); //Reset search results
+      setMobileOpen(false); //Đóng mobile menu
+      navigate(`/products?search=${encodeURIComponent(query)}`); //Chuyển hướng đến trang products và truyền query tìm kiếm
     }
   };
 
@@ -162,48 +199,103 @@ function Navbar({ cartOpen, setCartOpen }) {
         </div>
 
         {/* --- SEARCH BUTTON --- */}
-        <button 
-            ref={searchRef}
-            className={`search-button ${searchOpen ? 'active' : ''}`} //Thêm class để thay đổi giao diện khi search box đang mở
-            onClick={() => {
-              if (searchOpen) setSearchQuery(''); //Nếu search box đang mở thì xóa query
-              setSearchOpen(v => !v); //Mở/Đóng search box
-            }}
-            type="button"
-        >
-            <FontAwesomeIcon 
-              icon={searchOpen ? faTimes : faSearch}  
-              className="search-icon"
-              onClick={(e) => {
-                if (searchOpen && searchQuery.trim()) {
-                  e.stopPropagation(); //Ngăn không cho event bubble lên button parent
-                  handleSearch(); //Thực hiện tìm kiếm khi click vào icon search
+        <div className="search-container" ref={searchRef}>
+          <button 
+              className={`search-button ${searchOpen ? 'active' : ''}`} //Thêm class để thay đổi giao diện khi search box đang mở
+              onClick={() => {
+                if (searchOpen) {
+                  setSearchQuery(''); //Nếu search box đang mở thì xóa query
+                  setSearchResults([]);
                 }
+                setSearchOpen(v => !v); //Mở/Đóng search box
               }}
-              style={{ cursor: searchOpen && searchQuery.trim() ? 'pointer' : 'default' }}
-            />
+              type="button"
+          >
+              <FontAwesomeIcon 
+                icon={searchOpen ? faTimes : faSearch}  
+                className="search-icon"
+                onClick={(e) => {
+                  if (searchOpen && searchQuery.trim()) {
+                    e.stopPropagation(); //Ngăn không cho event bubble lên button parent
+                    handleSearch(); //Thực hiện tìm kiếm khi click vào icon search
+                  }
+                }}
+                style={{ cursor: searchOpen && searchQuery.trim() ? 'pointer' : 'default' }}
+              />
 
-            <input
-              type="text"
-              placeholder="Search for products"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} //Cập nhật giá trị searchQuery khi người dùng nhập
-              onClick={(e) => e.stopPropagation()} //Ngăn không cho event bubble lên button parent
-              onFocus={() => setSearchOpen(true)} //Mở search box khi focus vào input
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') { //Khi nhấn Enter thì thực hiện tìm kiếm
-                  handleSearch();
-                }
-                // Fix Space không đóng search box
-                if (e.key === ' ' || e.code === 'Space') {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setSearchQuery((prev) => prev + ' ');
-                }
-              }}
-              autoComplete="off"
-            />
-        </button>
+              <input
+                type="text"
+                placeholder="Search for products"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} //Cập nhật giá trị searchQuery khi người dùng nhập
+                onClick={(e) => e.stopPropagation()} //Ngăn không cho event bubble lên button parent
+                onFocus={() => setSearchOpen(true)} //Mở search box khi focus vào input
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') { //Khi nhấn Enter thì thực hiện tìm kiếm
+                    handleSearch();
+                  }
+                  // Fix Space không đóng search box
+                  if (e.key === ' ' || e.code === 'Space') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSearchQuery((prev) => prev + ' ');
+                  }
+                }}
+                autoComplete="off"
+              />
+          </button>
+
+          {/* Search Results Dropdown */}
+          {searchOpen && searchQuery.trim() && (
+            <div className="search-dropdown">
+              {isSearching ? (
+                <div className="search-loading">Searching...</div>
+              ) : searchResults.length > 0 ? (
+                <>
+                  <div className="search-results-list">
+                    {searchResults.map((product) => (
+                      <Link 
+                        key={product.id} 
+                        to={`/product/${product.id}`}
+                        className="search-result-item"
+                        onClick={() => {
+                          setSearchOpen(false);
+                          setSearchQuery('');
+                          setSearchResults([]);
+                        }}
+                      >
+                        <img 
+                          src={product.img_url?.startsWith('http') ? product.img_url : `http://localhost:3000${product.img_url}`} 
+                          alt={product.name}
+                          className="search-result-img"
+                          onError={(e) => { e.target.src = '/placeholder.jpg'; }}
+                        />
+                        <div className="search-result-info">
+                          <span className="search-result-name">{product.name}</span>
+                          <span className="search-result-category">{product.category}</span>
+                          <span className="search-result-price">
+                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                  <button 
+                    className="search-view-all"
+                    onClick={() => {
+                      handleSearch();
+                      setSearchResults([]);
+                    }}
+                  >
+                    View all results for "{searchQuery}"
+                  </button>
+                </>
+              ) : (
+                <div className="search-no-results">No products found for "{searchQuery}"</div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* music play */}
 

@@ -1,20 +1,31 @@
 import React from "react";
 import "./components-style/footer.css";
 import footerImage from "/src/assets/image/running.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Footer() {
+    // const navigate = useNavigate();
+
+    // const handleCategoryClick = (category) => {
+    //     navigate(`/products?category=${encodeURIComponent(category)}`);
+    // };
+
+    const handleOpenCart = (e) => {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('openCart'));
+    };
+
     return (
         <footer className="ps-footer">
             <div className="ps-footer__container">
                 <div className="ps-footer__main">
                     {/* Prime Section */}
                     <div className="ps-footer__column">
-                        <h3 className="ps-footer__title">Products</h3>
-                        <a href="/bikes">Bastketball</a>
-                        <a href="/quads">Soccer</a>
-                        <a href="/helmets">Tennis</a>
-                        <a href="/gear">Pickleball</a>
+                        <h3 className="ps-footer__title">Category</h3>
+                        <Link to="/products?category=Basketball">Basketball</Link>
+                        <Link to="/products?category=Sneakers">Sneakers</Link>
+                        <Link to="/products?category=LifeStyle">LifeStyle</Link>
+                        <Link to="/products?category=Accessories">Accessories</Link>
                     </div>
 
                     {/* Company Section */}
@@ -30,8 +41,8 @@ function Footer() {
                     <div className="ps-footer__column">
                         <h3 className="ps-footer__title">Account</h3>
                         <Link to="/login">Log-in</Link>
-                        <a href="/cart">Cart</a>
-                        <a href="/order">Order</a>
+                        <a href="#" onClick={handleOpenCart}>Cart</a>
+                        <Link to="/order">Order</Link>
                     </div>
 
                     {/* Image Section */}

@@ -30,6 +30,7 @@ import Order from './pages/order'
 import CheckOut from './pages/checkout'
 import Admin from './pages/admin'
 import Profile from './pages/profile'
+import FAQ from './pages/faq'
 
 function AppContent() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -39,6 +40,13 @@ function AppContent() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  // Listen for openCart event from footer
+  useEffect(() => {
+    const handleOpenCart = () => setCartOpen(true);
+    window.addEventListener('openCart', handleOpenCart);
+    return () => window.removeEventListener('openCart', handleOpenCart);
+  }, []);
 
   // Check if current route is admin page
   const isAdminPage = location.pathname.startsWith('/admin');
@@ -107,6 +115,7 @@ function AppContent() {
         <Route path="/product/:id" element={<ProductsView openCart={() => setCartOpen(true)}/>}/>
         <Route path="/admin/*" element={<Admin/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/faq" element={<FAQ/>}/>
       </Routes>
       {!isAdminPage && <Footer/>}
     </>
