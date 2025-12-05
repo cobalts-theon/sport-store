@@ -2,6 +2,8 @@ import { Order, OrderItem } from "../models/order.model.js";
 import Product from "../models/product.model.js";
 import Coupon from "../models/coupon.model.js";
 import sequelize from "../config/db.js";
+import { sendEmail } from "../utils/sendEmail.js";
+import { generateInvoiceHTML } from "../utils/invoiceTemplate.js";
 
 export const createOrder = async (req, res) => {
     //Dùng transaction để báo lỗi nếu có bước nào đó không thành công: Nếu lỗi thì rollback lại toàn bộ
@@ -134,7 +136,7 @@ export const getAllOrders = async (req, res) => {
         res.json(orders);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Lỗi lấy danh sách đơn hàng' });
+        res.status(500).json({ message: 'Error fetching orders' });
     }
 };
 
@@ -147,21 +149,45 @@ export const updateOrderStatus = async (req, res) => {
         // Validate status
         const validStatuses = ['pending', 'shipping', 'completed', 'cancelled'];
         if (!validStatuses.includes(status)) {
-            return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
+            return res.status(400).json({ message: 'Invalid status' });
         }
 
-        const order = await Order.findByPk(orderId);
+        const order = await Order.findByPk(orderId, {
+            include: [
+                {
+                    model: OrderItem,
+                    include: [Product],
+                },
+            ],
+        });
         if (!order) {
-            return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+            return res.status(404).json({ message: 'Order not found' });
         }
 
+        const previousStatus = order.status;
         order.status = status;
         await order.save();
 
-        res.json({ message: 'Cập nhật trạng thái thành công', order });
+        // Gửi email hóa đơn khi đơn hàng hoàn thành
+        if (status === 'completed' && previousStatus !== 'completed') {
+            try {
+                const invoiceHTML = generateInvoiceHTML(order, order.OrderItems || []);
+                await sendEmail(
+                    order.email,
+                    ` Order #${String(order.id).padStart(6, '0')} is completed - Prime Souls`,
+                    invoiceHTML
+                );
+                console.log(`Invoice email sent to ${order.email} for order #${order.id}`);
+            } catch (emailError) {
+                console.error('Error sending invoice email:', emailError);
+                // Không throw error để không ảnh hưởng đến việc cập nhật status
+            }
+        }
+
+        res.json({ message: 'Status updated successfully', order });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Lỗi cập nhật trạng thái đơn hàng' });
+        res.status(500).json({ message: 'Error updating order status' });
     }
 };
 
@@ -175,7 +201,7 @@ export const deleteOrder = async (req, res) => {
         const order = await Order.findByPk(orderId, { transaction: t });
         if (!order) {
             await t.rollback();
-            return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+            return res.status(404).json({ message: 'Order not found' });
         }
 
         // Xóa các OrderItems trước
@@ -188,11 +214,11 @@ export const deleteOrder = async (req, res) => {
         await order.destroy({ transaction: t });
 
         await t.commit();
-        res.json({ message: 'Xóa đơn hàng thành công' });
+        res.json({ message: 'Order deleted successfully' });
     } catch (error) {
         await t.rollback();
         console.error(error);
-        res.status(500).json({ message: 'Lỗi xóa đơn hàng' });
+        res.status(500).json({ message: 'Error deleting order' });
     }
 };
 
@@ -204,7 +230,7 @@ export const updateTrackingNumber = async (req, res) => {
 
         const order = await Order.findByPk(orderId);
         if (!order) {
-            return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+            return res.status(404).json({ message: 'Order not found' });
         }
 
         order.trackingNumber = trackingNumber;
@@ -217,7 +243,7 @@ export const updateTrackingNumber = async (req, res) => {
         await order.save();
 
         res.json({ 
-            message: 'Cập nhật mã vận đơn thành công', 
+            message: 'Tracking number updated successfully', 
             order: {
                 id: order.id,
                 trackingNumber: order.trackingNumber,
@@ -226,7 +252,7 @@ export const updateTrackingNumber = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Lỗi cập nhật mã vận đơn' });
+        res.status(500).json({ message: 'Error updating tracking number' });
     }
 };
 
@@ -246,7 +272,7 @@ export const getOrderByTracking = async (req, res) => {
         });
 
         if (!order) {
-            return res.status(404).json({ message: 'Không tìm thấy đơn hàng với mã vận đơn này' });
+            return res.status(404).json({ message: 'Order not found with this tracking number' });
         }
 
         // Trả về thông tin cơ bản (không bao gồm thông tin nhạy cảm)
@@ -263,6 +289,6 @@ export const getOrderByTracking = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Lỗi tra cứu đơn hàng' });
+        res.status(500).json({ message: 'Error looking up order' });
     }
 };

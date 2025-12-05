@@ -4,7 +4,7 @@ import ProductCard from '../components/product-card';
 import api from '../../lib/api';
 import './pages-style/products-page.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faFilter, faSort, faTimes, faChevronDown, faChevronUp, faCheck, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faFilter, faSort, faTimes, faChevronDown, faChevronUp, faCheck, faSpinner, faAngleUp, faAngleDown, faClock } from '@fortawesome/free-solid-svg-icons';
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -20,6 +20,9 @@ function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(true);
   const [visibleProducts, setVisibleProducts] = useState([]);
+  const [sortOption, setSortOption] = useState('newest'); // 'newest', 'price-asc', 'price-desc'
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const sortMenuRef = useRef(null);
   
   const location = useLocation();
 
@@ -101,6 +104,17 @@ function ProductsPage() {
       document.body.style.overflow = '';
     };
   }, [isSidebarOpen]);
+
+  // Close sort menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sortMenuRef.current && !sortMenuRef.current.contains(event.target)) {
+        setShowSortMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Parse query params
   useEffect(() => {
@@ -198,12 +212,26 @@ function ProductsPage() {
       );
     }
 
+    // Apply sorting
+    switch (sortOption) {
+      case 'price-asc':
+        result = [...result].sort((a, b) => (a.price || 0) - (b.price || 0));
+        break;
+      case 'price-desc':
+        result = [...result].sort((a, b) => (b.price || 0) - (a.price || 0));
+        break;
+      case 'newest':
+      default:
+        result = [...result].sort((a, b) => (b.id || 0) - (a.id || 0));
+        break;
+    }
+
     setFilteredProducts(result);
     
     // Reset và animate lại khi filter thay đổi
     setVisibleProducts([]);
     setIsLoading(true);
-  }, [searchQuery, activeFilters, products]);
+  }, [searchQuery, activeFilters, products, sortOption]);
 
   // Stagger animation effect
   useEffect(() => {
@@ -253,6 +281,29 @@ function ProductsPage() {
 
   const closeSidebar = () => {
     setIsSidebarOpen(false);
+  };
+
+  const handleSort = (option) => {
+    setSortOption(option);
+    setShowSortMenu(false);
+  };
+
+  const getSortLabel = () => {
+    switch (sortOption) {
+      case 'price-asc': return 'Price: Low to High';
+      case 'price-desc': return 'Price: High to Low';
+      case 'newest': return 'Newest';
+      default: return 'Sort';
+    }
+  };
+
+  const getSortIcon = () => {
+    switch (sortOption) {
+      case 'price-asc': return faAngleUp;
+      case 'price-desc': return faAngleDown;
+      case 'newest': return faClock;
+      default: return faSort;
+    }
   };
 
   return (
@@ -380,9 +431,42 @@ function ProductsPage() {
             )}
           </button>
           <span className="products-count">{filteredProducts.length} PRODUCTS</span>
-          <button className="shuffle-btn">
-            <FontAwesomeIcon icon={faSort} />
-          </button>
+          <div className="sort-container" ref={sortMenuRef}>
+            <button 
+              className={`shuffle-btn ${showSortMenu ? 'active' : ''}`}
+              onClick={() => setShowSortMenu(!showSortMenu)}
+            >
+              <FontAwesomeIcon icon={getSortIcon()} />
+            </button>
+            {showSortMenu && (
+              <div className="sort-menu">
+                <div 
+                  className={`sort-option ${sortOption === 'newest' ? 'active' : ''}`}
+                  onClick={() => handleSort('newest')}
+                >
+                  <FontAwesomeIcon icon={faClock} />
+                  <span>Newest</span>
+                  {sortOption === 'newest' && <FontAwesomeIcon icon={faCheck} className="check-icon" />}
+                </div>
+                <div 
+                  className={`sort-option ${sortOption === 'price-asc' ? 'active' : ''}`}
+                  onClick={() => handleSort('price-asc')}
+                >
+                  <FontAwesomeIcon icon={faAngleUp} />
+                  <span>Price: Low to High</span>
+                  {sortOption === 'price-asc' && <FontAwesomeIcon icon={faCheck} className="check-icon" />}
+                </div>
+                <div 
+                  className={`sort-option ${sortOption === 'price-desc' ? 'active' : ''}`}
+                  onClick={() => handleSort('price-desc')}
+                >
+                  <FontAwesomeIcon icon={faAngleDown} />
+                  <span>Price: High to Low</span>
+                  {sortOption === 'price-desc' && <FontAwesomeIcon icon={faCheck} className="check-icon" />}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="products-grid">
