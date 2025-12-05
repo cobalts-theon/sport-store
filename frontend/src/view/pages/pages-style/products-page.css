@@ -481,11 +481,12 @@
 
 @media (max-width: 480px) {
   .products-page {
-    padding-top: 65px;
+    padding-top: 60px;
   }
   
   .products-sidebar {
-    width: 260px;
+    width: 85vw;
+    max-width: 280px;
     padding: 0.8rem;
     /* Increase height scrollbar   when there are more filters */
     height: calc(100vh - 70px);
@@ -561,7 +562,7 @@
   .products-grid {
     padding-left: 0;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
   
   .no-products h3 {
@@ -571,11 +572,25 @@
   .no-products p {
     font-size: 0.85rem;
   }
+
+  .products-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 }
 
 @media (max-width: 360px) {
+  .products-page {
+    padding-top: 55px;
+  }
+
+  .products-main {
+    padding: 0.5rem;
+  }
+
   .products-sidebar {
-    width: 240px;
+    width: 90vw;
+    max-width: 260px;
   }
 
   .filter-toggle-btn > span:not(.filter-badge) {
@@ -600,7 +615,11 @@
 
   .products-grid {
     grid-template-columns: 1fr;
-    gap: 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .products-count {
+    font-size: 0.7rem;
   }
 }
 

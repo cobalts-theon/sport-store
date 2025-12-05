@@ -1,7 +1,7 @@
 import Coupon from '../models/coupon.model.js';
 import { Op } from 'sequelize';
 
-// --- ADMIN: Create New Coupon ---
+// --- ADMIN: Tạo coupon mới ---
 export const createCoupon = async (req, res) => {
     try {
         const { code, discountType, discountValue, minOrderAmount, maxUses, startDate, endDate, isActive } = req.body;
@@ -45,10 +45,10 @@ export const getAllCoupons = async (req, res) => {
     }
 };
 
-// --- PUBLIC: Get Available Coupons for Users ---
+// --- PUBLIC: Tìm kiếm coupon cho người dùng ---
 export const getAvailableCoupons = async (req, res) => {
     try {
-        const now = new Date();
+        const now = new Date(); // Thời điểm hiện tại
         
         const coupons = await Coupon.findAll({
             where: {
@@ -80,7 +80,7 @@ export const getAvailableCoupons = async (req, res) => {
     }
 };
 
-// --- ADMIN: Delete Coupon ---
+// --- ADMIN: Xóa Coupon ---
 export const deleteCoupon = async (req, res) => {
     try {
         const { id } = req.params;
@@ -91,7 +91,7 @@ export const deleteCoupon = async (req, res) => {
     }
 };
 
-// --- ADMIN: Update Coupon ---
+// --- ADMIN: Cập nhật coupon ---
 export const updateCoupon = async (req, res) => {
     try {
         const { id } = req.params;

@@ -9,7 +9,8 @@ import {
   faClockRotateLeft,
   faEye,
   faChevronDown,
-  faChevronUp
+  faChevronUp,
+  faBan
 } from '@fortawesome/free-solid-svg-icons';
 import './pages-style/order.css';
 import api from '../../lib/api';
@@ -21,6 +22,28 @@ function Order() {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cancellingOrder, setCancellingOrder] = useState(null);
+
+  // Handle cancel order (only for pending orders)
+  const handleCancelOrder = async (rawId) => {
+    if (window.confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+      try {
+        setCancellingOrder(rawId);
+        await api.patch(`/orders/${rawId}/status`, { status: 'cancelled' });
+        setOrders(orders.map(order => 
+          order.rawId === rawId 
+            ? { ...order, status: 'cancelled' } 
+            : order
+        ));
+        toast.success('Order cancelled successfully!');
+      } catch (error) {
+        console.error('Error cancelling order:', error);
+        toast.error('Failed to cancel order');
+      } finally {
+        setCancellingOrder(null);
+      }
+    }
+  };
 
   // Fetch orders từ API
   useEffect(() => {
@@ -263,8 +286,19 @@ function Order() {
                         <p className="tracking-number no-tracking">Awaiting shipment - tracking will be available soon</p>
                       )}
                     </div>
-                    {order.status !== 'cancelled' && (
+                    {order.status !== 'cancelled' && order.status !== 'completed' && (
                       <div className="order-actions">
+                        {/* Cancel button - only show for pending orders */}
+                        {order.status === 'pending' && (
+                          <button 
+                            className="action-btn danger"
+                            onClick={() => handleCancelOrder(order.rawId)}
+                            disabled={cancellingOrder === order.rawId}
+                          >
+                            <FontAwesomeIcon icon={faBan} /> 
+                            {cancellingOrder === order.rawId ? 'CANCELLING...' : 'CANCEL ORDER'}
+                          </button>
+                        )}
                         {order.shipping.tracking && order.shipping.tracking !== 'Pending' && (
                           <button 
                             className="action-btn primary"
@@ -277,6 +311,13 @@ function Order() {
                             <FontAwesomeIcon icon={faTruck} /> COPY TRACKING
                           </button>
                         )}
+                        <Link to="/products" className="action-btn secondary">
+                          BUY AGAIN
+                        </Link>
+                      </div>
+                    )}
+                    {order.status === 'cancelled' && (
+                      <div className="order-actions">
                         <Link to="/products" className="action-btn secondary">
                           BUY AGAIN
                         </Link>

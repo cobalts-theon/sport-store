@@ -12,7 +12,7 @@ export const createOrder = async (req, res) => {
 
         // 1. Validate dữ liệu đầu vào
         if (!cartItems || cartItems.length === 0) {
-        return res.status(400).json({ message: "Giỏ hàng trống!" });
+        return res.status(400).json({ message: "Cart is empty" });
         }
 
         let calculatedTotal = 0;
@@ -23,12 +23,12 @@ export const createOrder = async (req, res) => {
         const product = await Product.findByPk(item.id, { transaction: t });
 
         if (!product) {
-            throw new Error(`Sản phẩm ID ${item.id} không tồn tại!`);
+            throw new Error(`Product with id ${item.id} not found`);
         }
 
         // Kiểm tra tồn kho (Stock)
         if (product.stock < item.quantity) {
-            throw new Error(`Sản phẩm "${product.name}" không đủ hàng (Còn: ${product.stock})`);
+            throw new Error(`Product "${product.name}" is out of stock (Stock: ${product.stock})`);
         }
 
         // Trừ tồn kho
@@ -88,14 +88,14 @@ export const createOrder = async (req, res) => {
         await t.commit();
 
         res.status(201).json({ 
-            message: "Đặt hàng thành công!", 
+            message: "Place order successfully", 
             orderId: newOrder.id 
         });} 
     catch (error) {
         // Nếu có lỗi, rollback transaction
         await t.rollback();
         console.error(error);
-        return res.status(500).json({ message: 'Lỗi tạo đơn hàng' });
+        return res.status(500).json({ message: 'Error creating order' });
     }
 };
 

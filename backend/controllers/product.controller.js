@@ -4,7 +4,7 @@ import sequelize from '../config/db.js';
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.findAll({
-      order: [['createdAt', 'ASC']]
+      order: [['createdAt', 'DESC']]
     });
     res.status(200).json(products);
     } catch (error) {

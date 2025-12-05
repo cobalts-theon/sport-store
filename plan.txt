@@ -1,24 +1,50 @@
 #AUTHENTICATION:
-    -login
-    -logout
-    -register (username, gmail, password, comfirm password) || (with google)
-    -forgot password (OTP email)
+    - Login (email, password)
+    - Login with Google OAuth
+    - Logout
+    - Register (name, email, password, confirm password)
+    - Forgot password (OTP qua email)
+    - Reset password (sau khi verify OTP)
+    - Change password (yêu cầu mật khẩu cũ)
 
-#MAIN PAGES
-    -Home Page (NEWS): hiển thị tin tức, sản phẩm mới
-    -Product List Page: danh sách sản phẩm (filter, search, sort)
-    -Product Detail Page: xem chi tiết sản phẩm
-    -Cart Page: xem, thêm, xóa, cập nhật sản phẩm trong giỏ hàng
-    -Order Page: xem thông tin đơn hàng trong quá trình vận chuyển.
-    -Checkout Page: xác nhận đơn hàng và thanh toán (giả lập)
-    -Profile Page: xem và cập nhật thông tin cá nhân
-    -Help Page: Page giúp bạn tìm trợ giúp nếu có sự cố hay bug xảy ra
-#PRODCUT FEATURES
-    -Add to cart: Thêm sản phẩm vào giỏ
-    -Remove from cart: Xóa sản phẩn khỏi giỏ
-    -Thay đổi số lượng: Thay đổi số lượng sản phẩm trong giỏ
-    -Product Info: Xem chi tiết thông tin sản phẩm, giá, năm sx, tình trạng (Hết hay còn)
-    -Search product: Tìm tên sản phẩm
-    -Filter: Lọc theo địa chỉ, loại(Áo, quần, dụng cụ thể thao,...)
-    -Sort Product: Lọc sản phẩm
-    -
+#MAIN PAGES:
+    - Home Page: Hiển thị slider sản phẩm, categories, user reviews, slogan
+    - Products Page: Danh sách sản phẩm (filter, search, sort, pagination)
+    - Product Detail Page: Xem chi tiết sản phẩm, chọn size/color, suggested products
+    - Cart Drawer: Xem, thêm, xóa, cập nhật số lượng sản phẩm trong giỏ hàng
+    - Checkout Page: Nhập thông tin giao hàng, áp dụng coupon, thanh toán
+    - Order Page: Tra cứu đơn hàng theo tracking number, xem lịch sử đơn hàng
+    - Profile Page: Xem và cập nhật thông tin cá nhân, đổi avatar
+    - About Page: Giới thiệu về Prime Souls
+    - FAQ Page: Câu hỏi thường gặp
+
+#PRODUCT FEATURES:
+    - Add to cart: Thêm sản phẩm vào giỏ (với size, color, quantity)
+    - Remove from cart: Xóa sản phẩm khỏi giỏ
+    - Update quantity: Thay đổi số lượng sản phẩm trong giỏ (kiểm tra stock)
+    - Product Info: Xem chi tiết (tên, mô tả, giá, giá gốc, discount, stock, category, brand, material)
+    - Search product: Tìm kiếm theo tên, mô tả, category (live search dropdown)
+    - Filter by category: Sneakers, Running, Basketball, Training, Lifestyle, Apparel, Accessories
+    - Filter by price: Dưới 500K, 500K-1M, 1M-5M, Trên 5M
+    - Filter by status: Sale, New Arrivals, Featured, Hot Deals
+    - Sort products: Theo giá (tăng/giảm), theo tên, theo mới nhất
+    - Suggested products: Hiển thị 5 sản phẩm gợi ý (cùng category)
+
+#COUPON FEATURES:
+    - View available coupons: Xem danh sách mã giảm giá khả dụng
+    - Apply coupon: Áp dụng mã giảm giá khi checkout (kiểm tra điều kiện)
+    - Discount types: Phần trăm (%) hoặc số tiền cố định (VND)
+
+#ORDER FEATURES:
+    - Create order: Tạo đơn hàng mới (hỗ trợ khách vãng lai)
+    - Track order: Tra cứu đơn hàng theo mã vận đơn
+    - Order history: Xem lịch sử đơn hàng của user
+    - Order status: Pending → Shipping → Completed / Cancelled
+
+#ADMIN FEATURES:
+    - Dashboard: Thống kê tổng quan (users, products, orders, revenue)
+    - User Management: CRUD users, cập nhật role/status
+    - Product Management: CRUD products, upload ảnh (main + gallery)
+    - Order Management: Xem tất cả đơn, cập nhật status, thêm tracking number
+    - Coupon Management: CRUD coupons, thiết lập điều kiện áp dụng
+    - Analytics: Phân tích doanh thu, top products, category performance

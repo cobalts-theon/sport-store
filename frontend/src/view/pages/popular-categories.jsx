@@ -1,13 +1,23 @@
 import { useState, useEffect } from 'react';
 import "./pages-style/popular-categories.css";
-import productsData from "../data/products.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+
+// Categories theo backend
+const categories = [
+    { id: 1, name: 'Sneakers', img: '/src/assets/image/shoess.jpg', link: '/products?category=Sneakers' },
+    { id: 2, name: 'Running', img: '/src/assets/image/running.jpg', link: '/products?category=Running' },
+    { id: 3, name: 'Basketball', img: '/src/assets/image/5.jpg', link: '/products?category=Basketball' },
+    { id: 4, name: 'Training', img: '/src/assets/image/training.jpg', link: '/products?category=Training' },
+    { id: 5, name: 'Lifestyle', img: '/src/assets/image/lifestyle.jpg', link: '/products?category=Lifestyle' },
+    { id: 6, name: 'Apparel', img: '/src/assets/image/unnamed.jpg', link: '/products?category=Apparel' },
+    { id: 7, name: 'Accessories', img: '/src/assets/image/accessories.jpg', link: '/products?category=Accessories' },
+];
 
 function PopularCategories() {
-    const baseProducts = productsData.filter(p => p.id <= 8);
-    // Lặp lại 3 lần để lấp đầy vòng tròn (8 mục * 30 độ * 3 = 360 độ)
-    const products = [...baseProducts, ...baseProducts, ...baseProducts]; 
+    // Lặp lại 3 lần để lấp đầy vòng tròn
+    const items = [...categories, ...categories, ...categories]; 
     const [rotation, setRotation] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -73,9 +83,9 @@ function PopularCategories() {
                 onTouchStart={handleMouseDown}
             >
                 <div className="arc-center" style={{ top: `${RADIUS + 150}px` }}>
-                    {products.map((product, index) => {
+                    {items.map((category, index) => {
                         // Center the group of items around 0 degrees initially
-                        const offsetAngle = (index - (products.length - 1) / 2) * ITEM_SPACING;
+                        const offsetAngle = (index - (items.length - 1) / 2) * ITEM_SPACING;
                         const currentAngle = offsetAngle + rotation;
                         
                         // Normalize angle to 0-360
@@ -88,7 +98,7 @@ function PopularCategories() {
 
                         return (
                             <div 
-                                key={`${product.id}-${index}`} 
+                                key={`${category.id}-${index}`} 
                                 className="arc-item-wrapper"
                                 style={{
                                     transform: `rotate(${currentAngle}deg)`,
@@ -106,10 +116,10 @@ function PopularCategories() {
                                     }}
                                 >
                                     <div className="arc-item-content">
-                                        <img src={product.img} alt={product.name} draggable="false" className="arc-img"/>
+                                        <img src={category.img} alt={category.name} draggable="false" className="arc-img"/>
                                         <div className="arc-item-info">
-                                            <h3 className="arc-name">{product.name}</h3>
-                                            <a href={product.link} className="arc-btn">SHOP NOW</a>
+                                            <h3 className="arc-name">{category.name}</h3>
+                                            <Link to={category.link} className="arc-btn">SHOP NOW</Link>
                                         </div>
                                     </div>
                                 </div>

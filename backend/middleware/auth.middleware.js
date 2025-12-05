@@ -11,7 +11,7 @@ export const verifyToken = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1]; // Lấy phần sau "Bearer "
 
       // Giải mã token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       //Tìm user và gán vào req.user (Để controller dùng)
       req.user = await User.findByPk(decoded.id, {
@@ -27,27 +27,9 @@ export const verifyToken = async (req, res, next) => {
       return res.status(401).json({message: "No access! Please log in."});
     }
   }
-
-  // if (!token) {
-  //   return res.status(403).json({ message: "Token không hợp lệ" });
-  // }
-
-  // // Frontend thường gửi dạng "Bearer <token>", ta cần cắt bỏ chữ "Bearer "
-  // if (token.startsWith('Bearer ')) {
-  //   token = token.slice(7, token.length);
-  // }
-
-  // jwt.verify(token, process.env.JWT_SECRET || 'secret', (err, decoded) => {
-  //   if (err) {
-  //     return res.status(401).json({ message: "Token không hợp lệ hoặc đã hết hạn!" });
-  //   }
-  //   req.userId = decoded.id; // Lưu ID người dùng vào request để dùng ở bước sau
-  //   req.userRole = decoded.role; // Lưu Role
-  //   next();
-  // });
 };
 
-// 2. Xác thực Admin (Có phải sếp không?)
+// 2. Xác thực Admin (Có phải sếp không?) (Nếu là BigBoss thì cho qua, or người dùng thì chim cút) (When you cant even say my name!!!!)
 export const isAdmin = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();

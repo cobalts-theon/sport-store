@@ -27,7 +27,7 @@ function VerifyCode() {
     useEffect(() => {
         // Nếu không có email (truy cập trực tiếp link), đá về trang quên mật khẩu
         if (!email) {
-            toast.error("Vui lòng nhập email trước!");
+            toast.error("Please enter your email first.");
             navigate('/forgot-password');
         }
         inputRefs.current[0]?.focus();
@@ -58,6 +58,7 @@ function VerifyCode() {
         if (e.key === 'ArrowRight' && index < 5) inputRefs.current[index + 1]?.focus();
     };
 
+    // Xử lý dán mã
     const handlePaste = (e) => {
         e.preventDefault();
         const pastedData = e.clipboardData.getData('text').slice(0, 6);
@@ -76,10 +77,10 @@ function VerifyCode() {
         setIsResending(true);
         try {
             await api.post('/users/forgot-password', { email });
-            toast.success("Đã gửi lại mã xác thực!");
+            toast.success("Verification code resent!");
             setCountdown(60);
         } catch (error) {
-            toast.error("Lỗi gửi lại mã!");
+            toast.error("Failed to resend code! Please try again.");
         } finally {
             setIsResending(false);
         }
@@ -89,10 +90,10 @@ function VerifyCode() {
     const handleVerify = async (verificationCode) => {
         try {
             await api.post('/users/verify-code', { email, code: verificationCode });
-            toast.success("Mã chính xác! Vui lòng nhập mật khẩu mới.");
+            toast.success("Code verified! Please set your new password.");
             setStep(2); // Chuyển sang bước nhập mật khẩu
         } catch (error) {
-            toast.error(error.response?.data?.message || "Mã xác thực không đúng!");
+            toast.error(error.response?.data?.message || "Invalid verification code! Please try again.");
             // Reset ô nhập mã để nhập lại
             setCode(['', '', '', '', '', '']);
             inputRefs.current[0]?.focus();
@@ -103,10 +104,10 @@ function VerifyCode() {
     const handleResetPassword = async (e) => {
         e.preventDefault();
         if (passwords.newPassword !== passwords.confirmPassword) {
-            return toast.error("Mật khẩu xác nhận không khớp!");
+            return toast.error("Passwords do not match!");
         }
         if (passwords.newPassword.length < 6) {
-            return toast.error("Mật khẩu phải có ít nhất 6 ký tự!");
+            return toast.error("Password must be at least 6 characters long!");
         }
 
         try {
@@ -115,10 +116,10 @@ function VerifyCode() {
                 code: code.join(''), // Gửi kèm mã để backend xác thực lần cuối (vì backend yêu cầu)
                 newPassword: passwords.newPassword
             });
-            toast.success("Đổi mật khẩu thành công! Vui lòng đăng nhập.");
+            toast.success("Password reset successfully! Please log in.");
             navigate('/login');
         } catch (error) {
-            toast.error(error.response?.data?.message || "Lỗi đổi mật khẩu!");
+            toast.error(error.response?.data?.message || "Password reset failed! Please try again.");
         }
     };
 

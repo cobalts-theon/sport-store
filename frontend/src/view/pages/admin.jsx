@@ -29,7 +29,8 @@ import {
   faThLarge,
   faList,
   faSpinner,
-  faPrint
+  faPrint,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import toast from 'react-hot-toast';
 import api from '../../lib/api';
@@ -606,15 +607,19 @@ function Admin() {
     }
   };
 
-  const handleDeleteOrder = async (orderId) => {
-    if (window.confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+  const handleCancelOrder = async (orderId) => {
+    if (window.confirm('Are you sure you want to cancel this order?')) {
       try {
-        await api.delete(`/orders/${orderId}`);
-        setOrders(orders.filter(order => order.id !== orderId));
-        toast.success('Order deleted successfully!');
+        await api.patch(`/orders/${orderId}/status`, { status: 'cancelled' });
+        setOrders(orders.map(order => 
+          order.id === orderId 
+            ? { ...order, status: 'cancelled' } 
+            : order
+        ));
+        toast.success('Order cancelled successfully!');
       } catch (error) {
-        console.error('Error deleting order:', error);
-        toast.error('Failed to delete order');
+        console.error('Error cancelling order:', error);
+        toast.error('Failed to cancel order');
       }
     }
   };
@@ -1825,14 +1830,16 @@ function Admin() {
                             <FontAwesomeIcon icon={faPrint} />
                             Print
                           </button>
-                          <button 
-                            className="admin-action-btn danger"
-                            onClick={() => handleDeleteOrder(order.id)}
-                            title="Delete Order"
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                            Delete
-                          </button>
+                          {order.status !== 'cancelled' && order.status !== 'completed' && (
+                            <button 
+                              className="admin-action-btn danger"
+                              onClick={() => handleCancelOrder(order.id)}
+                              title="Cancel Order"
+                            >
+                              <FontAwesomeIcon icon={faTimesCircle} />
+                              Cancel
+                            </button>
+                          )}
                         </div>
                       </div>
 

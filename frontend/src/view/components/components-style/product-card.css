@@ -414,68 +414,77 @@
 @media (max-width: 480px) {
   .product-card {
     border-radius: 5px;
+    max-width: 195px;
   }
   
   .product-tag {
-    top: 6px;
-    right: 6px;
-    font-size: 7px;
-    padding: 2px 5px;
+    top: 5px;
+    right: 5px;
+    font-size: 6px;
+    padding: 2px 4px;
   }
   
   .hot-deal-badge {
-    top: 6px;
-    left: 6px;
-    font-size: 7px;
-    padding: 2px 5px;
+    top: 5px;
+    left: 5px;
+    font-size: 6px;
+    padding: 2px 4px;
   }
   
   .discount-badge {
-    top: 30px;
-    right: 6px;
-    font-size: 10px;
+    top: 25px;
+    right: 5px;
+    font-size: 9px;
     padding: 2px 4px;
   }
   
   .product-image-container {
-    height: 180px;
+    height: 140px;
   }
   
-  .product-info {
-    padding: 10px;
+  .product-info-card {
+    padding: 8px;
   }
   
   .product-category-card {
-    font-size: 7px;
-    letter-spacing: 0.5px;
+    font-size: 6px;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
   }
   
   .product-name {
-    font-size: 14px;
-    margin-bottom: 4px;
+    font-size: 11px;
+    margin-bottom: 3px;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   
   .product-rating {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   
   .star-icon {
-    font-size: 9px;
+    font-size: 8px;
     gap: 1px;
   }
   
   .rating-count {
-    font-size: 8px;
-    margin-left: 3px;
+    font-size: 7px;
+    margin-left: 2px;
   }
   
   .product-bottom {
-    padding-top: 8px;
-    gap: 8px;
+    padding-top: 6px;
+    gap: 4px;
+    flex-direction: column;
+    align-items: flex-start;
   }
   
   .product-price {
-    font-size: 16px;
+    font-size: 13px;
   }
   
   .product-price-original {
@@ -483,38 +492,56 @@
   }
   
   .add-to-cart-btn {
-    width: 70px;
-    height: 26px;
+    width: 100%;
+    height: 24px;
     font-size: 7px;
     padding: 0 6px;
   }
   
   .quick-view-btn {
-    padding: 6px 14px;
-    font-size: 9px;
+    padding: 5px 12px;
+    font-size: 8px;
   }
 }
 
 @media (max-width: 360px) {
+  .product-card {
+    max-width: 140px;
+  }
+
   .product-image-container {
-    height: 220px;
+    height: 120px;
   }
   
-  .product-info {
-    padding: 12px;
+  .product-info-card {
+    padding: 6px;
   }
   
   .product-name {
-    font-size: 16px;
+    font-size: 10px;
   }
   
   .product-price {
-    font-size: 18px;
+    font-size: 12px;
+  }
+  
+  .product-price-original {
+    font-size: 7px;
   }
   
   .add-to-cart-btn {
-    width: 80px;
-    height: 28px;
+    height: 22px;
+    font-size: 6px;
+  }
+
+  .product-tag,
+  .hot-deal-badge {
+    font-size: 5px;
+    padding: 1px 3px;
+  }
+
+  .discount-badge {
     font-size: 8px;
+    top: 20px;
   }
 }

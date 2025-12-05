@@ -413,6 +413,22 @@
   box-shadow: 0 2px 6px rgba(255, 255, 255, 0.2);
 }
 
+.action-btn.danger {
+  background: rgba(244, 67, 54, 0.15);
+  border: 1px solid #F44336;
+  color: #F44336;
+}
+
+.action-btn.danger:hover {
+  background: #F44336;
+  color: #fff;
+}
+
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* No Orders State */
 .no-orders {
   display: flex;

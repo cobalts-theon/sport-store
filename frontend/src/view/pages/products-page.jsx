@@ -36,7 +36,8 @@ function ProductsPage() {
 
   // Price ranges
   const priceRanges = [
-    { label: 'Under 500k', min: 0, max: 500000 },
+    { label: 'Under 100k', min: 0, max: 100000 },
+    { label: '100k - 500k', min: 100000, max: 500000 },
     { label: '500k - 1M', min: 500000, max: 1000000 },
     { label: 'Over 1M', min: 1000000, max: Infinity }
   ];
@@ -109,6 +110,7 @@ function ProductsPage() {
     const statusParam = params.get('status');
     const priceParam = params.get('price');
     
+    // Lọc theo category từ URL params
     if (categoryParam && products.length > 0) {
       let filtered = products;
       filtered = filtered.filter(p => p.category && p.category.toLowerCase().includes(categoryParam.toLowerCase()));
@@ -116,13 +118,15 @@ function ProductsPage() {
       setActiveFilters(prev => ({ ...prev, category: filtered.length > 0 ? filtered[0].category : null }));
     }
 
+    //Đặt filter từ URL params
     if (statusParam && products.length > 0) {
       setActiveFilters(prev => ({ ...prev, status: statusParam }));
     }
 
     if (priceParam && products.length > 0) {
       const priceMap = {
-        'under500k': 'Under 500k',
+        'under100k': 'Under 100k',
+        '100k-500k': '100k - 500k',
         '500k-1m': '500k - 1M',
         'over1m': 'Over 1M'
       };

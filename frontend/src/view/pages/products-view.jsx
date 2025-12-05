@@ -216,7 +216,7 @@ function ProductsView({ openCart }) {
 
     if (!product) {
         return (
-            <div className="products-view-container">
+            <div className="products-view-container" style={{ marginTop: '65px' }}>
                 <div className="products-view-right" style={{ alignItems: 'center', justifyContent: 'center'}}>
                     <FontAwesomeIcon icon={faTriangleExclamation} style={{ color: '#333', fontSize: '40px' }} />
                     <h2 style={{ color: '#333' }}>Product not found</h2>

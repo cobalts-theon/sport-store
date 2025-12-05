@@ -1,4 +1,4 @@
-import multer from 'multer';
+import multer from 'multer';    //multer là middleware xử lý file upload trong Node.js có tác dụng phân tích các yêu cầu đa phần (multipart/form-data) và lưu trữ các file tải lên từ client.
 import path from 'path';
 
 // Cấu hình lưu trữ cho multer (Tên file và thư mục lưu)
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 
 // Lọc file: Chỉ cho phép ảnh
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|heic|webp/;
+    const allowedTypes = /jpeg|jpg|png|heic|webp|gif/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
     if (extname && mimetype) {

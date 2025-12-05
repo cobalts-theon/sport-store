@@ -38,3 +38,5 @@ backend/db.sql
 test-code.json
 backend/test-code.json
 
+backend/uploads/*
+!backend/uploads/.gitkeep

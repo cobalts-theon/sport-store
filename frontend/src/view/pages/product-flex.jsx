@@ -1,11 +1,13 @@
 import "./pages-style/product-flex.css";
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../lib/api";
 import productsData from "../data/products.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare } from "@fortawesome/free-solid-svg-icons";
 
 function ProductFlex() {
+    const navigate = useNavigate();
     const containerRef = useRef(null);
 
     // Filter products 1-7 for the carousel (keeping original logic)
