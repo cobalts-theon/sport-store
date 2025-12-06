@@ -480,6 +480,16 @@
   transform: translateY(0) scale(1);
 }
 
+.products-loading {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  width: 100%;
+}
+
 /* Shimmer loading effect */
 @keyframes shimmer {
   0% {
