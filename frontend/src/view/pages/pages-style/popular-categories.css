@@ -20,10 +20,20 @@
     max-height: 3000px;
     border: 20px dashed rgba(255, 255, 255, 0.21);
     background: radial-gradient(circle at center, rgba(208,254,29,0.02), transparent 60%);
+    animation: rotate 120s linear infinite;
     border-radius: 50%;
     z-index: 0;
     pointer-events: none;
 }
+
+@keyframes rotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}   
 
 .popular-categories-title {
     font-family: 'Bebas Neue', sans-serif;

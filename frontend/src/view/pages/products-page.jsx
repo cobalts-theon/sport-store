@@ -129,12 +129,12 @@ function ProductsPage() {
       let filtered = products;
       filtered = filtered.filter(p => p.category && p.category.toLowerCase().includes(categoryParam.toLowerCase()));
       setFilteredProducts(filtered);
-      setActiveFilters(prev => ({ ...prev, category: filtered.length > 0 ? filtered[0].category : null }));
+      setActiveFilters(prev => ({ ...prev, category: filtered.length > 0 ? [filtered[0].category] : [] }));
     }
 
     //Đặt filter từ URL params
     if (statusParam && products.length > 0) {
-      setActiveFilters(prev => ({ ...prev, status: statusParam }));
+      setActiveFilters(prev => ({ ...prev, status: [statusParam] }));
     }
 
     if (priceParam && products.length > 0) {
@@ -145,7 +145,7 @@ function ProductsPage() {
         'over1m': 'Over 1M'
       };
       if (priceMap[priceParam]) {
-        setActiveFilters(prev => ({ ...prev, priceRange: priceMap[priceParam] }));
+        setActiveFilters(prev => ({ ...prev, priceRange: [priceMap[priceParam]] }));
       }
     }
 
@@ -166,49 +166,52 @@ function ProductsPage() {
     }
 
     // Status filter
-    if (activeFilters.status) {
-      if (activeFilters.status === 'hot-deal') {
-        // Match logic with product-card: isHotDeal OR discount >= 20%
-        result = result.filter(p => {
-          const discountPercentage = p.originalPrice && p.price 
-            ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
-            : 0;
-          return p.isHotDeal === true || discountPercentage >= 20;
+    if (activeFilters.status && activeFilters.status.length > 0) {
+      result = result.filter(p => {
+        return activeFilters.status.some(status => {
+          if (status === 'hot-deal') {
+            // Match logic with product-card: isHotDeal OR discount >= 20%
+            const discountPercentage = p.originalPrice && p.price 
+              ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+              : 0;
+            return p.isHotDeal === true || discountPercentage >= 20;
+          }
+          return p.tag === status;
         });
-      } else {
-        result = result.filter(p => p.tag === activeFilters.status);
-      }
+      });
     }
 
     // Category filter
-    if (activeFilters.category) {
-      result = result.filter(p => p.category === activeFilters.category);
+    if (activeFilters.category && activeFilters.category.length > 0) {
+      result = result.filter(p => activeFilters.category.includes(p.category));
     }
 
     // Price filter
-    if (activeFilters.priceRange) {
-      const range = priceRanges.find(r => r.label === activeFilters.priceRange);
-      if (range) {
-        result = result.filter(p => {
-          const price = p.price || 0;
-          return price >= range.min && price <= range.max;
+    if (activeFilters.priceRange && activeFilters.priceRange.length > 0) {
+      result = result.filter(p => {
+        const price = p.price || 0;
+        return activeFilters.priceRange.some(label => {
+          const range = priceRanges.find(r => r.label === label);
+          return range && price >= range.min && price <= range.max;
         });
-      }
+      });
     }
 
     // Size filter (Mock)
-    if (activeFilters.size) {
+    if (activeFilters.size && activeFilters.size.length > 0) {
       // In a real app, products would have a sizes array. 
       // Here we just show the UI works, potentially filtering randomly or not at all for now
       // or we can assume all products have all sizes for this demo
     }
 
     // Color filter (Mock)
-    if (activeFilters.color) {
+    if (activeFilters.color && activeFilters.color.length > 0) {
       // Same as size, mock logic or partial match if description contains color
       result = result.filter(p => 
-        p.description.toLowerCase().includes(activeFilters.color.toLowerCase()) ||
-        p.name.toLowerCase().includes(activeFilters.color.toLowerCase())
+        activeFilters.color.some(color => 
+          p.description.toLowerCase().includes(color.toLowerCase()) ||
+          p.name.toLowerCase().includes(color.toLowerCase())
+        )
       );
     }
 
@@ -261,12 +264,30 @@ function ProductsPage() {
 
   const handleFilterChange = (type, value) => {
     setActiveFilters(prev => {
-      if (prev[type] === value) {
-        const newFilters = { ...prev };
-        delete newFilters[type];
-        return newFilters;
+      // Price filter should be single select
+      if (type === 'priceRange') {
+        const currentValues = prev[type] || [];
+        // If clicking the same price, toggle it off
+        if (currentValues.includes(value)) {
+           const newFilters = { ...prev };
+           delete newFilters[type];
+           return newFilters;
+        }
+        // Otherwise replace with new value (as an array of 1)
+        return { ...prev, [type]: [value] };
       }
-      return { ...prev, [type]: value };
+
+      const currentValues = prev[type] || [];
+      if (currentValues.includes(value)) {
+        const newValues = currentValues.filter(v => v !== value);
+        if (newValues.length === 0) {
+          const newFilters = { ...prev };
+          delete newFilters[type];
+          return newFilters;
+        }
+        return { ...prev, [type]: newValues };
+      }
+      return { ...prev, [type]: [...currentValues, value] };
     });
   };
 
@@ -286,6 +307,19 @@ function ProductsPage() {
   const handleSort = (option) => {
     setSortOption(option);
     setShowSortMenu(false);
+  };
+
+  const removeFilter = (key, value) => {
+    setActiveFilters(prev => {
+      const currentValues = prev[key] || [];
+      const newValues = currentValues.filter(v => v !== value);
+      if (newValues.length === 0) {
+        const newFilters = { ...prev };
+        delete newFilters[key];
+        return newFilters;
+      }
+      return { ...prev, [key]: newValues };
+    });
   };
 
   const getSortLabel = () => {
@@ -356,11 +390,11 @@ function ProductsPage() {
                 {statusOptions.map(option => (
                   <div 
                     key={option.value} 
-                    className={`filter-option ${activeFilters.status === option.value ? 'active' : ''}`}
+                    className={`filter-option ${activeFilters.status?.includes(option.value) ? 'active' : ''}`}
                     onClick={() => handleFilterChange('status', option.value)}
                   >
                     {option.label.toUpperCase()}
-                    {activeFilters.status === option.value && <FontAwesomeIcon icon={faTimes} />}
+                    {activeFilters.status?.includes(option.value) && <FontAwesomeIcon icon={faTimes}/>}
                   </div>
                 ))}
               </div>
@@ -381,11 +415,11 @@ function ProductsPage() {
                 {categories.map(cat => (
                   <div 
                     key={cat} 
-                    className={`filter-option ${activeFilters.category === cat ? 'active' : ''}`}
+                    className={`filter-option ${activeFilters.category?.includes(cat) ? 'active' : ''}`}
                     onClick={() => handleFilterChange('category', cat)}
                   >
                     {cat.toUpperCase()}
-                    {activeFilters.category === cat && <FontAwesomeIcon icon={faTimes} />}
+                    {activeFilters.category?.includes(cat) && <FontAwesomeIcon icon={faTimes} />}
                   </div>
                 ))}
               </div>
@@ -406,11 +440,11 @@ function ProductsPage() {
                 {priceRanges.map(range => (
                   <div 
                     key={range.label} 
-                    className={`filter-option ${activeFilters.priceRange === range.label ? 'active' : ''}`}
+                    className={`filter-option ${activeFilters.priceRange?.includes(range.label) ? 'active' : ''}`}
                     onClick={() => handleFilterChange('priceRange', range.label)}
                   >
                     {range.label}
-                    {activeFilters.priceRange === range.label && <FontAwesomeIcon icon={faTimes} />}
+                    {activeFilters.priceRange?.includes(range.label) && <FontAwesomeIcon icon={faTimes} />}
                   </div>
                 ))}
               </div>
@@ -423,14 +457,46 @@ function ProductsPage() {
       {/* Main Content */}
       <main className="products-main">
         <div className="products-header">
-          <button className="filter-toggle-btn" onClick={toggleSidebar}>
-            <FontAwesomeIcon icon={faFilter} />
-            <span>FILTERS</span>
+          <div className="header-left-section">
+            <button className="filter-toggle-btn" onClick={toggleSidebar}>
+              <FontAwesomeIcon icon={faFilter} />
+              <span>FILTERS</span>
+              {Object.keys(activeFilters).length > 0 && (
+                <span className="filter-badge">
+                  {Object.values(activeFilters).reduce((acc, curr) => acc + (Array.isArray(curr) ? curr.length : 0), 0)}
+                </span>
+              )}
+            </button>
+
+            {/* Active Filters Tags */}
             {Object.keys(activeFilters).length > 0 && (
-              <span className="filter-badge">{Object.keys(activeFilters).length}</span>
+              <div className="active-filters-inline">
+                {Object.entries(activeFilters).map(([key, values]) => (
+                  Array.isArray(values) && values.map(value => (
+                    <div key={`${key}-${value}`} className="filter-tag">
+                      <span className="filter-tag-label">
+                        {key === 'priceRange' ? 'Price' : key}: 
+                      </span>
+                      <span className="filter-tag-value">
+                        {key === 'status' && value === 'hot-deal' ? 'Hot Deals' : 
+                        key === 'status' && value === 'new' ? 'New Arrivals' :
+                        value.toString().toUpperCase()}
+                      </span>
+                      <button onClick={() => removeFilter(key, value)} className="filter-tag-remove">
+                        <FontAwesomeIcon icon={faTimes} />
+                      </button>
+                    </div>
+                  ))
+                ))}
+                <button onClick={clearFilters} className="clear-all-tags">
+                  Clear All
+                </button>
+              </div>
             )}
-          </button>
+          </div>
+
           <span className="products-count">{filteredProducts.length} PRODUCTS</span>
+          
           <div className="sort-container" ref={sortMenuRef}>
             <button 
               className={`shuffle-btn ${showSortMenu ? 'active' : ''}`}

@@ -257,6 +257,13 @@ function ProductsView({ openCart }) {
 
     return (
         <div className="products-view-page">
+            <div className="product-breadcrumb">
+                <span onClick={() => navigate('/products')} className="breadcrumb-link">Products</span>
+                <span className="breadcrumb-separator">&gt;</span>
+                <span onClick={() => navigate(`/products?category=${product.category}`)} className="breadcrumb-category breadcrumb-link" style={{ textTransform: 'capitalize' }}>{product.category}</span>
+                <span className="breadcrumb-separator">&gt;</span>
+                <span className="breadcrumb-current">{product.name}</span>
+            </div>
         <div className="products-view-container">
             {/* Left Panel: Image & Details */}
             <div className="products-view-left">

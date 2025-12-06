@@ -14,10 +14,6 @@ function UserReview() {
             </div>
             <div className="line-s">
                 <p>Together with Prime Souls, we are creating a world where athletes can buy and sell their own products. With your opinion, we can make Prime Souls even better, so we invite you to share your experience with us.</p>
-                <div className="submit-review-section">
-                    <input type="text" placeholder="Write your review here..." className="review-input"/>
-                    <Link to="/signup" className="become-member-link"><button className="submit-review-btn">Submit</button></Link>
-                </div>
                 <div className="submit-review-button-line">
                     <p>Join us on Prime Souls and let your voice be heard!</p>
                     <Link to="/signup" className="become-member-link"><button className="submit-review-btn second"><FontAwesomeIcon icon={faSquare} style={{ fontSize: "10px" }}/> Join Us</button></Link>
@@ -51,12 +47,11 @@ function UserReview() {
                     </div>
                     <div className="user-name-role second-role-info">
                         <h3 className="user-name second-name">Grey</h3>
-                        <p className="user-role second-role">THE ONE WHO ASK </p>
+                        <p className="user-role second-role">THE ONE WHO ASK</p>
                         <div className="user-rating second-rating">
-                            {[...Array(4)].map((_, i) => (
+                            {[...Array(5)].map((_, i) => (
                                 <FontAwesomeIcon key={i} icon={faStar} className="star-icon" />
                             ))}
-                            <FontAwesomeIcon icon={faStar} className="star-icon empty" style={{opacity: 0.3}} />
                         </div>
                         <p className="user-review-text second-review">
                             "Great experience shopping at Prime Sales."
@@ -71,7 +66,7 @@ function UserReview() {
                     </div>
                     <div className="user-name-role third-role-info">
                         <h3 className="user-name third-name">Luz</h3>
-                        <p className="user-role third-role">USA PRESIDENT</p>
+                        <p className="user-role third-role">USB PRESIDENT</p>
                         <div className="user-rating third-rating">
                             {[...Array(5)].map((_, i) => (
                                 <FontAwesomeIcon key={i} icon={faStar} className="star-icon" />

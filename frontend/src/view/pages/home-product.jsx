@@ -10,6 +10,15 @@ import api from '@/lib/api';
  * với animation và style hiện đại
  */
 function HomeProduct() {
+
+  //Giải thích code: 
+  //B1: Khai báo state để lưu trữ sản phẩm và trạng thái loading
+  //B2: Sử dụng useEffect để fetch dữ liệu sản phẩm từ API khi component được mount
+  //B3: Map dữ liệu API về đúng định dạng cần thiết và lưu vào state products
+  //B4: Tạo biến gridProducts để dễ quản lý sản phẩm hiển thị
+  //B5: Lọc sản phẩm dựa trên filter hiện tại và chỉ lấy 10 sản phẩm đầu tiên
+  //B6: Render giao diện với header, nút lọc, lưới sản phẩm và phần kêu gọi hành động
+
   const [filter, setFilter] = useState('all'); // all, featured, new, sale
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +28,7 @@ function HomeProduct() {
     const fetchProducts = async () => {
       try {
         const response = await api.get('/products');
-        // Map API data to match ProductCard expected format
+        // map dữ liệu api về đúng định dạng cần thiết
         // API returns: img_url (not img), original_price (not old_price)
         const mappedProducts = response.data.map(p => ({
           id: p.id,
@@ -48,13 +57,13 @@ function HomeProduct() {
     fetchProducts();
   }, []);
 
-  // Get all products (no ID filter since we want to show all from API)
+  // Gắn products vào gridProducts để dễ quản lý
   const gridProducts = products;
 
   // Lọc sản phẩm theo tag
   const filteredProducts = filter === 'all' 
-    ? gridProducts.slice(0, 10) // Show only first 10 products
-    : gridProducts.filter(product => product.tag === filter).slice(0, 10);
+    ? gridProducts.slice(0, 10) // Cho chỉ hiển thị 10 sản phẩm
+    : gridProducts.filter(product => product.tag === filter).slice(0, 10);  
 
   return (
     <div className="home-product-container">

@@ -6,6 +6,48 @@
     margin-top: 65px;
 }
 
+.product-breadcrumb {
+    padding: 15px 40px;
+    font-size: 14px;
+    color: black;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Jetbrains Mono', sans-serif;
+}
+
+.breadcrumb-link {
+    cursor: pointer;
+    color: #000000ff;
+    transition: color 0.2s;
+}
+
+.breadcrumb-link:hover {
+    color: #000;
+    background: #d1fe1d46;
+    text-decoration: underline;
+}
+
+.breadcrumb-category {
+    color: #000000ff;
+    font-weight: 500;
+}
+
+.breadcrumb-separator {
+    color: #999;
+    font-size: 12px;
+}
+
+.breadcrumb-current {
+    color: #767676ff;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 .products-view-container {
     display: flex;
     width: 100%;
