@@ -1,50 +1,14 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faBox,
-  faPlus,
-  faEdit,
-  faTrash,
-  faSearch,
-  faTimes,
-  faImage,
-  faDollarSign,
-  faTag,
-  faBoxes,
-  faChevronDown,
-  faChevronUp,
-  faSave,
-  faTachometerAlt,
-  faShoppingCart,
-  faUsers,
-  faChartLine,
-  faBullhorn,
-  faPercent,
-  faCalendarAlt,
-  faEnvelope,
-  faCheck,
-  faClock,
-  faTruck,
-  faEye,
-  faThLarge,
-  faList,
-  faSpinner,
-  faPrint,
-  faTimesCircle
-} from '@fortawesome/free-solid-svg-icons';
+import { faBox, faEdit, faTrash, faSearch, faTimes, faImage, faDollarSign, faTag, faBoxes, faChevronDown, faChevronUp, faSave, faShoppingCart, faUsers, faChartLine, faBullhorn, faPercent, faCalendarAlt, faEnvelope, faCheck, faClock, faTruck, faThLarge, faList, faPrint, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import toast from 'react-hot-toast';
 import api from '../../lib/api';
 import { 
   AdminSidebar, 
   AdminHeader, 
-  SettingsSection, 
-  PlaceholderSection,
   UserManagement,
   Dashboard,
   Analytics,
-  mockPromotions, 
-  mockOrders,
-  mockUsers,
   getStockStatus, 
   getPromotionStatus, 
   getOrderStatus 
@@ -171,8 +135,6 @@ function Admin() {
         setPromotions(mappedPromotions);
       } catch (error) {
         console.error('Error fetching coupons:', error);
-        // Fallback to mock data if API fails
-        setPromotions(mockPromotions);
       }
     };
     fetchPromotions();
@@ -214,8 +176,6 @@ function Admin() {
         setOrders(mappedOrders);
       } catch (error) {
         console.error('Error fetching orders:', error);
-        // Fallback to mock data if API fails
-        setOrders(mockOrders);
       }
     };
     fetchOrders();
@@ -244,8 +204,6 @@ function Admin() {
         setUsers(mappedUsers);
       } catch (error) {
         console.error('Error fetching users:', error);
-        // Fallback to mock data if API fails
-        setUsers(mockUsers);
       }
     };
     fetchUsers();

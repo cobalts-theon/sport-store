@@ -891,3 +891,131 @@
     width: 20px;
   }
 }
+
+/* Payment Methods */
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.payment-method-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.payment-method-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(208, 254, 29, 0.3);
+}
+
+.payment-method-card.active {
+  background: rgba(208, 254, 29, 0.05);
+  border-color: #D0FE1D;
+}
+
+.payment-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #888;
+  transition: all 0.2s ease;
+}
+
+.payment-method-card.active .payment-icon {
+  background: #D0FE1D;
+  color: #000;
+}
+
+.payment-details {
+  flex: 1;
+}
+
+.payment-details h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.2rem 0;
+  color: #fff;
+}
+
+.payment-details p {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0;
+}
+
+.payment-radio {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.payment-method-card.active .payment-radio {
+  border-color: #D0FE1D;
+}
+
+.radio-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #D0FE1D;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s ease;
+}
+
+.payment-method-card.active .radio-circle {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.payment-info-box {
+  background: rgba(208, 254, 29, 0.05);
+  border: 1px solid rgba(208, 254, 29, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.payment-info-box svg {
+  font-size: 1.5rem;
+  color: #D0FE1D;
+}
+
+.payment-info-box p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.card-payment-form {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

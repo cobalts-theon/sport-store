@@ -1,5 +1,4 @@
 // frontend/src/view/components/admin/Dashboard.jsx
-import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faDollarSign,
@@ -100,7 +99,7 @@ function Dashboard({ products, orders, users, promotions }) {
       {/* Section: Key Metrics */}
       <div className="section-title-bar">
         <span className="section-icon"><FontAwesomeIcon icon={faChartLine} /></span>
-        <h2>Key Metrics</h2>
+        <h2>Stats</h2>
         <span className="section-line"></span>
       </div>
       
@@ -113,10 +112,6 @@ function Dashboard({ products, orders, users, promotions }) {
           <div className="metric-content">
             <h3>Total Revenue</h3>
             <p className="metric-value">{formatCurrency(totalRevenue)}</p>
-            <div className={`metric-trend ${revenueTrend >= 0 ? 'positive' : 'negative'}`}>
-              <FontAwesomeIcon icon={revenueTrend >= 0 ? faArrowUp : faArrowDown} />
-              <span>{Math.abs(revenueTrend)}% from last month</span>
-            </div>
           </div>
         </div>
 
@@ -127,10 +122,6 @@ function Dashboard({ products, orders, users, promotions }) {
           <div className="metric-content">
             <h3>Total Orders</h3>
             <p className="metric-value">{totalOrders}</p>
-            <div className={`metric-trend ${ordersTrend >= 0 ? 'positive' : 'negative'}`}>
-              <FontAwesomeIcon icon={ordersTrend >= 0 ? faArrowUp : faArrowDown} />
-              <span>{Math.abs(ordersTrend)}% from last month</span>
-            </div>
           </div>
         </div>
 
@@ -141,10 +132,6 @@ function Dashboard({ products, orders, users, promotions }) {
           <div className="metric-content">
             <h3>Active Users</h3>
             <p className="metric-value">{activeUsers}</p>
-            <div className={`metric-trend ${usersTrend >= 0 ? 'positive' : 'negative'}`}>
-              <FontAwesomeIcon icon={usersTrend >= 0 ? faArrowUp : faArrowDown} />
-              <span>{Math.abs(usersTrend)}% from last month</span>
-            </div>
           </div>
         </div>
 
@@ -155,10 +142,6 @@ function Dashboard({ products, orders, users, promotions }) {
           <div className="metric-content">
             <h3>Products</h3>
             <p className="metric-value">{totalProducts}</p>
-            <div className={`metric-trend ${productsTrend >= 0 ? 'positive' : 'negative'}`}>
-              <FontAwesomeIcon icon={productsTrend >= 0 ? faArrowUp : faArrowDown} />
-              <span>{Math.abs(productsTrend)}% from last month</span>
-            </div>
           </div>
         </div>
       </div>
@@ -278,7 +261,7 @@ function Dashboard({ products, orders, users, promotions }) {
                       onError={(e) => { e.target.src = 'https://via.placeholder.com/50x50?text=No+Image'; }}
                     />
                     <div className="product-info">
-                      <span className="product-name">{product.name}</span>
+                      <span className="product-name-dashboard">{product.name}</span>
                       <span className="product-price">{formatCurrency(product.price)}</span>
                     </div>
                     <div className="product-stock">

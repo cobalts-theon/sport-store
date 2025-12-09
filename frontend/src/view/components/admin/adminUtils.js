@@ -8,6 +8,8 @@ export const getStockStatus = (stock) => {
   return { text: 'In Stock', color: '#4CAF50' };
 };
 
+//Khai báo hàm getPromotionStatus để xác định trạng thái của khuyến mãi dựa trên ngày bắt đầu, ngày kết thúc và trạng thái hoạt động
+//Liên quan đến frontend/src/view/pages/admin.jsx
 export const getPromotionStatus = (promotion) => {
   const now = new Date();
   const start = new Date(promotion.startDate);

@@ -8,7 +8,6 @@ import {
   faTachometerAlt,
   faChartLine,
   faBullhorn,
-  faCog,
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -52,7 +51,6 @@ function AdminSidebar({ activeSection, setActiveSection }) {
     { id: 'dashboard', icon: faTachometerAlt, label: 'Dashboard' },
     { id: 'analytics', icon: faChartLine, label: 'Analytics' },
     { id: 'marketing', icon: faBullhorn, label: 'Marketing/Promotions' },
-    { id: 'settings', icon: faCog, label: 'Settings' }
   ];
 
   return (

@@ -18,7 +18,10 @@ import {
   faGift,
   faPercent,
   faChevronDown,
-  faChevronUp
+  faChevronUp,
+  faMoneyBillWave,
+  faQrcode,
+  faUniversity
 } from '@fortawesome/free-solid-svg-icons';
 import './pages-style/checkout.css';
 import { useCart } from '../context/CartContext';
@@ -58,6 +61,8 @@ function Checkout() {
     expiryDate: '',
     cvv: ''
   });
+
+  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card', 'cod', 'bank'
 
   const subtotal = getCartTotal();
   const shipping = 30000;
@@ -188,7 +193,8 @@ function Checkout() {
           shippingFee: shipping,
           discount: discount,
           couponCode: appliedCoupon ? appliedCoupon.code : null,
-          totalAmount: total
+          totalAmount: total,
+          paymentMethod: paymentMethod
         };
 
         // attach userId if present in localStorage
@@ -368,60 +374,113 @@ function Checkout() {
               <div className="checkout-section">
                 <div className="section-header">
                   <FontAwesomeIcon icon={faCreditCard} />
-                  <h2>Payment Information</h2>
+                  <h2>Payment Method</h2>
                 </div>
+                
+                <div className="payment-methods">
+                  <div 
+                    className={`payment-method-card ${paymentMethod === 'card' ? 'active' : ''}`}
+                    onClick={() => setPaymentMethod('card')}
+                  >
+                    <div className="payment-icon">
+                      <FontAwesomeIcon icon={faCreditCard} />
+                    </div>
+                    <div className="payment-details">
+                      <h3>Credit/Debit Card</h3>
+                      <p>Pay securely with your card</p>
+                    </div>
+                    <div className="payment-radio">
+                      <div className="radio-circle"></div>
+                    </div>
+                  </div>
+
+                  <div 
+                    className={`payment-method-card ${paymentMethod === 'cod' ? 'active' : ''}`}
+                    onClick={() => setPaymentMethod('cod')}
+                  >
+                    <div className="payment-icon">
+                      <FontAwesomeIcon icon={faMoneyBillWave} />
+                    </div>
+                    <div className="payment-details">
+                      <h3>Cash on Delivery</h3>
+                      <p>Pay when you receive your order</p>
+                    </div>
+                    <div className="payment-radio">
+                      <div className="radio-circle"></div>
+                    </div>
+                  </div>
+                </div>
+
                 <form onSubmit={handlePaymentSubmit} className="checkout-form">
-                  <div className="form-row">
-                    <div className="form-group full">
-                      <label>Card Number</label>
-                      <input 
-                        type="text" 
-                        placeholder="1234 5678 9012 3456"
-                        value={paymentInfo.cardNumber}
-                        onChange={(e) => setPaymentInfo({...paymentInfo, cardNumber: e.target.value})}
-                        maxLength="19"
-                        required
-                      />
-                    </div>
-                  </div>
+                  {paymentMethod === 'card' && (
+                    <div className="card-payment-form">
+                      <div className="form-row">
+                        <div className="form-group full">
+                          <label>Card Number</label>
+                          <input 
+                            type="text" 
+                            placeholder="1234 5678 9012 3456"
+                            value={paymentInfo.cardNumber}
+                            onChange={(e) => setPaymentInfo({...paymentInfo, cardNumber: e.target.value})}
+                            maxLength="19"
+                            required
+                          />
+                        </div>
+                      </div>
 
-                  <div className="form-row">
-                    <div className="form-group full">
-                      <label>Cardholder Name</label>
-                      <input 
-                        type="text" 
-                        placeholder="John Doe"
-                        value={paymentInfo.cardName}
-                        onChange={(e) => setPaymentInfo({...paymentInfo, cardName: e.target.value})}
-                        required
-                      />
-                    </div>
-                  </div>
+                      <div className="form-row">
+                        <div className="form-group full">
+                          <label>Cardholder Name</label>
+                          <input 
+                            type="text" 
+                            placeholder="John Doe"
+                            value={paymentInfo.cardName}
+                            onChange={(e) => setPaymentInfo({...paymentInfo, cardName: e.target.value})}
+                            required
+                          />
+                        </div>
+                      </div>
 
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>Expiry Date</label>
-                      <input 
-                        type="text" 
-                        placeholder="MM/YY"
-                        value={paymentInfo.expiryDate}
-                        onChange={(e) => setPaymentInfo({...paymentInfo, expiryDate: e.target.value})}
-                        maxLength="5"
-                        required
-                      />
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Expiry Date</label>
+                          <input 
+                            type="text" 
+                            placeholder="MM/YY"
+                            value={paymentInfo.expiryDate}
+                            onChange={(e) => setPaymentInfo({...paymentInfo, expiryDate: e.target.value})}
+                            maxLength="5"
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label><FontAwesomeIcon icon={faLock} /> CVV</label>
+                          <input 
+                            type="text" 
+                            placeholder="123"
+                            value={paymentInfo.cvv}
+                            onChange={(e) => setPaymentInfo({...paymentInfo, cvv: e.target.value})}
+                            maxLength="3"
+                            required
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label><FontAwesomeIcon icon={faLock} /> CVV</label>
-                      <input 
-                        type="text" 
-                        placeholder="123"
-                        value={paymentInfo.cvv}
-                        onChange={(e) => setPaymentInfo({...paymentInfo, cvv: e.target.value})}
-                        maxLength="3"
-                        required
-                      />
+                  )}
+
+                  {paymentMethod === 'cod' && (
+                    <div className="payment-info-box">
+                      <FontAwesomeIcon icon={faMoneyBillWave} />
+                      <p>You will pay in cash upon delivery. Please prepare the exact amount if possible.</p>
                     </div>
-                  </div>
+                  )}
+
+                  {paymentMethod === 'bank' && (
+                    <div className="payment-info-box">
+                      <FontAwesomeIcon icon={faQrcode} />
+                      <p>You will be redirected to scan a QR code for bank transfer after placing the order.</p>
+                    </div>
+                  )}
 
                   <div className="form-actions">
                     <button type="button" className="checkout-btn secondary" onClick={() => setStep(1)}>
@@ -461,8 +520,16 @@ function Checkout() {
                 <div className="review-section">
                   <h3>Payment Method</h3>
                   <div className="review-info">
-                    <p>Card ending in {paymentInfo.cardNumber.slice(-4)}</p>
-                    <p>{paymentInfo.cardName}</p>
+                    {paymentMethod === 'card' && (
+                      <>
+                        <p>Credit/Debit Card</p>
+                        <p>Card ending in {paymentInfo.cardNumber.slice(-4)}</p>
+                        <p>{paymentInfo.cardName}</p>
+                      </>
+                    )}
+                    {paymentMethod === 'cod' && (
+                      <p>Cash on Delivery</p>
+                    )}
                   </div>
                   <button className="edit-btn" onClick={() => setStep(2)}>Edit</button>
                 </div>
@@ -483,7 +550,7 @@ function Checkout() {
 
           {/* Right Column - Order Summary */}
           <div className="order-summary">
-            {step === 2 && (
+            {step === 2 && paymentMethod === 'card' && (
               <div style={{ marginBottom: '25px' }}>
                 <CreditCard 
                   cardNumber={paymentInfo.cardNumber}

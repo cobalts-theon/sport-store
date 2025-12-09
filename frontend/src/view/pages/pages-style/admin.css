@@ -2727,14 +2727,14 @@
 
 .dashboard-metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 .dashboard-metric-card {
   background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.2rem;
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -3060,9 +3060,13 @@
   color: black;
 }
 
-.product-name {
+.product-name-dashboard {
   color: #fff;
   font-size: 0.85rem;
+  width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: 600;
 }
 
@@ -3306,16 +3310,16 @@
 
 .analytics-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 .analytics-kpi-card {
   background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.2rem;
   border-radius: 8px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .analytics-kpi-card:hover {
@@ -3345,7 +3349,7 @@
 }
 
 .kpi-value {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 900;
   color: #fff;
   margin: 0.5rem 0;

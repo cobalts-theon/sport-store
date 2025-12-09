@@ -96,6 +96,24 @@
     font-family: 'BBH Sans Bartle', sans-serif;
 }
 
+.cart-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cart-content::-webkit-scrollbar-track {
+    background: #100f0f;
+    border: 1px solid #ffffff0f;
+}
+
+.cart-content::-webkit-scrollbar-thumb {
+    background: #5c5c5cff;
+    border: 1px solid #ffffff0f;
+}
+
+.cart-content::-webkit-scrollbar-thumb:hover {
+    background: #7a7a7aff;
+}
+
 .empty-cart-msg {
     text-align: center;
     margin-top: 50px;

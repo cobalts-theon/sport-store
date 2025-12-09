@@ -33,7 +33,7 @@ body {
   background-repeat: repeat;
   background-attachment: fixed;
   scroll-behavior: smooth;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 /* Custom scrollbar – keep it exactly like this */

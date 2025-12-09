@@ -119,50 +119,10 @@ function Analytics({ products, orders, users }) {
 
   return (
     <div className="analytics-container">
-      {/* Analytics Header */}
-      <div className="analytics-header">
-        <div className="time-range-selector">
-          <button 
-            className={`time-btn ${timeRange === '7days' ? 'active' : ''}`}
-            onClick={() => setTimeRange('7days')}
-          >
-            7 Days
-          </button>
-          <button 
-            className={`time-btn ${timeRange === '30days' ? 'active' : ''}`}
-            onClick={() => setTimeRange('30days')}
-          >
-            30 Days
-          </button>
-          <button 
-            className={`time-btn ${timeRange === '90days' ? 'active' : ''}`}
-            onClick={() => setTimeRange('90days')}
-          >
-            90 Days
-          </button>
-          <button 
-            className={`time-btn ${timeRange === 'year' ? 'active' : ''}`}
-            onClick={() => setTimeRange('year')}
-          >
-            This Year
-          </button>
-        </div>
-        <div className="analytics-actions">
-          <button className="analytics-btn">
-            <FontAwesomeIcon icon={faFilter} />
-            Filter
-          </button>
-          <button className="analytics-btn primary">
-            <FontAwesomeIcon icon={faDownload} />
-            Export Report
-          </button>
-        </div>
-      </div>
-
       {/* Key Performance Indicators */}
       <div className="section-title-bar">
         <span className="section-icon"><FontAwesomeIcon icon={faChartLine} /></span>
-        <h2>Key Performance Indicators</h2>
+        <h2>STATS</h2>
         <span className="section-line"></span>
       </div>
       <div className="analytics-kpi-grid">
@@ -172,10 +132,6 @@ function Analytics({ products, orders, users }) {
             <FontAwesomeIcon icon={faDollarSign} />
           </div>
           <p className="kpi-value">{formatCurrency(totalRevenue)}</p>
-          <div className="kpi-trend positive">
-            <FontAwesomeIcon icon={faArrowUp} />
-            <span>+18.5% vs last period</span>
-          </div>
         </div>
 
         <div className="analytics-kpi-card">
@@ -184,10 +140,6 @@ function Analytics({ products, orders, users }) {
             <FontAwesomeIcon icon={faShoppingCart} />
           </div>
           <p className="kpi-value">{formatCurrency(avgOrderValue)}</p>
-          <div className="kpi-trend positive">
-            <FontAwesomeIcon icon={faArrowUp} />
-            <span>+7.2% vs last period</span>
-          </div>
         </div>
 
         <div className="analytics-kpi-card">
@@ -196,10 +148,6 @@ function Analytics({ products, orders, users }) {
             <FontAwesomeIcon icon={faPercent} />
           </div>
           <p className="kpi-value">{conversionRate}%</p>
-          <div className="kpi-trend negative">
-            <FontAwesomeIcon icon={faArrowDown} />
-            <span>-2.3% vs last period</span>
-          </div>
         </div>
 
         <div className="analytics-kpi-card">
@@ -208,10 +156,6 @@ function Analytics({ products, orders, users }) {
             <FontAwesomeIcon icon={faUsers} />
           </div>
           <p className="kpi-value">{users.filter(u => u.status === 'active').length}</p>
-          <div className="kpi-trend positive">
-            <FontAwesomeIcon icon={faArrowUp} />
-            <span>+12.8% vs last period</span>
-          </div>
         </div>
       </div>
 
