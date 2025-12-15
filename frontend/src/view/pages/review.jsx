@@ -9,13 +9,14 @@ import calloutlineup from "/src/assets/icon/calloutlineup.svg";
 import calloutlinedown from "/src/assets/icon/calloutlinedown.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquare, faFutbol ,faInfo} from '@fortawesome/free-solid-svg-icons';
+import { IoTriangleSharp } from "react-icons/io5";
 function Review() {
     const ringText = " PRIME SOULS • PRIME SOULS • PRIME SOULS • "; // Chuỗi văn bản lặp lại 3 lần
 
     return (
         <div className="review-container-bento-grid">
             <div className="review-container-bento-grid-title" id="title" style={{ color: 'white' }}>
-                <h1><FontAwesomeIcon icon={faSquare} style={{ fontSize: '30px' }}/> ABOUT OUR PRODUCT</h1>
+                <h1><FontAwesomeIcon icon={faSquare} style={{ fontSize: '30px' }}/>[ ABOUT OUR PRODUCT ]</h1>
             </div>
             <div className="review-container-bento-grid-item" id="box-1">
                 <div className="lime-ring-container">
@@ -37,7 +38,7 @@ function Review() {
             </div>
             <div className="review-container-bento-grid-item" id="box-2">
                 <img src={shoe} alt="Shoe" className="shoe-img" />
-                <p className="product-name2"><FontAwesomeIcon icon={faSquare} />PS LXCX Trainer</p>
+                <p className="product-name2"><IoTriangleSharp /> PS LXCX Trainer</p>
                 <img src={calloutlineup} alt="Calloutlineup" className="calloutlineup-img" />
                 <img src={calloutlinedown} alt="Calloutlinedown" className="calloutlinedown-img" />
                 <p className="product-material">Cotton</p>
@@ -52,7 +53,7 @@ function Review() {
             </div>
             <div className="review-container-bento-grid-item" id="box-4">
                 <h1 style={{ color: 'white' }}>Welcome to <span style={{ color: '#D0FE1D' }}>PRIME SOULS</span> – your trusted destination for high-quality sports gear and apparel, empowering you to push your limits and elevate your active lifestyle.</h1>
-                <p style={{ color: 'white' }}><FontAwesomeIcon icon={faSquare} /> The Best Choice for Your Sports Gear</p>
+                <p style={{ color: 'white' }}><IoTriangleSharp /> The Best Choice for Your Sports Gear</p>
             </div>
         </div>
     );

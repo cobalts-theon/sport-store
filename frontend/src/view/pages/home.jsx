@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '/src/view/pages/pages-style/home.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import topo from '/src/assets/icon/topography.svg';
 import api from '@/lib/api';
 
 // Fallback images
@@ -142,6 +143,9 @@ function Home() {
             </textPath>
           </text>
         </svg>
+        
+        <img src={topo} alt="" className="topo-background" aria-hidden="true" />
+        
         <div
           className="image-Carousel"
           role="region"
@@ -179,8 +183,17 @@ function Home() {
 
         <div className="home-shape"></div>
         <div className="product-name">
+          <span className="product-id-tag">[Product ID: #{products[current]?.id || FEATURED_PRODUCT_IDS[current]}]</span>
           <span className="product-name-text">{productNames[current]}</span>
           <span className="product-description-text">{productDescriptions[current]}</span>
+        </div>
+        
+        <div className="triangle-column">
+          <div className="triangle">&#9650;</div>
+          <div className="triangle">&#9650;</div>
+          <div className="triangle">&#9650;</div>
+          <div className="triangle">&#9650;</div>
+          <div className="triangle">&#9650;</div>
         </div>
           <div className="product-actions">
             <button className="buy-btn" onClick={handleBuy} aria-label={`Buy ${productNames[current]}`}>

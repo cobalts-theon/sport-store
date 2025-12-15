@@ -74,7 +74,7 @@ function PopularCategories() {
         <div className="popular-categories">
             <div className="Circle-background"></div>
             <h1 className="popular-categories-title">
-                <FontAwesomeIcon icon={faSquare} style={{ fontSize: '30px' }}/> POPULAR CATEGORIES
+                <FontAwesomeIcon icon={faSquare} style={{ fontSize: '30px' }}/> [ POPULAR CATEGORIES ]
             </h1>
             <p className="popular-categories-subtitle"><FontAwesomeIcon icon={faSquare} /> Explore our most popular product categories, and find the perfect fit for your needs</p>
             <div 

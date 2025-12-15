@@ -2,8 +2,10 @@
 
 .product-flex-title {
     font-family: 'Bebas Neue', sans-serif;
-    color: #ffffff;
-    margin: 40px 0 0px 20px;
+    color: #ffffffff;
+    width: fit-content;
+    margin: 40px 0 0px 0px;
+    padding: 0 20px 0 20px;
     letter-spacing: 2px;
     text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
@@ -61,7 +63,6 @@
 .scroll-btn:hover {
     background-color: #D0FE1D;
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 0 25px rgba(208, 254, 29, 0.8);
 }
 
 .scroll-btn:active {
@@ -74,6 +75,14 @@
 
 .scroll-btn-right {
     right: 20px;
+}
+
+.scroll-btn-left:hover {
+    clip-path: polygon(100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%, 25% 0%);
+}
+
+.scroll-btn-right:hover {
+    clip-path: polygon(0% 0%, 25% 50%, 0% 100%, 75% 100%, 100% 50%, 75% 0%);
 }
 
 .product-flex-item {

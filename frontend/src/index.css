@@ -26,10 +26,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #0f0f10;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
+  background-image: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 58 58' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M24 19v10M19 24h10' stroke='rgba(255, 255, 255, 0.09)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 90px 90px;
   background-repeat: repeat;
   background-attachment: fixed;
   scroll-behavior: smooth;

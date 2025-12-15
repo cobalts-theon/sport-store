@@ -5,6 +5,7 @@ import api from "../../lib/api";
 import productsData from "../data/products.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare } from "@fortawesome/free-solid-svg-icons";
+import { IoTriangleSharp } from "react-icons/io5";
 
 function ProductFlex() {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ function ProductFlex() {
     
     return (
         <div className="product-flex">
-            <h1 className="product-flex-title"><FontAwesomeIcon icon={faSquare} style={{ fontSize: '30px' }}/> FEATURED</h1>
+            <h1 className="product-flex-title"><IoTriangleSharp/> [ FEATURED ]</h1>
             <div className="product-flex-wrapper">
                 <button className="scroll-btn scroll-btn-left" onClick={scrollLeft}>
                     &#8249;
