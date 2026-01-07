@@ -4,6 +4,8 @@ import './pages-style/home-product.css';
 import ProductCard from '../components/product-card';
 import Silk from '../components/Silk';
 import api from '@/lib/api';
+import football from '/src/assets/image/football(glitch).png';
+import basketball from '/src/assets/image/basketball.png';
 
 /**
  * Home Product Page - Hiển thị các sản phẩm trong grid layout
@@ -126,6 +128,8 @@ function HomeProduct() {
 
       {/* Call to Action Section */}
       <div className="cta-section">
+        <img src={football} alt="" className="cta-football" aria-hidden="true" />
+        <img src={basketball} alt="" className="cta-basketball" aria-hidden="true" />
         <div className="cta-content">
           <h2 className="cta-title">Ready to Elevate Your Game?</h2>
           <p className="cta-text">Join thousands of athletes who trust Prime Souls</p>

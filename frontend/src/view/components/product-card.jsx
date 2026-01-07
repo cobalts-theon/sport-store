@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './components-style/product-card.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faStarHalf, faFire } from '@fortawesome/free-solid-svg-icons';
+import { faFire } from '@fortawesome/free-solid-svg-icons';
 import { useCart } from '../context/CartContext';
 
 const API_BASE = 'http://localhost:3000';
@@ -15,8 +15,8 @@ function ProductCard({ product, index }) {
   // Get image URL - handle both API paths and static paths
   const getImageUrl = (imgPath) => {
     if (!imgPath) return '';
-    if (imgPath.startsWith('http')) return imgPath;
-    if (imgPath.startsWith('/uploads')) return `${API_BASE}${imgPath}`;
+    if (imgPath.startsWith('http')) return imgPath; //Nếu đường dẫn bắt đầu với http thì trả về đường dẫn đó
+    if (imgPath.startsWith('/uploads')) return `${API_BASE}${imgPath}`; //Nếu đường dẫn bắt đầu với /uploads thì thêm base URL vào đường dẫn
     return imgPath;
   };
 
@@ -52,9 +52,7 @@ function ProductCard({ product, index }) {
     e.stopPropagation();
     // Thêm sản phẩm vào giỏ với số lượng 1, không có size/color được chọn
     // Nếu sản phẩm cần chọn size, chuyển đến trang chi tiết sản phẩm
-    const needsSize = ['shoes', 'sneakers', 'running', 'basketball', 'training', 'lifestyle', 
-                       'clothing', 'apparel', 't-shirt', 'shirt', 'jacket', 'hoodie', 'pants', 'shorts']
-                      .includes(product.category?.toLowerCase());
+    const needsSize = ['shoes', 'sneakers', 'running', 'basketball', 'training', 'lifestyle', 'clothing', 'apparel', 't-shirt', 'shirt', 'jacket', 'hoodie', 'pants', 'shorts'].includes(product.category?.toLowerCase());
     
     if (needsSize) {
       // Nếu cần chọn size, chuyển đến trang chi tiết

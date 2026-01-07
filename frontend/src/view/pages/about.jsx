@@ -27,7 +27,7 @@ function About() {
                 <img src={whitelogo} alt="About" />
             </div>
             <div className="what-about-us">
-                <p>//What's Prime Soulsabout?</p>
+                <p>//What's Prime Souls about?</p>
                 <h2><span style={{ color: '#D0FE1D' }}>Prime Souls</span> is a brand made by a student with big dreams and bigger hustle. <br></br>It's about buying and managing your own sports products.</h2>
             </div>
             <div className="why-choose-us">

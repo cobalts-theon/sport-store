@@ -127,11 +127,36 @@
   background:rgba(26, 26, 26, 0.26);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
   border-radius: 12px;
   text-align: center;
   position: relative;
-  
+  overflow: hidden;
   z-index: 1;
+}
+
+.cta-football {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 150%; /* Adjust size as needed */
+  width: auto;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.cta-basketball {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(50%, -50%);
+  height: 150%; /* Adjust size as needed */
+  width: auto;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .cta-content {
@@ -171,7 +196,24 @@
 
 .cta-button:hover {
   background: #ffffff;
-  transform: translateY(-2px);
+  clip-path: polygon(0 0, 100% 0, 100% 20%, 100% 100%, 10% 100%, 0 70%, 0 0, 0 0);
+}
+
+.cta-basketball,
+.cta-football {
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cta-section:hover {
+  background: #d1fe1d1e;
+}
+
+.cta-section:hover .cta-football {
+  transform: translate(0%, -50%) rotate(180deg);
+}
+
+.cta-section:hover .cta-basketball {
+  transform: translate(0%, -50%) rotate(-180deg);
 }
 
 /* Responsive Design */

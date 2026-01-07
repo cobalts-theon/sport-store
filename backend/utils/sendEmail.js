@@ -12,6 +12,7 @@ export const sendEmail = async (to, subject, text) => {
             }
         });
 
+        //Cấu hình nội dung email
         const Mailoptions = {
             from:`"Prime Souls" <${process.env.EMAIL_USER}>`, // Địa chỉ người gửi
             to: to,

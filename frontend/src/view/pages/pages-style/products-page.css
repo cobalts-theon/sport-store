@@ -2,7 +2,6 @@
   display: flex;
   min-height: 100vh;
   padding-top: 80px; /* Account for fixed navbar */
-  background-color: #0f0f10;
   color: #fff;
   font-family: 'JetBrains Mono', sans-serif;
   position: relative;

@@ -45,7 +45,7 @@ function ProductDropdown({ setMobileOpen }) {
                 onClick={() => setMobileOpen(false)}
                 onMouseEnter={() => {
                   setHoveredText('NEW ARRIVALS');
-                  setHoveredImage('/src/assets/icon/sales.svg');
+                  setHoveredImage('/src/assets/icon/new-3-svgrepo-com.svg');
                 }}
                 onMouseLeave={() => {
                   setHoveredText('PRIMESOULS');
@@ -60,7 +60,7 @@ function ProductDropdown({ setMobileOpen }) {
                 onClick={() => setMobileOpen(false)}
                 onMouseEnter={() => {
                   setHoveredText('FEATURED');
-                  setHoveredImage('/src/assets/icon/sales.svg');
+                  setHoveredImage('/src/assets/icon/certificate-check-solid-svgrepo-com.svg');
                 }}
                 onMouseLeave={() => {
                   setHoveredText('PRIMESOULS');
@@ -75,7 +75,7 @@ function ProductDropdown({ setMobileOpen }) {
                 onClick={() => setMobileOpen(false)}
                 onMouseEnter={() => {
                   setHoveredText('HOT DEALS');
-                  setHoveredImage('/src/assets/icon/sales.svg');
+                  setHoveredImage('/src/assets/icon/deal-hot-sale-svgrepo-com.svg');
                 }}
                 onMouseLeave={() => {
                   setHoveredText('PRIMESOULS');
@@ -138,7 +138,7 @@ function ProductDropdown({ setMobileOpen }) {
                 onClick={() => setMobileOpen(false)}
                 onMouseEnter={() => {
                   setHoveredText('TRAINING');
-                  setHoveredImage('/src/assets/icon/sales.svg');
+                  setHoveredImage('/src/assets/image/training.jpg');
                 }}
                 onMouseLeave={() => {
                   setHoveredText('PRIMESOULS');
@@ -153,7 +153,7 @@ function ProductDropdown({ setMobileOpen }) {
                 onClick={() => setMobileOpen(false)}
                 onMouseEnter={() => {
                   setHoveredText('LIFESTYLE');
-                  setHoveredImage('/src/assets/icon/sales.svg');
+                  setHoveredImage('/src/assets/image/lifestyle.jpg');
                 }}
                 onMouseLeave={() => {
                   setHoveredText('PRIMESOULS');
@@ -168,7 +168,7 @@ function ProductDropdown({ setMobileOpen }) {
                 onClick={() => setMobileOpen(false)}
                 onMouseEnter={() => {
                   setHoveredText('APPAREL');
-                  setHoveredImage('/src/assets/image/unnamed.jpg');
+                  setHoveredImage('/src/assets/image/8999de6cf36183d46d558ce931dcdb57.jpg');
                 }}
                 onMouseLeave={() => {
                   setHoveredText('PRIMESOULS');
@@ -183,7 +183,7 @@ function ProductDropdown({ setMobileOpen }) {
                 onClick={() => setMobileOpen(false)}
                 onMouseEnter={() => {
                   setHoveredText('ACCESSORIES');
-                  setHoveredImage('/src/assets/icon/sales.svg');
+                  setHoveredImage('/src/assets/image/accessories.jpg');
                 }}
                 onMouseLeave={() => {
                   setHoveredText('PRIMESOULS');

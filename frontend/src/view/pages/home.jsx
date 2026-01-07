@@ -143,6 +143,8 @@ function Home() {
             </textPath>
           </text>
         </svg>
+
+        <div className="home-shape"></div>
         
         <img src={topo} alt="" className="topo-background" aria-hidden="true" />
         
@@ -181,7 +183,6 @@ function Home() {
           </div>
         </div>
 
-        <div className="home-shape"></div>
         <div className="product-name">
           <span className="product-id-tag">[Product ID: #{products[current]?.id || FEATURED_PRODUCT_IDS[current]}]</span>
           <span className="product-name-text">{productNames[current]}</span>

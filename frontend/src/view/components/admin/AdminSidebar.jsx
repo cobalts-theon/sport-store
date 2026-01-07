@@ -1,15 +1,7 @@
 // AdminSidebar.jsx dùng để hiển thị thanh điều hướng bên cho trang quản trị
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faBox,
-  faShoppingCart,
-  faUsers,
-  faTachometerAlt,
-  faChartLine,
-  faBullhorn,
-  faSignOutAlt
-} from '@fortawesome/free-solid-svg-icons';
+import { faBox, faShoppingCart, faUsers, faTachometerAlt, faChartLine, faBullhorn, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 // Default avatar
 const DEFAULT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%23374151' width='40' height='40' rx='20'/%3E%3Ccircle cx='20' cy='15' r='8' fill='%239CA3AF'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='12' fill='%239CA3AF'/%3E%3C/svg%3E";

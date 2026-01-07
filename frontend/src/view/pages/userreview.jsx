@@ -5,6 +5,7 @@ import avatar3 from "/src/assets/image/Luz.png";
 import { faStar, faSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import topo from "/src/assets/icon/topography.svg";
 function UserReview() {
     return (
         <div className="user-review-container">
@@ -20,6 +21,7 @@ function UserReview() {
                 </div>
                 <p className="user-review-text-third" style={{ fontSize: "8px"}}><FontAwesomeIcon icon={faSquare} /> Become a Prime Soul member today!</p>
             </div>
+            <img src={topo} alt="topo" className="topo-icon" />
             <div className="center-circle"></div>
             <div className="user-review-content first">
                 <div className="user-header">
@@ -28,14 +30,14 @@ function UserReview() {
                     </div>
                     <div className="user-name-role">
                         <h3 className="user-name">Riyaki</h3>
-                        <p className="user-role">CEO OF RYCAFE</p>
+                        <p className="user-role">THE NIGHTLORD</p>
                         <div className="user-rating">
                             {[...Array(5)].map((_, i) => (
                                 <FontAwesomeIcon key={i} icon={faStar} className="star-icon" />
                             ))}
                         </div>
                         <p className="user-review-text first-review">
-                            "I love Prime Sales! Their products are top-notch and the customer service is excellent. Highly recommend to everyone!"
+                            "I love Prime Souls! Their products are top-notch and the customer service is excellent. Highly recommend to everyone!"
                         </p>
                     </div>
                 </div>
@@ -47,14 +49,14 @@ function UserReview() {
                     </div>
                     <div className="user-name-role second-role-info">
                         <h3 className="user-name second-name">Grey</h3>
-                        <p className="user-role second-role">THE ONE WHO ASK</p>
+                        <p className="user-role second-role">LORD OF CINDER</p>
                         <div className="user-rating second-rating">
                             {[...Array(5)].map((_, i) => (
                                 <FontAwesomeIcon key={i} icon={faStar} className="star-icon" />
                             ))}
                         </div>
                         <p className="user-review-text second-review">
-                            "Great experience shopping at Prime Sales."
+                            "Great experience shopping at Prime Souls."
                         </p>
                     </div>
                 </div>
@@ -66,14 +68,14 @@ function UserReview() {
                     </div>
                     <div className="user-name-role third-role-info">
                         <h3 className="user-name third-name">Luz</h3>
-                        <p className="user-role third-role">USB PRESIDENT</p>
+                        <p className="user-role third-role">THE GREAT WILL</p>
                         <div className="user-rating third-rating">
                             {[...Array(5)].map((_, i) => (
                                 <FontAwesomeIcon key={i} icon={faStar} className="star-icon" />
                             ))}
                         </div>
                         <p className="user-review-text third-review">
-                            "Shopping at Prime Sales has been a fantastic experience. The variety of products and the ease of navigation on their website made my shopping enjoyable. Best online store ever!"
+                            "Shopping at Prime Souls has been a fantastic experience. The variety of products and the ease of navigation on their website made my shopping enjoyable. Best online store ever!"
                         </p>
                     </div> 
                 </div>

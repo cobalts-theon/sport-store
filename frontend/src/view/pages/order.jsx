@@ -1,17 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faBox, 
-  faTruck, 
-  faCheckCircle, 
-  faTimesCircle,
-  faClockRotateLeft,
-  faEye,
-  faChevronDown,
-  faChevronUp,
-  faBan
-} from '@fortawesome/free-solid-svg-icons';
+import { faBox, faTruck, faCheckCircle, faTimesCircle,faClockRotateLeft, faChevronDown, faChevronUp, faBan} from '@fortawesome/free-solid-svg-icons';
 import './pages-style/order.css';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';

@@ -1,6 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import cors from 'cors'
+import cors from 'cors' //Cho phép các yêu cầu tài nguyên từ các nguồn khác nhau
 import path from 'path'
 import { fileURLToPath } from 'url'
 import sequelize from './config/db.js'
@@ -13,7 +13,6 @@ import './models/coupon.model.js'
 import User from './models/user.model.js'
 import Product from './models/product.model.js'
 import { Order, OrderItem } from './models/order.model.js'
-
 
 //import routes
 import orderRoutes from './routes/order.routes.js'

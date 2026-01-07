@@ -37,10 +37,7 @@ function Login() {
     ];
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.id]: e.target.value
-        });
+        setFormData({...formData,[e.target.id]: e.target.value});
     };
 
     const handleSubmit = async (e) => {
@@ -109,10 +106,12 @@ function Login() {
         // Handle social login logic
     };
 
+    //Điều hướng đến trang tiếp theo của testimonial (slide)
     const nextTestimonial = () => {
         setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
     };
 
+    //Điều hướng đến trang trước của testimonial (slide)
     const prevTestimonial = () => {
         setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
     };

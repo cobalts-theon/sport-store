@@ -25,6 +25,14 @@ const formatCurrency = (amount) => {
 
 // Month names for the chart
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+// Const  palette for charts
+const chartPalette = {
+  high: '#4CAF50',
+  medium: '#D0FE1D',
+  low: '#FF9800',
+  veryLow: '#F44336',
+  empty: 'rgba(255,255,255,0.1)'
+};
 
 function Analytics({ products, orders, users }) {
   const [timeRange, setTimeRange] = useState('30days');
@@ -73,16 +81,24 @@ function Analytics({ products, orders, users }) {
     .filter(u => u.role !== 'admin')
     .slice(0, 5);
   
-  // Get available years from orders
-  const availableYears = [...new Set(orders.map(order => {
+  // // Get available years from orders    
+  // const availableYears = [...new Set(orders.map(order => {
+  //   const date = new Date(order.createdAt || order.date || order.orderDate);
+  //   return isNaN(date.getTime()) ? null : date.getFullYear();
+  // }).filter(y => y !== null))].sort((a, b) => b - a);
+  
+  // // If no years available, use current year
+  // if (availableYears.length === 0) {
+  //   availableYears.push(new Date().getFullYear());
+  // }
+  
+  const currentYear = new Date().getFullYear();
+  const yearsFromOrders = [...new Set(orders.map(order => {
     const date = new Date(order.createdAt || order.date || order.orderDate);
     return isNaN(date.getTime()) ? null : date.getFullYear();
-  }).filter(y => y !== null))].sort((a, b) => b - a);
-  
-  // If no years available, use current year
-  if (availableYears.length === 0) {
-    availableYears.push(new Date().getFullYear());
-  }
+  }).filter(y => y !== null))];
+
+  const availableYears = [...new Set([...yearsFromOrders, currentYear])].sort((a, b) => b - a);
   
   // Monthly sales data - show all 12 months for selected year
   const salesData = monthNames.map((monthName, index) => {
@@ -110,11 +126,12 @@ function Analytics({ products, orders, users }) {
 
   // Bar colors based on performance
   const getBarColor = (sales, maxSales) => {
+    if (sales === 0) return chartPalette.empty; // Empty for no data
     const percentage = (sales / maxSales) * 100;
-    if (percentage >= 80) return '#4CAF50'; // Green for high
-    if (percentage >= 50) return '#D0FE1D'; // Yellow-green for medium
-    if (percentage >= 25) return '#FF9800'; // Orange for low
-    return '#F44336'; // Red for very low
+    if (percentage >= 80) return chartPalette.high; // Green for high
+    if (percentage >= 50) return chartPalette.medium; // Yellow-green for medium
+    if (percentage >= 25) return chartPalette.low; // Orange for low
+    return chartPalette.veryLow; // Red for very low
   };
 
   return (
@@ -196,7 +213,7 @@ function Analytics({ products, orders, users }) {
               <span className="year-total-label">Total {selectedYear}:</span>
               <span className="year-total-value">{formatCurrency(yearTotal)}</span>
             </div>
-            <div className={`bar-chart monthly-chart ${yearTotal > 0 ? 'has-data' : ''}`}>
+            <div className={`bar-chart monthly-chart has-data`}>
               {salesData.map((data, index) => {
                 // Calculate bar height - minimum 15% for bars with data, scale up rest
                 const baseHeight = maxSales > 0 ? (data.sales / maxSales) * 100 : 0;
@@ -216,7 +233,7 @@ function Analytics({ products, orders, users }) {
                         className="bar"
                         style={{
                           height: `${Math.min(boostedHeight, 100)}%`,
-                          background: data.sales > 0 ? getBarColor(data.sales, maxSales) : 'rgba(255,255,255,0.1)',
+                          background: getBarColor(data.sales, maxSales),
                           minHeight: data.sales > 0 ? '40px' : '2px'
                         }}
                         title={`${data.month} ${selectedYear}: ${formatCurrency(data.sales)} (${data.orders} orders)`}
@@ -230,10 +247,10 @@ function Analytics({ products, orders, users }) {
             </div>
             <div className="chart-footer">
               <div className="color-legend">
-                <span className="color-item"><span style={{background: '#4CAF50'}}></span> High</span>
-                <span className="color-item"><span style={{background: '#D0FE1D'}}></span> Medium</span>
-                <span className="color-item"><span style={{background: '#FF9800'}}></span> Low</span>
-                <span className="color-item"><span style={{background: '#F44336'}}></span> Very Low</span>
+                <span className="color-item"><span style={{background: chartPalette.high}}></span> High</span>
+                <span className="color-item"><span style={{background: chartPalette.medium}}></span> Medium</span>
+                <span className="color-item"><span style={{background: chartPalette.low}}></span> Low</span>
+                <span className="color-item"><span style={{background: chartPalette.veryLow}}></span> Very Low</span>
               </div>
             </div>
           </div>
@@ -252,10 +269,10 @@ function Analytics({ products, orders, users }) {
               <svg className="pie-chart-svg" viewBox="0 0 200 200">
                 {(() => {
                   const colors = {
-                    completed: '#4CAF50',
-                    pending: '#FF9800',
-                    shipping: '#2196F3',
-                    cancelled: '#F44336'
+                    completed: chartPalette.high,
+                    pending: chartPalette.medium,
+                    shipping: chartPalette.low,
+                    cancelled: chartPalette.veryLow
                   };
                   let currentAngle = 0;
                   const radius = 80;
